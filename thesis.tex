@@ -1,0 +1,49 @@
+% Include header.tex with configuration
+
+\input{header}
+
+%glossary
+%\newglossary[sylg]{symbolslist}{syi}{syo}{Nomenclature}
+%\makeglossaries
+
+\begin{document}
+
+\input{title}
+
+\cleardoublepage{}
+%start with roman page numbering
+\pagenumbering{Roman}
+
+%comment out two lines before printing final thesis
+\listoftodos
+\newpage
+
+\tableofcontents
+
+\chapter{\headingsize{Introduction}}
+\label{introduction}
+%\input{introduction}
+
+\chapter{Related Work}
+\label{relatedwork}
+%\input{relatedwork}
+
+%this chapter can be divided into 2 parts, implementation for PUF toolkit
+% and integration into cogni UI
+\chapter{Implementation}
+\label{implementation}
+%\input{implementation}
+
+\chapter{Evaluation}
+\label{evaluation}
+%\input{evaluation}
+
+\chapter{Conclusion}
+\label{conclusion}
+%\input{conclusion}
+
+
+\nocite{*}
+bibliographystyle{ieeetr}
+\bibliography{bibliography}
+\end{document}
