@@ -1,0 +1,23 @@
+1 why security is important
+As the internet grows so does the threat to its infrastructure.
+In recent wake of heartbleed bugs, threat to cloud storage and NSA debacle tracking private data, security becomes more important than ever.\\
+
+2. limited hardware resources , standard key exchange cryptography not feasable
+Well known protection mechanisms like symmetric share key based or asymmetric public/private key based requires algorithms to generate secure keys and/or pass certificates between two communicating parties. Generation and storage of keys and certificates on embedded devices with limited hardware resources is cost ineffective. Securing the data in the memory requires specialized hardware security modules which is expensive. For eg. A specialized tamper-proof hardware costs more than 3000USD [os 8]\\
+
+3. how PUFs provide alternate solution to hardware based key generation
+Physical(ly) Unclonable functions (PUFs) [os 9] provide a low-cost solution to the economic problem of key-generation on limited resource hardware embedded devices. PUFs are a result of the manufactoring variations while printing the Integrated Circuits (ICs), these variations are unclonable which means even the manufacturer cannot generate two identical ICs. PUFs depends on its physical microstructure and exhibit challenge/response behaviour to evaluate its stucture. It is a hardware analog to one-way function that is easy to evaluate but difficult to predict. When a physical stimulus is applied to the structure (challenge) it outputs an unpreditable (but repeatable) response which depends on the physical factors introduced during manufacture of the PUF. So the PUF is unique and can be seen as a fingerprint of hardware.[seb 31]\\
+
+A fuzzy extractor [cite fuzzy paper] can be applied to the PUF to derive an exclusive and strong cryptographic key from the underlying physical microstructure. Since the output from evaluation is reproducible and unique so every time the same key is generated.
+
+Some PUFs like SRAM PUFs may not need additional costs and are generated implicitly by variations in the manufactoring of SRAM modules itself\\
+
+4. PUF varies with conditions and must be error corrected and evaluated
+
+5. what and why cognicrypt, stuff about how it is user friendly, user interface\\
+
+\section{Motivation}
+1. motivation of this thesis is to extend the User interface that helps designers and researchers to evaluate PUF responses
+ and then integrate the toolkit as a jar archive in Cognicrypt wrapped in Java Native Interface 
+
+ This thesis 
