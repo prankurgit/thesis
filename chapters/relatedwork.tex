@@ -1,0 +1,48 @@
+This chapters exlpains the related work that is helpful in understanding the concepts, mathematical constructs, terms and definitions that are necessary to understand the working details of the thesis. The first part discusses Physical(ly) Unclonable Functions, second part introduces the concept of the BCH Code, third part talks about golay code constructs and finally a synopsis of Jaccard Index is presented.
+
+\section{Physical(ly) Unclonable Functions - Background}
+In order for the reader to have a better understanding of the fundamentals of Physical(ly) Unclonable Functions, this section discusses some basics of PUFs. Intially we talk about historical emergence of PUFs, followed by a general definiton of PUF. Then we go on to classify PUFs and after that a selection of different types of PUFs is presented. Lastly %write the last section
+Work in this section is mostly derived from [seb 34, 36]\\
+
+\subsection{History and origins}
+Physical(ly) Unclonable Function (PUF) are based on unique and non-reproducible artifacts, which were caused by production variances during manufacturing processes presented in the early eighties [seb 7]. Fingerprint identification of humans goes back to at least nineteenth century [Th 21] and from that emerged the field of biometrics. In the twentieth century, random patterns in paper and optical tokens were used for exclusive identification of currency notes and strategic arms [Th 2, 8, 53]. A formalization of this concept was introduced in the beginning of twenty-first century. In 2001, Pappu et al. [seb 19, 39] presented \emph{physical one-way functions}. Next year 2002, gassend et al. [seb 21] proposed a silicon-based PUF approach as a \emph{physical random function}. This led to coining of the acronym PUF (\emph{Physical(ly) Unclonable Functions}) to avoid confusion with the concept of pseudo-random functions (PRF), which was an already established concept in cryptography.\\
+
+The promising properties of PUFs like physical unclonability and tamper evidence which are favourable for security mechanisms, lead to the increase in popularity of PUFs and in coming years new types of PUFs were proposed. Due to their practical usages and encouraging properties the interest in PUFs has risen significantly, they are still a hot topic in field of Hardware security and can contribute to evolution of security mechanism and applications.\\
+
+\subsection{Definition}
+The definition of PUFs is taken from Gassend et al.[seb 17]:
+
+\emph{A Physical(ly) Unclonable Function (PUF) is a function that maps challenges to responses, that is embodied by a physical device, and that verifies the following properties:\\
+1. Easy to evaluate: The physical device is easily capable of evaluating the function in a short amount of time.\\
+2. Hard to characterize: From a polynomial number of plausible physical measurements (in particular, determination of chosen challenge-response pairs), an attacker who no longer has the device, and who can only use a polynomial amount of resources (time, matter, etc \ldots) can only extract a negligible amount of information about the response to a randomly chosen challenge.\\}
+
+To simplify, PUFs are functions that use hardware manufacturing process variations to generate a random output. They are easy to evaluate means that for a given input, result is extracted without much effort. Unclonable implies the output function cannot be duplicated to make another PUF. Random response means it contains equal number of ones and zeros. 
+
+\subsection{PUF terminolgies}
+This section introduces commonly used terms used for describing PUFs and their characterstics. Work in this subsection is inspired from [TH book]
+
+\subsubsection{Challenge and Responses}
+As discussed in the definition, PUF produces output on being queried with a input. Since the an input may have more than one possible output so PUFs are not functions in mathematical sense rather they are considered function in engineering sense i.e a procedure performed by or acting upon a specific (physical) system. [Th book page 4]. Input to PUF is called \emph{Challenge} and output is termed as \emph{Response}, together they are known as \emph{challenge-response Pair} or \emph{CRP} and the relation imposed between challenges and reponses by a particular PUF is called as its \emph{CRP behaviour}. PUF is applied in two phases, first phase is \emph{enrollement}, where a certain number of CRPs are collected from a PUF and stored in \emph{CRP database}. In second phase called \emph{verification}, a challenge from CRP database is applied to the PUF and the produced response is compared with the corresponding response from the database [TH book section 2.1]
+
+\subsubsection{Intra and Inter-Distance metrics}
+The concept of inter versus intra-(class) distance is inherited from the theory of classification and identification.
+\begin{itemize}
+	\item for a specific challenge, inter-distance between two PUFs instances is the distance between two reponses produced by applying the same challenge to both PUFs.
+	\item for a specific challenge, the intra-distance between two evaluations of the single PUF is the distance between two reponses produced by applying the same challenge twice to the same PUF. [Th book section 2.2]
+\end{itemize} 
+
+In our case we deal with challenges and responses output in bit strings (after decoding and quantization of analog physical stimuli and measured effect), so Hamming Distance is a good metric to measure the difference in the repsonses i.e. degree by which the reponses from the same challenge differ. To amplify the hamming distance it is often expressed as fraction of the length of the considered strings, in that case it is known as \emph{fractional Hamming distance} 
+
+\subsection{Classifications}
+\subsection{PUF types}
+	- arbiter
+	- optical
+	- coating
+	- ring oscillator
+	- SRAM
+	- additional memory based PUF constructions
+
+\section{linear codes, bch , golay}
+
+\section{Jaccard index}
+

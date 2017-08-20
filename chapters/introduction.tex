@@ -1,23 +1,51 @@
-1 why security is important
+%1 why security is important\\
 As the internet grows so does the threat to its infrastructure.
 In recent wake of heartbleed bugs, threat to cloud storage and NSA debacle tracking private data, security becomes more important than ever.\\
 
-2. limited hardware resources , standard key exchange cryptography not feasable
+%2. limited hardware resources , standard key exchange cryptography not feasable\\
 Well known protection mechanisms like symmetric share key based or asymmetric public/private key based requires algorithms to generate secure keys and/or pass certificates between two communicating parties. Generation and storage of keys and certificates on embedded devices with limited hardware resources is cost ineffective. Securing the data in the memory requires specialized hardware security modules which is expensive. For eg. A specialized tamper-proof hardware costs more than 3000USD [os 8]\\
 
-3. how PUFs provide alternate solution to hardware based key generation
+%3. how PUFs provide alternate solution to hardware based key generation\\
 Physical(ly) Unclonable functions (PUFs) [os 9] provide a low-cost solution to the economic problem of key-generation on limited resource hardware embedded devices. PUFs are a result of the manufactoring variations while printing the Integrated Circuits (ICs), these variations are unclonable which means even the manufacturer cannot generate two identical ICs. PUFs depends on its physical microstructure and exhibit challenge/response behaviour to evaluate its stucture. It is a hardware analog to one-way function that is easy to evaluate but difficult to predict. When a physical stimulus is applied to the structure (challenge) it outputs an unpreditable (but repeatable) response which depends on the physical factors introduced during manufacture of the PUF. So the PUF is unique and can be seen as a fingerprint of hardware.[seb 31]\\
 
-A fuzzy extractor [cite fuzzy paper] can be applied to the PUF to derive an exclusive and strong cryptographic key from the underlying physical microstructure. Since the output from evaluation is reproducible and unique so every time the same key is generated.
+A fuzzy extractor [cite fuzzy paper] can be applied to the PUF to derive an exclusive and strong cryptographic key from the underlying physical microstructure. Since the output from evaluation is reproducible and unique so every time the same key is generated. Some PUFs like SRAM PUFs may not need additional costs and are generated implicitly by variations in the manufactoring of SRAM modules itself\\
 
-Some PUFs like SRAM PUFs may not need additional costs and are generated implicitly by variations in the manufactoring of SRAM modules itself\\
+%4. PUF varies with conditions and must be error corrected and evaluated\\
+There are lot of applications of PUFs like realization of a secure key storage [32, 60, 64], Intellectual Property (IP) protection and remote service activation [22, 20], anti-counterfeiting [13, 9], device authentication and secret key generation [62, 52, 56], remote attestation protocols [55, 27] and the integration in cryptographic algorithms [3]. Based on the use case, PUF instance must satisfy different criteria and implement special properties to be integrated in the security mechanism. 
+Behaviour of PUF instance is sensitive to differing operational conditions such as supply voltage, ambient temperature or aging effect that can result in slightly different PUF response each time PUF is challenged. \pagebreak Consequently an adequate pre-assessment of the PUF-instance is required to ensure that the response is consistent, required criteria is accomplished and essential properties are provided for the desired security mechanism. This pre-evalutaion also verifies the stability of the PUF reaction under fluctuating operating conditions. Principally for security mechanism, correct and stable working behaviour plays a major role, specifically if the mechanism is build on top of a noisy PUF-instance or if the PUF-instance is the central building block.\\
 
-4. PUF varies with conditions and must be error corrected and evaluated
+%5. what and why cognicrypt, stuff about how it is user friendly, user interface\\
+CogniCrypt is an opensource library that is implemented as an Eclipse plugin that supports Java developers in using Java Cryptographic APIs[cogni paper]. Cryptographical algorithms are highly configurable and one configuration which may be secure in one scenario might have flaws and loopholes in other. Cognicrypt aims to provide non security expert java developers to securely and correctly use the underlying cryptography APIs. 
+It classifies the different configurations based on developer's answers to high-level questions in non-expert terminology [onward2015]. Apart from generating secure implementations for cryptography tasks it also analyzes developer code and generates alerts for misuses of cryptographic APIs [cogni paper]. 
 
-5. what and why cognicrypt, stuff about how it is user friendly, user interface\\
 
-\section{Motivation}
-1. motivation of this thesis is to extend the User interface that helps designers and researchers to evaluate PUF responses
- and then integrate the toolkit as a jar archive in Cognicrypt wrapped in Java Native Interface 
+\section{Goal of the Thesis}
+The goal is to extend the User interface that helps designers and researchers to evaluate PUF responses  and then integrate the toolkit as a jar archive in Cognicrypt wrapped in Java Native Interface.
 
- This thesis 
+This thesis is an extension to the Master Thesis ``Development of a user interface and implementation of specific software tools for the evaluation and realization of PUFs with respect to security applications''[seb thesis]	where the orignal UI was designed and implemented. The design did not incorporate BCH encoding and decoding in the toolkit and were presented as seperate UI. The secure key storage approach in [seb 56] was realized using a fuzzy extractor, which was based on the syndrome generation of a Golay(23,12,7) error correction code in combination with a binary linear repetition code and a binary majority voting for the reconstruction.[seb thesis]  Since golay (23, 12, 7) can correct three errors in each syndrome so PUF response correction lead to too many coding errors.
+
+\section{Contribution}
+This Thesis aims to improve the UI , add new functionalities to the PUF response evaluation, integrate BCH encoder and decoder to the toolkit.
+And finally wrap the toolkit in Jar to be accessible by cognicrypt via Java Native Interface.
+
+In particular, the contribution of this work is characterized by the following points:
+
+\begin{itemize}
+	\item Improvement of a console user interface for the PUF Toolkit in C++
+	\item Implementation of specific software tools with respect to PUF relevant metrics in C++
+		\begin{itemize}
+			\item Hamming Distance Menu
+			\item Golay encoder 
+			\item Golay Decoder
+			\item Jaccard Index 
+			\item Intra Jaccard Index
+			\item Inter Jaccard Index
+		\end{itemize}
+	\item BCH encoder and decoder integration to the PUF Toolkit
+	\item Augmenting the offset functionality
+	\item Enhancing the toolkit to output fractional distance
+	\item Wrapping the toolkit via JNI to be made accessible in cognicrypt
+	\item UI implementation for Cognicrypt module to generate boilerplate code
+\end{itemize}
+
+\section{outline}
