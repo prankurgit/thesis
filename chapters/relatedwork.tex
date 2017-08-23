@@ -62,6 +62,13 @@ hazard if an adversary observes the PUF response.\\
 
 Second one distinguishes between source of the random variations. The manufacturer can explicitly add randomization procedure to introduce random features that are later measured during PUF evaluation or measured random features can be an implicit side effect introduced during the production of the integrated circuit and PUF instance. This means they arise naturally and cannot be controlled by the manufacturer, hence even the he/she cannot reproduce and clone the same random features. These implicit random variations incorporated during manufacturing are called \emph{process variations} come at no extra cost, so they incur no additional cost and are attractive from economic viewpont.\\
 
+The final classification is based on the Challenge-Reponse behaviour security properties. Guajardo et al. [ ] introduced concept of \textbf{Strong} and \textbf{Weak PUFs} which was further expanded by Rührmair et al.[ ]. They state that a Strong PUF is a PUF that adversary can have access to for a long period of time and still he/she cannot uncover the working of the PUF function or how the PUF is evaluated to map to specific reponse. In other words we can still come up with a
+new challenge that the adversary does not know what the reponse to it will be. Consequently this implies that
+\begin{itemize}
+	\item considered PUF has a very large challenge set, or else the adversary can apply brute force to know reponses to all challenges.
+	\item it is not possible to know the mapping function between CRPs based on observed CRPs, that means PUF is unpredictable.
+\end{itemize}
+PUFs that are not \emph{Strong PUFs} and those who have a small challenge set are called \emph{Weak PUFs}. Naturally Strong PUFs are favoured in a good securely designed application as compared to Weak PUFs. However construction of such a Strong and practical (intrinsic) PUFs is rather difficult and still an open problem. [34]
 
 \subsection{PUF types}
 	- arbiter
