@@ -33,7 +33,36 @@ The concept of inter versus intra-(class) distance is inherited from the theory 
 
 In our case we deal with challenges and responses output in bit strings (after decoding and quantization of analog physical stimuli and measured effect), so Hamming Distance is a good metric to measure the difference in the repsonses i.e. degree by which the reponses from the same challenge differ. To amplify the hamming distance it is often expressed as fraction of the length of the considered strings, in that case it is known as \emph{fractional Hamming distance} 
 
+\subsection{Reliability Issues}
+As pointed out earlier in introduction PUF is sensitive to external factors and therefore the output of PUF is not consistent. These factors can be inevitable random noise or measurement uncertainities which give rise to the intra distance between PUF responses [Th book section 2.3]. Apart from these undesirable effects PUFs are susceptible to other sources of noise e.g. varying temperature or supply voltage on PUFs integrated circuit, these factors contribute to a \emph{systematic} effect on response measurement. Other cause for unreliable responses is \emph{aging effect}, which causes gradual degradation of the device resulting in varying PUF responses. Consequently, PUF responses need post-processing techniques to be applicable in practical security scenarios. One such case is extracting a reliable key from PUF that requires a technique called Fuzzy Extractor (covered in more detailed in later section TODO write the section name)
+
 \subsection{Classifications}
+The popularity of PUFs and immense research on the topic has resulted in various concepts and constructions, we talk about the ones that are concerned with this thesis and for completeness breifly describe other classifications.\\
+The following sections talk about the classification of PUFs that are subdivided into three different groups based on [seb 34]:
+\begin{enumerate}
+	\item Implementation technology and material of the proposed construction
+	\item A more general set of physical construction properties
+	\item Algorithmic properties of the challenge-reponse behavior
+\end{enumerate}
+
+The first criteria for classification is the implementation technology of the construction. PUFs can be realized with different technologies and materials like glass, plasctic, paper, electronic components and integrated circuits (ICs). Essentially there are two classes in this group based on the \emph{electronic} nature of the identifying features.
+
+\textbf{Non-electronic PUFs} are PUFs whose physical microstructure where the nature of the components in the system that contributes to the random physical microstructure of unique PUF is of non-electronic origin. It should be noted that keyword 'non-electronical' only reflects the origin of the PUF behaviour, post processing (like fuzzy extraction) or intermediate steps can be electronic. Examples can be Optical PUFs where the core element is an optical microstucture constructed by mixing microscopic refractive glass spheres in a transparent epoxy plate[Th book section 3.1.1]. A unique response is obtained upon irradiating the transparent material with laser, this can interperted as a PUF response. Another example is Paper-based PUFs where the random fiber structure of the paper is scanned using a laser.The reflection from the erratic fiber serves as a unique identifier and can be considered as a PUF response. [th book section 3.1.2].
+
+\textbf{Electronic PUFs} proposed construction contains random variations derived from electronic properties of the underlying material e.g. resistance, capacitance etc. \emph{Silicon PUFs} are a major subclass of electronic PUFs. They were first practical realization of PUFs introduced by Gassend et al. [ ]. Since Silicon PUFs can be connected to the integrated circuit on the same chip, they can be instantly deployed as hardware building block in cryptographic implemenatations. [seb 34]. Another eg. is a construction RF-DNA where copper wires are arranged randomly on a silicone medium to generate PUF repsonses.\\
+
+The second classification which is based on the construction properties subdivides the PUFs in \textbf{Intrnisic PUFs} and \textbf{Non-Intrinsic PUFs}. Initially proposed by Guajardo et al. [ ], \emph{Intrinsic PUFs} must meet following two conditions 
+\begin{itemize}
+	\item the evaluation of the PUF is performed internally (the measurement instrument is integrated in the device)
+	\item the random instance specific features are implicitly imported during its manufactoring process ( )
+\end{itemize}
+
+We look with some detail in the above two conditions. First one states that the evaluation that is physical measurement can be internal or external. An external evaluation is measurement of features that are externally observable and is done with the help of equipments external to the physical entity. Internal evaluations on the other hand are measurements features that are internal to the instance and is performed by equipment absolutely embedded in the instance itself. There are some advantages for internal evaluations, one there is a less security risk since the measurement entity is embedded in the instance and the PUF response is protected from the outside world. Also there is a practical leverage because every PUF instance can evaluate itself without any external restriction. Hindrance from outside influences and measurement errors is also minimized in internal evaluation. With \emph{Non-intrinsic PUFs} the external measurement can pose a security
+hazard if an adversary observes the PUF response.\\
+
+Second one distinguishes between source of the random variations. The manufacturer can explicitly add randomization procedure to introduce random features that are later measured during PUF evaluation or measured random features can be an implicit side effect introduced during the production of the integrated circuit and PUF instance. This means they arise naturally and cannot be controlled by the manufacturer, hence even the he/she cannot reproduce and clone the same random features. These implicit random variations incorporated during manufacturing are called \emph{process variations} come at no extra cost, so they incur no additional cost and are attractive from economic viewpont.\\
+
+
 \subsection{PUF types}
 	- arbiter
 	- optical
