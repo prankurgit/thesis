@@ -89,6 +89,13 @@ important to determine PUF response depends individually on process variations o
 	\item arbiter circuit must not be biased for one input over other.
 \end{itemize}
 
+\begin{figure}
+	\centering
+	\fbox{ \includegraphics[width=0.9\textwidth]{images/arbiter_4.png}}
+	\caption{Construction of a basic arbiter PUF, \emph{switching blocks} realized with muxes and a \emph{SR latch} realized with NAND gates, modified graphic based on [seb 34]}
+	\label{img:1}
+\end{figure}
+
 \textbf{\emph{Security Issues:}}
 Though the challenge set is large still the number of delay paramerters which effect the PUF response are linear in n, hence the 2$^n$ challenges cannot generate independant reponses. A certain model or mathematical clone can be build for a given arbiter PUF if adversary learns the underlying delay parameters. This clone can accurately forecast the PUF reponse rendering the arbiter PUF hackable in security applications scenarios. Machine learning techniques like artificial neural
 networks (ANNs) and support-vector machines (SVMs) can be employed to implicitly learn the underlying delay parameters by observing the challenge response pairs.
@@ -105,6 +112,20 @@ power-up in a non-preferred state. Finally the cells with almost zero mismatch p
 
 Most SRAM cells have strongly preferred cell-specific initial state due to the magnitude of the process variations on the device mismatch, only a small number of the cells have weak preferred or no preferred state, hence a typical SRAM cell exhibits strong PUF behavior. These cells are arranged in a large array giving millions of reponse bits, challenge for this cell assembly is the address of the cell.\\
 
+\subsubsection{Ring Oscillator PUF}
+
+Proposed by Gassend et al. [ ] it is another type of delay-based intrinsic PUF. There are two parts to ring oscillator PUF, first is the ring oscillator and other is the frequency counter which are arranged is a configuration as shown in the fig. [ ] and connected to a response generating algorithm. Gassend et al. uses a variant of the switch block base delay line similar to arbiter PUF \ref{arbiterpuf} which is transformed in a oscillator with the help of a negative feedback.
+An AND gate is added to turn off/on the oscillation, which is fed to a frequency counter that counts the number of oscillating cycles in a fixed time interval. A same setup for ring oscillator on another device with same implementation has different counter value because of the silicon process variations which forms the basis of the PUF reponse.\\
+
+\begin{figure}
+\centering
+\fbox{ \includegraphics[width=0.9\textwidth]{images/arbiter_4.png}}
+\caption{Construction of a basic ring oscillator PUF, modified graphic based on [seb 34]} 
+\label{img:2}
+\end{figure}
+
+There are some other side effects associated with ring oscillator PUFs, one of them is significant influence from the environmental conditions like temperature changes and voltage fluctuations. The frequency changes introduced by these factors outweigh the deviations caused by the process variations, so to counteract these changes we need a post processing technique known as \emph{compensated measuring}. The main idea is to calculate the ratio of the frequency of two ring oscillators
+on the same device since they both are affected with identical environmental factors, hence the ratio would be more uniform. According to observations average intra-distance distance between evaluations is approximately less than the average inter-distance by 50\% [seb 34 section 2.4.2] 
 
 	- optical
 	- coating
