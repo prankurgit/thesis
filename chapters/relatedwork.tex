@@ -127,12 +127,27 @@ An AND gate is added to turn off/on the oscillation, which is fed to a frequency
 There are some other side effects associated with ring oscillator PUFs, one of them is significant influence from the environmental conditions like temperature changes and voltage fluctuations. The frequency changes introduced by these factors outweigh the deviations caused by the process variations, so to counteract these changes we need a post processing technique known as \emph{compensated measuring}. The main idea is to calculate the ratio of the frequency of two ring oscillators
 on the same device since they both are affected with identical environmental factors, hence the ratio would be more uniform. According to observations average intra-distance distance between evaluations is approximately less than the average inter-distance by 50\% [seb 34 section 2.4.2] 
 
-	- optical
-	- coating
-	- ring oscillator
-	- additional memory based PUF constructions
+\subsubsection{Optical PUFs}
+
+Even before the introduction of PUFs an unclonable identification system based on random optical reflection patterns was proposed in [th 53 section 3.1.1]. Proposed by Pappu et al. as Physical one-way functions (POWF) optical PUF contains a microstructure constructed by blending microscopic (500 $\mu$m) refractive glass spheres in a miniature (10 x 10 x 2.54 $mm$) transparent epoxy plate. This token is illuminated with a helium neon laser which produces a irregular wavefront,
+the cause for this irregularity is the multiple scattering of the laser by the refractive particles. Finally a CCD camera captures the speckle pattern and digitally processed by applying Gabor Hash to it as a feature extraction procedure. [th section 3.1.1] The final output is a string of bits that deviates significantly if the orientation of the laser beam is even minutely changed.\\
+
+Challenge is made up from the exact positioning of the laser and the resulting Gabor hash of the emerged speckle pattern is considered as response. The operation and implemetation for optical PUF is shown in fig [ ]. Number of experiments were performed by [th 41 42] for testing the characterstics of the optical PUF and following summarizes their results. These values are taken from the [pappu et al. and th 42]. Total four optical tokens used with 576 individual challenges, for the
+responses intra and inter distance measures were evaluated with average inter-distance of $\mu_{inter}$ = 49.79\% and average intra-distance of 
+$\mu_{intra}$ = 25.25\%. One of the main limitation of such an optical PUF is the burdensome large setup consisting of a laser and mechanical positioning system. They are classified as Non-electronic, non-intrinisic and strong PUFs.\\
+
+\begin{figure}
+\centering
+\fbox{ \includegraphics[width=0.9\textwidth]{images/opticalPUF.png}}
+\caption{Construction of a basic optical PUF as proposed by Pappu et al. \cite{18,19}.}
+\label{img:3}
+\end{figure}
+
+\section{Fuzzy extractors}
 
 \section{linear codes, bch , golay}
 
 \section{Jaccard index}
+
+\section{Congnicrypt Syonpsis}
 
