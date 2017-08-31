@@ -119,7 +119,7 @@ An AND gate is added to turn off/on the oscillation, which is fed to a frequency
 
 \begin{figure}
 \centering
-\fbox{ \includegraphics[width=0.9\textwidth]{images/arbiter_4.png}}
+\fbox{ \includegraphics[width=0.9\textwidth]{images/ringPUF_1.png}}
 \caption{Construction of a basic ring oscillator PUF, modified graphic based on [seb 34]} 
 \label{img:2}
 \end{figure}
@@ -143,9 +143,46 @@ $\mu_{intra}$ = 25.25\%. One of the main limitation of such an optical PUF is th
 \label{img:3}
 \end{figure}
 
-\section{Fuzzy extractors}
-
 \section{linear codes, bch , golay}
+In order to understand the working of the toolkit and fuzzy extractors (discussed later in section ) we need to look at the two specific type of linear codes. The following sections and subsections discuss the basics of linear codes and their mathematical constructs. After the intial explanation of what linear codes are, we go on to explain BCH codes and golay codes that are used in the PUF toolkit to extract private and public keys in conjugation with SRAM PUFs. The major
+content for these sections is inspired from [ln, bf book chap 2].\\
+
+Before diving into linear codes let us first look at the definition of Field from the book [chap 2]:\\
+\textbf{Definition} A field F is given by a triple (S, +, ·), where S is the set of elements containing
+special elements 0 and 1 and +, · are functions $F \times F \rightarrow F$ with the following properties:
+\begin{itemize}
+	\item Closure: For every a, b $\in$ S, we have both a + b $\in$ S and a · b $\in$ S.
+	\item Associativity: + and · are associative, that is, for every a, b, c $\in$ S, a +(b +c) = (a +b)+c and a · (b · c) = (a · b) · c.
+	\item Commutativity: + and · are commutative, that is, for every a, b $\in$ S, a + b = b + a and a · b = b · a.
+	\item Distributivity: · distributes over +, that is for every a, b, c $\in$ S, a · (b + c) = a · b + a · c.
+	\item Identity: For every a $\in$ S, a + 0 = a and a · 1 = a.
+	\item Inverse: For every a $\in$ S, there exists its unique additive inverse -a such that a + (-a) = 0. Also for every a $\in S \backslash \left\{0\right\}$ there exists its unique multiplicative inverse $a^{-1}$ such that a · $a^{-1}$ = 1.
+\end{itemize}
+
+\textbf{Lemma} Let p be a prime. Then $F_p = (\left\{0, 1, . . . , p - 1\right\}, +_p , \cdot_p )$ is a field, where $+_p$ and $\cdot_p$ are
+addition and multiplication mod p. [bf chap2]
+
+example $F_2 = \left\{0,1\right\}$ is a binary finite field with two symbols 0 and 1 where + and $\cdot$ are operations modulo 2.
+
+\textbf{Linear Subspaces},  before defining Codes and linear Codes we need to know what is a linear subspace.
+\textbf{Definition} $ S \subseteq F_q^n $ is a linear if the following properties are satisfied:[bf chap2]
+\begin{enumerate}
+	\item For every $x,y \in S, x+y \in S$, where addition is vector addition over $F_q$
+	\item For every $a \in F_q$ and $x \in S, a\cdot x\in S$, where multiplication is over $F_q$
+\end{enumerate}
+
+A simple example to understand above Definition and Lemma is $F_5^3$\\
+S = \{(0, 0, 0), (1, 1, 1), (2, 2, 2), (3, 3, 3), (4, 4, 4)\}.
+As you can see (1, 1, 1) + (3, 3, 3) = (4, 4, 4) $\in S$ and 2.(4, 4, 4) mod 5 = (3, 3, 3) $\in S$ as stated in the definition
+
+Now, we can define a \textbf{linear Code} as a code of length n over the field F is a subspace of $F^n$ . The words of the codespace $F^n$ are vectors, and we often refer to codewords as codevectors.
+If C is a linear code that, as a vector space over the field F , has dimension k,
+then we say that C is an [n, k] linear code over F , or an [n, k] code [linear.pdf]. The \emph{distance} of the code is number of symbols changes required in a codeword to assume another codeword. eg. let C(3,3) is a subspace $F_2^3$ if two code words 000 and 111 , then distance between them is 3 since we need to change three symbols 0 to 1.
+The \emph{rate} of an [n, k] linear code is \textbf{k/n}. If C has minimum distance d, then C is an [n, k, d] linear code over F .
+The number n - k is called the \emph{redundancy} of C [linear.pdf]
+
+This section tried to cover the basics for understanding BCH codes and Golay Codes, in no way we claim the completeness of the mathematical constructs and other proofs that are skipped. Please refer to the references for more details.\\
+
 
 \section{Jaccard index}
 
