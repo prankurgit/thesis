@@ -120,12 +120,12 @@ An AND gate is added to turn off/on the oscillation, which is fed to a frequency
 \begin{figure}
 \centering
 \fbox{ \includegraphics[width=0.9\textwidth]{images/ringPUF_1.png}}
-\caption{Construction of a basic ring oscillator PUF, modified graphic based on [seb 34]} 
+\caption{Construction of a basic ring oscillator PUF, modified graphic based on [seb 34]}
 \label{img:2}
 \end{figure}
 
 There are some other side effects associated with ring oscillator PUFs, one of them is significant influence from the environmental conditions like temperature changes and voltage fluctuations. The frequency changes introduced by these factors outweigh the deviations caused by the process variations, so to counteract these changes we need a post processing technique known as \emph{compensated measuring}. The main idea is to calculate the ratio of the frequency of two ring oscillators
-on the same device since they both are affected with identical environmental factors, hence the ratio would be more uniform. According to observations average intra-distance distance between evaluations is approximately less than the average inter-distance by 50\% [seb 34 section 2.4.2] 
+on the same device since they both are affected with identical environmental factors, hence the ratio would be more uniform. According to observations average intra-distance distance between evaluations is approximately less than the average inter-distance by 50\% [seb 34 section 2.4.2]
 
 \subsubsection{Optical PUFs}
 
@@ -133,7 +133,7 @@ Even before the introduction of PUFs an unclonable identification system based o
 the cause for this irregularity is the multiple scattering of the laser by the refractive particles. Finally a CCD camera captures the speckle pattern and digitally processed by applying Gabor Hash to it as a feature extraction procedure. [th section 3.1.1] The final output is a string of bits that deviates significantly if the orientation of the laser beam is even minutely changed.\\
 
 Challenge is made up from the exact positioning of the laser and the resulting Gabor hash of the emerged speckle pattern is considered as response. The operation and implemetation for optical PUF is shown in fig [ ]. Number of experiments were performed by [th 41 42] for testing the characterstics of the optical PUF and following summarizes their results. These values are taken from the [pappu et al. and th 42]. Total four optical tokens used with 576 individual challenges, for the
-responses intra and inter distance measures were evaluated with average inter-distance of $\mu_{inter}$ = 49.79\% and average intra-distance of 
+responses intra and inter distance measures were evaluated with average inter-distance of $\mu_{inter}$ = 49.79\% and average intra-distance of
 $\mu_{intra}$ = 25.25\%. One of the main limitation of such an optical PUF is the burdensome large setup consisting of a laser and mechanical positioning system. They are classified as Non-electronic, non-intrinisic and strong PUFs.\\
 
 \begin{figure}
@@ -181,7 +181,44 @@ then we say that C is an [n, k] linear code over F , or an [n, k] code [linear.p
 The \emph{rate} of an [n, k] linear code is \textbf{k/n}. If C has minimum distance d, then C is an [n, k, d] linear code over F .
 The number n - k is called the \emph{redundancy} of C [linear.pdf]
 
-This section tried to cover the basics for understanding BCH codes and Golay Codes, in no way we claim the completeness of the mathematical constructs and other proofs that are skipped. Please refer to the references for more details.\\
+\textbf{Cyclic Code} is a linear block code where if c is a codeword, then all the cyclic shifts of c are also codewords.
+example {000, 110, 101, 011} is a cyclic code.
+These codes can be completely produced by a generator string G, all codevectors are multiples of G.[see ref folder, leca.pdf]\\
+
+This section tried to cover the basics for understanding BCH codes and Golay Codes, in no way we claim the completeness of the mathematical constructs and other proofs that are skipped. Please see the references for more details.\\
+
+\subsubsection{BCH Codes}
+The \emph{BCH codes} belong to the class of powerful random error correcting cyclic codes and named after Bose, Chaudhuri and Hocquenghem. These codes exercise great control over code's parameters like code length, information bits etc. The major parameters to the BCH code is length of the input message (input bits) which produces output codewords based on the \emph{BCH mode} selected and number of bit errors that can be corrected with decoding. This section tries to summarize the BCH codes and
+their basic error correcting capability.\\
+
+As discussed BCH code is made up of three code parameters or has three dimensions; the code length \emph{n} of the codevectors, that are generated from the input bits of length \emph{k} and lastly a very important parameter \emph{d} that is called minimum distance, this \emph{d} is responsible for deriving the error correcting capability of BCH code $t = \frac{d}{2} + 1$ i.e maximum number of bit errors the code can correct. These parameters are inter dependant on each other
+and cannot be set directly, alternatively to set the legitimate BCH modes the user needs to set $m$ and $t$. The parameter $m$ determines the degree of the primitive polynomial $p(x)$ that is used in computing the Galois Field $GF(2^m)$ and also to calculate the coefficients of $p(x)$ which are crucial for code generation. The length of the codewords must fall within the range: $2^{m-1} - 1 < n \leq$ $2^m - 1$. The other parameter $t$ ascertains the maximal error correcting capability
+for the code and has explicit influence over redundancy created via encoding process. The minimum distance parameter $d$ is calculated via the formula $d = 2 * t + 1$, the redudancy bits that are mandatory for a successful bit correction in the codeword are calculated w.r.t $d$. So we can infer that the error correction is restricted by code length $n$ and the number of input bits $k$ are defined by the $k = n - redundancy$, where the value of $t$ must be such that $k \geq 2$. Now we can
+formally define BCH code, this definition is taken from [seb 42]:\\
+
+For a positive integer $m$ (m $\geq$ 4 and m $\leq$ 14) and $t$ ($t < 2^{m-1}$), there exists a binary BCH ($n$, $k$, $d$) code with the parameter:
+\begin{itemize}
+\item \textbf{Block length:} $n = 2^m - 1$
+\item \textbf{Number of redundancy bits:} $n - k \leq mt$
+\item \textbf{Minimum distance:} $d_{min} \geq 2t + 1$
+\end{itemize}
+
+``For the construction of BCH codes, the roots of their generator polynomials specified by their zeros are used. A BCH code of $d_{min}$ $\geq$ $2t_d + 1$ is a cyclic code with a generator polynomial $g(x)$ that has $2t_d$ consecutive roots $\alpha^b$, $\alpha^{b+1}$,$\alpha^{b+2t_d-1}$ and is able to correct $t$ or less bit errors for a block of $n = 2^m - 1$. The generator polynomial of that code is specified by its roots from the Galois field $GF(2^m)$. A binary BCH ($n$, $k$, $d_{min}$) code
+has a generator polynomial $g(x) = LCM\{\phi_{b}(x), \phi_{b+1}(x),...,\phi_{b+2t_{d}-1}(x)\}$, length $n = LCM\{n_b,n_{b+1},...,n_{b+2t_d-1}\}$ and dimension $k = n - deg[g(x)]$. The \emph{BCH bound} is the lower bound of a BCH code’s minimum distance and can be used to estimate the error-correcting capabilities of cyclic codes. The elements $\alpha^b$, $\alpha^{b+1}$,$\alpha^{b+2t_d-1}$ are roots of the generator polynomial $g(x)$ and every code word $v$ in the BCH code is associated with a
+polynomial $v(x)$ which is a multiple of $g(x)$. If the generator polynomial $g(x)$ of a cyclic ($n$, $k$, $d$) code has $l$ consecutive roots: $\alpha^b$, $\alpha^{b+1}$,$\alpha^{b+l-1}$, then $d \geq 2l +1$. In the encoding phase, the input to the BCH code will be transformed block-wise into the corresponding code words. In the decoding phase, these code words are decoded and at max $t$ bit errors in each code word can be corrected. The $GF(2^m)$ arithmetic is used to find the error positions
+in the code words during the decoding. This is done by solving a set of equations, which are obtained from the error polynomial $e(x)$ and the zeros of the code $\alpha^j$, for $b \geq j \geq b + 2t_d - 1$.’’ [seb 42]. The BCH decoding uses syndrome systematic decoding technique, which allows for an efficient hardware implementation. Following steps summarizes the decoding:
+
+\begin{itemize}
+\item The syndromes are computed through the evaluation of the received polynomial at the zeros of the code.
+\item The coefficients of the error-locator polynomial $\sigma(x)$ must be solved for.
+\item The inverses of the roots of $\sigma(x)$ have to be calculated, which inform about the error locations $\alpha^{j1}$,...,$\alpha^{jv}$
+\item The decoded error locations can then be used to inverse the bits at the corresponding position and thereby correcting the errors
+\end{itemize}
+
+This concludes our discussion of the BCH code, for more details and the inner workings of the BCH encoder and decoder please refer [seb 42]
+
+
+\subsubsection{Golay Codes}
 
 
 \section{Jaccard index}
