@@ -185,9 +185,9 @@ The number n - k is called the \emph{redundancy} of C [linear.pdf]
 example {000, 110, 101, 011} is a cyclic code.
 These codes can be completely produced by a generator string G, all codevectors are multiples of G.[see ref folder, leca.pdf]\\
 
-This section tried to cover the basics for understanding BCH codes and Golay Codes, in no way we claim the completeness of the mathematical constructs and other proofs that are skipped. Please see the references for more details.\\
+This section tries to cover the basics for understanding BCH codes and Golay Codes, in no way we claim the completeness of the mathematical constructs and other proofs that are skipped. Please see the references for more details.\\
 
-\subsubsection{BCH Codes}
+\subsection{BCH Codes}
 The \emph{BCH codes} belong to the class of powerful random error correcting cyclic codes and named after Bose, Chaudhuri and Hocquenghem. These codes exercise great control over code's parameters like code length, information bits etc. The major parameters to the BCH code is length of the input message (input bits) which produces output codewords based on the \emph{BCH mode} selected and number of bit errors that can be corrected with decoding. This section tries to summarize the BCH codes and
 their basic error correcting capability.\\
 
@@ -217,11 +217,66 @@ in the code words during the decoding. This is done by solving a set of equation
 
 This concludes our discussion of the BCH code, for more details and the inner workings of the BCH encoder and decoder please refer [seb 42]
 
+\subsection{Golay Codes}
+Golay codes are named after its discoverer swiss mathematician Marcel J.E golay, it falls in the class of linear error-correcting code used in digital transmissions. It is the only known code that can correct a three or less random errors in a block of 23 elements. A successor of golay code is extended golay code [24, 12, 8] which encodes 12 bits of data in 24 bit length codewords with error-correcting capabilty of 3-bits and can detect errors upto 7 bits. In our toolkit we have implemented
+the golay code G23 i.e a [23, 12, 7] code, so we will be only concerned with the definition and constructs of the latter. A lot of work in this subsecion is influenced and taken from [golay.pdf ].\\
 
-\subsubsection{Golay Codes}
+\textbf{Binary Golay codes} are constructed using the vectors u = 1 1 0 1 1 1 0 0 0 1 0 and J = 1 1 1 1 1 1 1 1 1 1 1 and P = ($p_{ij}$), which is a 11x11 full-cycle permutation matrix, i.e all the elements of the matrix are zero except:
+
+\tab \tab \tab $p_{2,1} = p_{3,2} = p_{i+1,i} = . . . . . = p_{n,n-1} = p_{1,n} = 1$
+
+We define matrix B as follows:\\
+\tab \tab \tab B = $ \begin{bmatrix}u & 1 \\u P & 1 \\u P^2 & 1\\u P^3 & 1\\u P^4 & 1\\u P^5 & 1\\u P^6 & 1\\u P^7 & 1\\u P^8 & 1\\u P^9 & 1\\u P^{10} & 1\\ & \\J & 0\end{bmatrix} = \begin{bmatrix}1\:1\:0\:1\:1\:1\:0\:0\:0\:1\:0 & 1 \\ 1\:0\:1\:1\:1\:0\:0\:0\:1\:0\:1 & 1 \\ 0\:1\:1\:1\:0\:0\:0\:1\:0\:1\:1 & 1 \\ 1\:1\:1\:0\:0\:0\:1\:0\:1\:1\:0 & 1 \\ 1\:1\:0\:0\:0\:1\:0\:1\:1\:0\:1 & 1 \\ 1\:0\:0\:0\:1\:0\:1\:1\:0\:1\:1 & 1 \\ 0\:0\:0\:1\:0\:1\:1\:0\:1\:1\:1 & 1 \\ 0\:0\:1\:0\:1\:1\:0\:1\:1\:1\:0 & 1 \\
+0\:1\:0\:1\:1\:0\:1\:1\:1\:0\:0 & 1 \\ 1\:0\:1\:1\:0\:1\:1\:1\:0\:0\:0 & 1 \\ 0\:1\:1\:0\:1\:1\:1\:0\:0\:0\:1 & 1\\ & \\J & 0\end{bmatrix} $\\
+
+The generator matrix for the binary golay code is defined as $ \begin{bmatrix} I_{12} & | & \hat{B}\end{bmatrix} $ where $I_{12}$ is a 12x12 identity matrix i.e a matrix whose principal diagonal elements are ones and all other elements are zero. This generator matrix will be denoted as $G_{23}$ in the remaining text.\\
+
+\emph{Decoding}: We summarize the steps for decoding the golay code, here we use parity check matrix for ``extended golay code'' denoted by $H = G^t_{24}$ where $G_{24}$ is generator matrix for extended Golay code [ ], the error pattern is assigned variable $u = v + w$, where $w$ is the word received and $v$ is nearest to $w$. In this context we denote $wt(x)$ as the weight of vector $x$, (or hamming weight or number of ``ones'' in $x$). Once we have found the value of $u$ we assume the
+corrected received word is $v = w + u$ and we denote the received word $w$ as $w = [w_1, w_2, \cdots , w_{23}]$. The algorithm is described below:
+\begin{enumerate}
+	\item If weight of $w$ is even then construct\\
+		$\hat{w} = [ w_1, w_2, \cdots , w_{23}, 0]$\\
+		  else\\
+		$\hat{w} = [ w_1, w_2, \cdots , w_{23}, 1]$\\
 
 
-\section{Jaccard index}
+\end{enumerate}
 
-\section{Congnicrypt Syonpsis}
 
+(a 0 )
+If the weight of w is odd then construct
+w
+c 0 = [ w 1 , w 2 , . . . , w 12 , w 13 , w 14 , . . . , w 23 , 0 ].
+(a 1 )
+If the weight of w is even then construct
+w
+c 1 = [ w 1 , w 2 , . . . , w 12 , w 13 , w 14 , . . . , w 23 , 1 ].
+Step 2. Use the algorithm for the extended Golay code to decode w
+c 0 or w
+c 1 .
+Step 3. Remove the last digit of the decoded word.
+
+\section{Metrics}
+This section describes about the fuzzy decoder technique employed by the PUF toolkit program to securely recover public and private keys with one of the error correction code as a basic building block. The second part defines Jaccardi's index and explains on the calculation of the Fractional jaccardi's index.
+
+\subsection{Fuzzy extractor}
+
+We have already established that external factors like noise, voltage fluctuation, aging etc. instill errors in the PUF responses with some of the bits flipped between two responses from the same device, giving rise to intra distance between them. \emph{Fuzzy Extraction} is a well known technique which aims to rectify these errors with the help of the error correcting codes. In this thesis we have used binary BCH codes, binary linear repetition code, binary majority vote and binary Golay
+codes to realize the PUF based secure key storage.\\
+
+The influence of noise and other environmental conditions can be pre-evaluated, so a selection of competent error correction algorithms can be optimized and an efficient implementation of a fuzzy extractor to regulate the variations can be established. Most implementations of fuzzy extractors utilize a static approach, which implies that the enlisted error correction code has a static maximum error
+correctiion capability. The Golay (23, 12, 7) code can correct upto three errors but the environmetal factors like aging effects render this code useless because they can introduce more errors than expected, so in the thesis BCH code is also used as a building block in the fuzzy extractor. There are three major steps to implement a secure key recovery using Fuzzy extractor. In the first phase we discard the unreliable PUF bits to reduce the burden on the error correction scheme that is called
+Prevaluation. The second phase is called generation/enrollement followed by the reproduction phase.\\
+
+\textbf{Pre-evaluation}: The PUF response properties are evaluated in this step. Some parameters that effect the PUF instance are static and remain constant with different PUF response generations, so measurements can be compensated for these parameters. Pre-evaluating the response also gives insight into the instensity of noise disturbance that can occur, consequently a BCH mode can be selected to adapt and correct errors instilled in the PUF-response by that noise. The conceptual
+design for this phase is illustrated in Figure [ ].\\
+
+\textbf{Generation}: The second phase also called the enrollment phase. It takes the secret key $s$, to be stored in the PUF-based secure key storage, and generates the matching helper data $hd_s$. The design for the generator is depicted in fig. [ ].  The secret $s$ is provided as input to the BCH (n, k, d) encoder that is configurable via the input line \emph{cfg}, this results in the output of BCH encoded codewords $C_s$, since we are using systematic encoding BCH algorithm this means that
+the encoded secret $s$ is contained in the codevectors. We denote this encoding for a certain configuration \emph{`cfg'} by $BCH(n,k,d)_{cfg}\_ENC(s) = C_s$. The configuration is decided in the \emph{pre-evaluation} phase, by setting the BCH code parameters $m, t$ and $n$.
+Only the non-secret part (part of the output from BCH encoder that does not contains secret $s$) is taken from the codeword $C_s$ and a linear repitition code LR is applied to it to generate $LR_s$, denoted in the text as $LR_s = LR(C_s)$. In the end helper data $hd_s$ for the secret key $s$ is derived by XORing the PUF response PR and $LR_s$ along with the configuration settings concatenated to the XORed result. This process is expressed in an equation as $hd_s = (PR \xor LR_s) \cup cfg$.
+The helper data is stored in the non-volatile memory of the hardware device:$store(hd_s)$. The last step in this phase is cleanup where all the generated values $C_s, LR_s and PR$ are erased.\\
+
+\textbf{Reconstruction}: After storing the key as helperdata the same secret key $s$ must be restored. First the `cfg' setting that was appended to the end of the helperdata is stripped. A new PUF response from the same device $PR'$ is XORed with stripped helperdata $hd_s$ to get $LR'_s$: $LR'_s = PR' \xor (hd_s\\cfg)$. Next a Majority vote algrorithm (refer section bla [ ]) is applied to $LR'$ from which the encoded codeword $C'_s$ is recovered: $C'_s = MJ\_VOTE(LR'_s)$. After this the
+reconstruction of the secret key $s$ is done by feeding the obtained $C'_s$ in the BCH (n,k,d) decoder: $C'_s = BCH(n,k,d)_{cfg}\_DEC(C'_s)$. The last step is similar to the generation phase i.e the cleanup of $PR', cfg and LR'_s$. The reproduced secret key $s$ is also erased after usage. An illustration for the reconstruction design is depicted in figure [ ].\\
+
+\section{Congnicrypt Synonpsis}
