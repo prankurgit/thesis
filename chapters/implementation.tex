@@ -1,0 +1,26 @@
+This chapter explains about the major tasks implemented in the thesis, new contributions made to the PUF Toolkit. The first part of the chapter briefly explains about the current PUF toolkit implementation, without delving much into the details. The second and more major part talks about the new modifications that were done to the toolkit in the form of BCH fuzzy extractor encoder and decoder integration, which were previously not a part of the main toolkit and presented as seperate executables
+with seperate menu items. We then go on to explain the Golay code implementation both the decoder and encoder, and explain their integration in the toolkit as a distinct menu item. Then the other modifications like the addition of \emph{'offsets from begining and end', error codes} and other intricate code developement changes are presented together as one section.\\
+
+The final two sections deal with cognicrypt details and the Java Native Interface (JNI), they first touch upon the basics of JNI
+wrapper and the functioning of JNI with shared libraries packaged as JAR files that are accesible to Java compiler as external library. Finally, we describe the clafer model of the cognicrypt and how it assists users and Java developers, without any previous knowledge about cryptography, to select a strong PUF based secure key evaluation algorithm based on the questions asked by the cognicrypt. In the end of this last section we also talk about the xsl model of the cognicrypt that builds on
+the clafer model to generate a boilerplate java code to help the Java developer by presenting him/her with a sample usecase of the Java code implementation showing a usage of the PUF evaluation algorithms that is robust and flawless.\\
+
+For the implementation, the ISO standardize programming language C++ was chosen. This selection was made based on the efficient and general purpose features provided by C++. Apart from the object oriented and generic programming features, C++ has a high abstraction level and the compilation and code development can be done on diverse systems. The implementations are dissociated from a specific hardware to support a wide range of systems and applications. This makes the toolkit easier
+to extned and conform to a particular hardware for next iterations. The JNI framework support native calls and the wrapper is written in Java, for clafer model we use Java script and json files along with the .cfr clafer extension modelling language(refer to github page [ ] for details) and xsl model to generate sample Java boilerplate code is written in xsl.\\
+
+\section{PUF Toolkit} 
+The current implementation of the PUF toolkit was done and presented in the thesis [sebastian Master Thesis]. The main aim of the toolkit is to evaluate various PUF repsonse based on well established metrics and thereby helping researchers and designers to gain useful insights into the properties and behaviour of PUF responses. The toolkit implements the following list of metrics: \pagebreak
+
+\begin{itemize}
+	\item (Shannon) Entropy
+	\item Hamming Weight
+	\item Intra-Hamming Distance
+	\item Inter-Hamming Distance
+	\item Min-entropy
+	\item Median and average
+\end{itemize}
+
+These metrics are well explained in the Master thesis Sebastian [ ], so we take the liberty to not go into the detail of explaining each metric here again. It must also be noted that there are other metrics and definitions that use identical concepts and/or apply the metrics in a different way to generalize the coorelation between different PUF instances and their reponses. More exhaustive and comprehensive information related to these metrics and definitions for PUFs can be found in [seb 37, 53, 26, 5].\\
+
+Apart from the above mentioned metrics implementation the PUF based secure key storage is implemented already using BCH encoder and Decoder in two seperate executables. The structure and the User design used in these two executables is similar to the PUF toolkit and to avoid confusion we shall refer to them as \emph{PUF-BCH encoder} and \emph{PUF-BCH decoder}
+
