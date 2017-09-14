@@ -10,7 +10,7 @@ the clafer model to generate a boilerplate java code to help the Java developer 
 For the implementation, the ISO standardize programming language C++ was chosen. This selection was made based on the efficient and general purpose features provided by C++. Apart from the object oriented and generic programming features, C++ has a high abstraction level and the compilation and code development can be done on diverse systems. The implementations are dissociated from a specific hardware to support a wide range of systems and applications. This makes the toolkit easier
 to extned and conform to a particular hardware for next iterations. The JNI framework support native calls and the wrapper is written in Java, for clafer model we use Java script and json files along with the .cfr clafer extension modelling language(refer to github page [ ] for details) and xsl model to generate sample Java boilerplate code is written in xsl.\\
 
-\section{PUF Toolkit} 
+\section{PUF Toolkit}
 The current implementation of the PUF toolkit was done and presented in the thesis [sebastian Master Thesis]. The main aim of the toolkit is to evaluate various PUF repsonse based on well established metrics and thereby helping researchers and designers to gain useful insights into the properties and behaviour of PUF responses. The toolkit implements the following list of metrics: \pagebreak
 
 \begin{itemize}
@@ -83,6 +83,128 @@ The design of the menu and the (sub-) menus is consistent and recurses itself to
 The design of the GUI is kept simple without the use of extended graphic components to keep the toolkit compatible with other operating systems like linux. The UI shows only relevant information depending on the current state of the program and potrays a simple but aesthetic clean design. Error correction and incorrect user input is efficiently handled, all possibile inputs are exhausted and depeding on the false input, meaningful errors information is displayed to the user, that can be used to
 recover from the erroneous state. Also for all mandatory inputs a brief guide / help text with examples is shown, the current settings are saved and kept in each (sub-) menu (wherever applicable) to avoid unecessary redudant input.\\
 
-By strictly adhering to the design guidelines throughout the toolkit, an effective and intuitive console
-user interface was created. The developed console user interface can thereby decisively support designers
-and researchers in the evaluation of PUFs. [seb thesis]
+Rigorously complying to the standardized design guidelines for the toolkit, resulted in a effective and intuitive console user interface.
+This in turn decisively supports developers and researchers in the PUFs reponses evaluation.[seb thesis]
+
+\section{Hamming Distance Menu}
+
+The hamming distance functionality was added to and integrated as part of this Master thesis. Hamming Distance between two bit strings of same length is defined as the number of the bits that differ amongst the two binary bit strings. For eg. if we have two string \emph{A = 1100} and \emph{B = 1010} then the hamming distance between them would be ``\emph{two}'', since the bits at second and third position (starting from the left) differ between these two strings. The implementation of
+this functionlality is straightforward, using the in-built \emph{bitwise XOR} operation of the ISO C++ standard and then counting the number of ones in the resulting string, which is nothing but calling the hamming distance function on the resultant string.\\
+
+As depicted in the figure \ref{img:gui_design} above there are other options like \emph{Intra Hamming Distance} and \emph{Inter Hamming Distance} in the Hamming Distance Menu, that are organized later as subsections where we explain about the different modes and other options and plausible input values the user can select from them. For now we direct our attention at the other menu items.\\
+
+The first menu item is related to the \emph{\textbf{Offsets}} that are mandatory for the user to input and the first query that must be answered after the toolkit is run. Since the PUF toolkit is designed for evalutation of PUF responses that are in binary format and not all the data in PUF reponse binary file is useful for evaluation the user can manually select how much he/she desires to skip the data (in bytes) from the beginning and the end of the file using this \emph{Offsets} option.
+For example the first $400$ bytes of the PUF response of a (TI) Stellaris LM4F120XL Launchpad Evaluation Kit are used during the booting process and are not random, so they are irrelevant in PUF responses evaluation. These kind of device specfic behavior requires suitable handling to ensure valid results.\\
+
+Consequently the \emph{Offset} determines the selection range of the bytes from the PUF response for calculation and also establishing the actual \emph{length} of the response. For eg. if a PUF response is 32784 bytes long and we skip 400 from the beginning and 200 from the end, the actual length becomes $32784-600 = 32184$ bytes and the processing starts from the $401^{th}$ byte till $32184^{th}$ byte.\\
+
+The result of the Hamming Distance between two PUF responses can be optionally stored in an output file that is set using the option \emph{two}. This is not mandatory if we are evaluating only two files but in cases of Inter/Intra Hamming distance this option becomes mandatory. Another functionality added to the Hamming Distance and other Functions in the toolkit as well is that of the Fractional Distance. \newline
+$\S$\emph{Defintion}: We define \emph{Fractional Hamming Distance} as the Hamming Distance between two PUF
+responses divided by their length. For example if Hamming Distance between two PUF responses each of length 31784 bytes is 10, then their Fractional Hamming Distance would be $ 10 / 31784 = 0.000314624$ (NOTE: the toolkit displays the fractional hamming distance rounded off to 9 digits after decimal).\\
+
+The Hamming Distance can be calculated using option \emph{three} that will ask for the two PUF responses binary filenames and if the path and filenames are correct, the results will be displayed in the fourth part of the GUI. If the output filename was given before then the result is also stored in that file and can be viewed using the option \emph{seven}.\\
+
+In order to understand the code flow and working of the hamming distance function it is vital to look at the structure \emph{Item} and its data members. This structure is used by other menus in the toolkit to share the current settings and global configurations like Offsets, filenames, paths etc. and thereby reducing the user's effort and memory load. The table \ref{table:item} only highlights the data members and their purpose that are relevant to Hamming Distance Menu. The other data members
+for the time being are not shown and will be discussed in relevant sections.\\
+
+\begin{table}[!ht]
+	\begin{center}
+		\begin{tabular}{ll}
+			\toprule
+			\multicolumn{1}{c}{\textbf{struct \emph{Item}}} & \multicolumn{1}{c}{\textbf{Purpose}}\\
+			\midrule
+			\hline
+
+			\emph{offset\_begin} & Defines the starting point in a binary file (bytes to skip from beginning)\\
+
+			\emph{offset\_end} & Defines the ending point in a binary file (bytes to skip from end)\\
+
+			\emph{input\_length} & Defines the number of bytes to use \\
+
+			\emph{input\_file\_name} & Defines the name of the first input file (name and path)\\
+
+			\emph{input\_PUF\_name} & Defines the name of the second input file (name and path)\\
+
+			\emph{output\_file\_name} & Defines the name of the output result file (name and path)\\
+
+			\emph{zeros} & Stores the occurrences of 0s in a defined file\\
+
+			\emph{ones} & Stores the occurrences of 1s in a defined file\\
+
+			\emph{frd} & Stores the fractional distance in a defined file\\
+
+			\emph{result} & Stores the result and feedback regarding the calculations\\
+
+			\emph{HD\_error\_pos} & Additional error information \\
+
+			\hline
+			\addlinespace
+			\bottomrule
+		\end{tabular}
+	\end{center}
+	\caption{Definition of the elements of the data structure \emph{Item} and their purpose.}
+	\label{table:item}
+\end{table}
+
+The four lines of code form the basic building block for hamming distance as shown in the listing \ref{lst:hammingdt}. First the data is read from the two input PUF files into two arrays of size \emph{dsize} where dsize is equal to the length of the files after applying the Offsets, then as depicted in lines 3-5 of the listing \ref{lst:hammingdt} each byte of the data are bitwise XORed and the result in stored in a third array of same length. So the resultant data array contains
+\emph{ones} in the position where bits differ in the two PUF responses. We then just need to count the number of ones in the XORed result.
+This is done by calling the function \emph{hammingwt} abbreviated in the code for Hamming Weight.\\
+
+\begin{center}
+\begin{minipage}{0.7\textwidth}
+\begin{lstlisting}[frame=single,language=C++,
+commentstyle=\color{green},
+backgroundcolor=\color{gray},
+keywordstyle=\color{blue},
+stringstyle=\color{orange},
+basicstyle = \ttfamily \color{black} \footnotesize,
+caption={Hamming Distance calculation using hamming weight and bitwise XOR operator} ,
+label={lst:hammingdt},
+captionpos=b,
+numbers=left]
+    //bitwise XOR f1data and f2data
+    //to get the positions where bits differ
+    for (i = 0; i < dsize; i++) {
+        data[i] = f1data[i] ^ f2data[i];
+    }
+    //calculate hamming distance
+    item->ones = hammingwt(data, dsize);
+    item->frd = (float) item->ones / dsize;
+\end{lstlisting}
+\end{minipage}
+\end{center}
+
+Hamming Weight is one of the essential function of the toolkit and it is also referred to by other functions its important that we list its code here. Listing \ref{lst:hammingwt} shows the Hamming Weight function as implemented in the toolkit,
+TODO: explain the listing
+
+\begin{center}
+\begin{minipage}{0.7\textwidth}
+\begin{lstlisting}[frame=single,language=C++,
+commentstyle=\color{green},
+backgroundcolor=\color{gray},
+keywordstyle=\color{blue},
+stringstyle=\color{orange},
+basicstyle = \ttfamily \color{black} \footnotesize,
+caption={Hamming Weight calculation using bitwise AND operator} ,
+label={lst:hammingwt},
+captionpos=b,
+numbers=left]
+int hammingwt(char *data, int size)
+{
+    int i;
+    int wt = 0;
+    for (i = 0; i < size; i++) {
+        (data[i] & 0x80 ? wt++ : wt);
+        (data[i] & 0x40 ? wt++ : wt);
+        (data[i] & 0x20 ? wt++ : wt);
+        (data[i] & 0x10 ? wt++ : wt);
+        (data[i] & 0x08 ? wt++ : wt);
+        (data[i] & 0x04 ? wt++ : wt);
+        (data[i] & 0x02 ? wt++ : wt);
+        (data[i] & 0x01 ? wt++ : wt);
+    }
+    return wt;
+}
+\end{lstlisting}
+\end{minipage}
+\end{center}
