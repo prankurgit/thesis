@@ -237,5 +237,20 @@ A sample output file with compact style format is shown in Figure \ref{img:4_int
 the files, that are compared to the selected input file, are displayed. The Hamming Distance and Fractional Hamming Distance, seperated by a tab length are printed in the center (right) of each table. The
 \emph{minimal} output style strips off all the path and filename info and only saves the Hamming Distance values seperated by spaces, this type of file format can be used by another metric of the toolkit called Median and Average [seb thesis section median] calculation which accepts only files containing plain numbers seperated with space. The \emph{View} option can be used to look at the output/result file.\\
 
+\subsection{Inter Hamming Distance}
+Contrary to the comparisons between PUF responses from the same device, Inter Hamming distance evaluates responses from different PUF instance. The co-relation is again based on the same metric Hamming Distance. In this case the toolkit can simulatneously compare from 2 to 99 PUF instances. All the PUF responses from a specific instance are arranged in a single directory so that means the toolkit can take input paths between 2 and 99 to evaluate different PUF devices. The output
+style in addition to compact and minimal has a \emph{detailed} as an alternative. The compact and minimal style formats are same as Intra Hamming Distance, but the detailed style differs from the compact style that it does not implicitly ignores the duplicate symmetric comparisons and therefore maps out all the permutations and combinations between files of different folders. It should be noted that Inter Hamming Distance metric does not compare PUF responses in the same directory. So
+in detailed mode, the first directory all the responses are compared to all the PUF responses from the remaining 3 to 99, then all files in second folder are compared to all the files in all the other folders except its own, and so on. The Figure \ref{ } shows a sample input with 3 input paths, for compact mode we need to ignore the duplicate comparisons so we take the following approach:
+\begin{itemize}
+	\item store all the filenames and their corresponding paths from all but last folder in list1.
+	\item store all the filenames and their corresponding paths from all but first folder in list2.
+	\item iterate over list1 (iteration 1-4) and compare the list1 objects with all entries of list2.
+	\item remove the second folder objects from list2.
+	\item iterate over list1 (iteration 5-7) and compare the list1 objects with all files of list2.
+\end{itemize}
 
+This process is summarized in Figure \ref{ } for three folder input and is generalized for more inputs. We emphasize on the inner workings of the modes because the exact same techniques are used for Jaccardi's index that will be discussed later in this chapter.\\
+
+\emph{Menu Modifications:} In contrast to the original toolkit where Intra and Inter Hamming Distance were seperated in their own sub-menus, the new changes merges both of them under Hamming Distance Menu. Seeing as it is relevant to combine them if they use the same underlying metric, on the other hand the Hamming Weight menu item was untouched since it takes only one PUF response file as an input and gives out its hamming weight and there is no evaluation between two or
+more files.\\
 
