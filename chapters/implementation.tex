@@ -254,3 +254,120 @@ This process is summarized in Figure \ref{ } for three folder input and is gener
 \emph{Menu Modifications:} In contrast to the original toolkit where Intra and Inter Hamming Distance were seperated in their own sub-menus, the new changes merges both of them under Hamming Distance Menu. Seeing as it is relevant to combine them if they use the same underlying metric, on the other hand the Hamming Weight menu item was untouched since it takes only one PUF response file as an input and gives out its hamming weight and there is no evaluation between two or
 more files.\\
 
+
+\section{Fuzzy extractor}
+As discussed in section \ref{ } the PUF based secure key storage uses Fuzzy Extractor technique that is divided in three phases \emph{(i)Pre-evaluation}, \emph{(ii) Enrollment} and \emph{(iii) Reconstruction}. We discuss only the later two phases, where these two phases follow a seperate implementation of the respective dedicated functionalities, according to [seb 56]. The enrollment phase employs PUF BCH encoder which will be discussed first followed by the Reconstruction phase, that is
+realized by the PUF BCH Decoder implementation. We will not go into the details of the actual implementation of the encoder and decoder since thay are already well documented in [Master theses sebastian], but rather explain the changes made to integrate these functionalities in the PUF toolkit.\\
+
+The concept of fuzzy extractor in combination with BCH coding with linear repetition code and majority vote is depicted in Figures \ref{4_BCH_concept}, \ref{4_LR_HD} and \ref{4_MV_codewords}.\pagebreak
+
+\begin{figure}[h]
+\centering
+\fbox{ \includegraphics[width=0.97\textwidth]{images/BCHconcept.png}}
+\caption{Exemplary code word generation with a BCH (15,7,5) code, based on \cite{10}.}
+\label{img:4_BCH_concept}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\fbox{ \includegraphics[width=0.97\textwidth]{images/LRhd.png}}
+\caption{Exemplary helper data generation with a linear repetition code and factor 7, based on \cite{10}.}
+\label{img:4_LR_HD}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\fbox{ \includegraphics[width=0.97\textwidth]{images/MVrecon.png}}
+\caption{Exemplary code word reconstruction with the majority vote and factor 7, based on \cite{10}.}
+\label{img:4_MV_codewords}
+\end{figure}
+
+\subsection{PUF BCH Encoder}
+We first briefly mention the implementation algorithm used in the BCH encoding of the data, after that the user interface is illustrated followed by a Entity relation diagram that shows major functions of the encoder. We present the changes as a subsection named integration changes and we conclude with steps taken to verify the integrated BCH encoder.\\
+
+The BCH encoding implementation is taken from \emph{Morelos-Zaragozas Encoder/Decoder} for binary BCH codes in C [seb 43]. This algorithm uses systematic encoding to encode the message, hence the encoded codewords contain initial message in it, which is stripped from the codeword to get the helper data, using the BCH(n,k,d) (refer section \ref{bch section}) the codewords are combined in groups of \emph{length k} and extra 0s are added to complete the last set as shown in Figure \ref{ }. In the
+second part of the enrollment of the fuzzy extractor the LR code is applied to the generated codeword, based on the user input the bits are repeated either 7 or 15 times, the Figure \ref{ } shows this LR process with factor 7. It was noted that there were some limitations to the original algorithm and the encoding only works for small values of $m$, after code review and research the error states were removed and/or documented.\\
+
+Due to above mentioned limitations, the correct combination of BCH encoding and linear repetition code requires correct handling of the bounds. The length of the secret key in bits is denoted by $N$, to process the entire file with BCH (n,k,d) code we need \emph{len} iterations of encoding, this is defined in equation \ref{4:BCH_len}.
+
+\begin{itemize}
+	\item For an input data of length \emph{N} (bits) and a BCH ($n$,$k$,$d$) code, a ‘\emph{len}’ number of BCH encoding iterations have to be performed to process the complete input file [Master thesis seb]:
+\begin{equation}
+	len =\Bigg\lceil\dfrac{N}{k}\Bigg\rceil
+	\label{4:BCH_len}
+\end{equation}
+
+\item For a BCH ($n$,$k$,$d$) code that requires ‘\emph{len}’ BCH encoding iterations to process the complete input file, the result of the linear repetition code has a length of ‘\emph{LengthAfterLR}’ with respect to the chosen linear repetition factor ‘\emph{LRfactor}’ (7 or 15) [Master Thesis Sebastian]:
+\begin{equation}
+	LengthAfterLR = \Bigg\lceil\Bigg(\dfrac{\Bigg(\dfrac{len}{k} * n\Bigg)}{8}\Bigg)\Bigg\rceil * LRfactor
+\label{4:BCH_LR_len}
+\end{equation}
+\end{itemize}
+
+The User interface for the BCH sub menu is shown in Figure \ref{ }. The first option is to set the BCH mode in which the user is required to input the codelength $n$ i.e. derived from $m$ such that $(2^{m-1} - 1) < length <= (2^m - 1)$, after that it is also mandatory to enter the desired correction capability $t$ of the BCH (n,k,d) code that in turn will determine the paramter $d$ of the code from the formula \ref{ }.
+These values must be consistent with the equations \ref{4:BCH_len} and \ref{4:BCH_LR_len} or else the decoding of the secret key will not be successful. The second option chooses the LR factor as 7 or 15, the third is the familiar offsets selection for the PUF response that will also determine the actual length of the PUF response used to generate the helper data. After this the user must also input the key he/she wants to securely store and the name of the PUF
+response file, finally the output filename for helperdata must be provided to be saved on permanent storage and to be used in the later reconstruction phase of the fuzzy extraction. These discussed inputs are all mandatory in the BCH menu and only then we can use option seven to process and generate the helper data or else the toolkit throws appropriate error messages to the user about missing parameters.\\
+
+We show the functions of the BCH encoder arranged in modules that are related to each other via Figure \ref{img:bchenc_fns}
+
+\begin{figure}
+\centering
+\fbox{ \includegraphics[width=0.9\textwidth]{images/bch_encoder_functions.pdf}}
+\caption{Dependencies of the BCH Encoder Modules}
+\label{img:bchenc_fns}
+\end{figure}
+
+The data structure \emph{Item} that was discussed in Hamming Distance contains relevant data members related to BCH encoder, which are summarized in the table \ref{tab:4_BCH_DEC_item_type_limits}
+
+\begin{table}[!ht]
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+\multicolumn{1}{l}{\textbf{Name}} & \multicolumn{1}{c}{\textbf{Type}} & \multicolumn{1}{c}{\textbf{Description}}\\
+\midrule
+\hline
+
+\emph{offset\_begin} & long & \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Defines the starting point in a binary file (bytes to skip from beginning) \end{tabular}}\\
+
+\emph{offset\_end} & long & \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Defines the ending point in a binary file (bytes to skip from end) \end{tabular}}\\
+
+\emph{input\_HD\_name} &  char [102] & \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Char array for 102 symbols, to define the input helper data file \end{tabular}}\\
+
+\emph{input\_PUF\_name} & char [102] & \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Char array for 102 symbols, to define the input PUF file \end{tabular}}\\
+
+\emph{output\_Key\_name} & char [102] & \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Char array for 102 symbols, to define the output key file \end{tabular}}\\
+
+\emph{BCHmode} & char [25] & \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Char array for 25 symbols, to define the BCH mode \end{tabular}}\\
+
+\emph{LR} & int & \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Definition of the utilized linear repetition factor \end{tabular}}\\
+
+\emph{result} & char [52] & \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Char array for 52 symbols, to provide feedback \end{tabular}}\\
+\hline
+\addlinespace
+\bottomrule
+\end{tabular}
+\end{center}
+
+\caption{Names and types of data memebers of the data structure \emph{Item} for the \emph{PUF BCH Decoder} and a brief description .}
+\label{tab:4_BCH_DEC_item_type_limits}
+\end{table}
+
+\subsubsection{Integration changes}
+Initially the BCH Menu item was defined in the toolkit module to be called by the main menu, after that support for Offset from beginning and end, depicted in table \ref{tab:4_BCH_DEC_item_type_limits}, was made available similar to Hamming Distance menu. Since the ``Calculation module'' functions of the BCH encoder are all called internally without any dependence on the user, so they were unified with the original PUF Toolkit Calculation module without much hindrance.
+The ``Settings module'' was merged to the toolkit with \emph{DefineFilename\_BCH} was renamed to avoid function name conflict with \emph{DefineFilename} of the toolkit, the former is dedicated to process the input PUF filename, output helperdata file and input secret key of the BCH encoder. The ``File and View modules'' were straightforward to unify with the toolkit, special care was taken to add the BCH global variables and global vectors to the toolkit. Changes in the ``View
+module'' were dominated by the \emph{ErrorMessages} routine, which informs the user about the incorrect input and error states and the ways to recover from them. Major challenges faced during the integration were the same name functions as in the orignal toolkit that resulted in linking errors, they were resolved by renaming them appropriately for BCH encoder and all the declarations of the resulting functions were unified in the header files of the respective modules.\\
+
+\subsubsection{Verification}
+The correctness after merging the BCH encoder was authenticated via exhaustive run through all the test cases. In addition to that a final verification of the entire implementation was done. While doing the verification following main points were given priority:
+
+\begin{itemize}
+	\item Correctness of each module verified through utilization of test cases.
+	\item All the possible menu options were checked and reviewed for their expected functionality
+	\item Wrong inputs and incorrect state handling was also tested to make sure that the toolkit accepts only legitimate inputs and display appropriate error messages to rectify the error.
+	\item Unusual workflows were inspected to assess their impact on Encoder functionality.
+\end{itemize}
+\pagebreak
+
+\subsection{PUF BCH Decoder}
+
+
