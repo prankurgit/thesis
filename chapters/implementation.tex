@@ -1,7 +1,7 @@
 This chapter explains about the major tasks implemented in the thesis, new contributions made to the PUF Toolkit. The first part of the chapter briefly explains about the current PUF toolkit implementation, without delving much into the details. The second and more major part talks about the new modifications that were done to the toolkit in the form of BCH fuzzy extractor encoder and decoder integration, which were previously not a part of the main toolkit and presented as seperate executables
 with seperate menu items. We then go on to explain the Golay code implementation both the decoder and encoder, and explain their integration in the toolkit as a distinct menu item. Then the other modifications like the addition of \emph{'offsets from begining and end', error codes} and other intricate code developement changes are presented together as one section.\\
 
-TODO: write about hamming distance and jaccardi's index
+%TODO: write about hamming distance and jaccardi's index
 
 The final two sections deal with cognicrypt details and the Java Native Interface (JNI), they first touch upon the basics of JNI
 wrapper and the functioning of JNI with shared libraries packaged as JAR files that are accesible to Java compiler as external library. Finally, we describe the clafer model of the cognicrypt and how it assists users and Java developers, without any previous knowledge about cryptography, to select a strong PUF based secure key evaluation algorithm based on the questions asked by the cognicrypt. In the end of this last section we also talk about the xsl model of the cognicrypt that builds on
@@ -64,7 +64,7 @@ The notion behind the console user interface design by inspired from Nielsen and
 \end{table}
 
 The design of the menu and the (sub-) menus is consistent and recurses itself to make the user interface more intuitive and friendly. Each menu option is written in clear and easy to understand instructions and the menu items are precisely structured to help the user navigate the toolkit with ease. The organization of the menu follows a hierarchical design and a ``back'' function is provided for the user to go to the parent menu. A conceptual depiction of the User Interface is shown in Figure
-\ref{img:gui_design}. The Graphical User Interface (GUI) is subdivided into four parts, the color markers are related to the illustration in \ref{img:gui_design}:
+\ref{img:gui_design}. The Graphical User Interface (GUI) is subdivided into four parts, the color markers are related to the illustration in \ref{img:gui_design}.
 
 \begin{itemize}
 	\item The first part, marked in yellow, is the \emph{header}. It gives the user general information, like the title of the current (sub-) menu or brief instructions.
@@ -284,7 +284,7 @@ The concept of fuzzy extractor in combination with BCH coding with linear repeti
 \end{figure}
 
 \subsection{PUF BCH Encoder}
-We first briefly mention the implementation algorithm used in the BCH encoding of the data, after that the user interface is illustrated followed by a Entity relation diagram that shows major functions of the encoder. We present the changes as a subsection named integration changes and we conclude with steps taken to verify the integrated BCH encoder.\\
+This section first briefly mentions the implementation algorithm used in the BCH encoding of the data, after that the user interface is illustrated followed by a Entity relation diagram that shows major functions of the encoder. The changes are presented as a subsection named integration changes and the section is concluded by showing the steps taken to verify the integrated BCH encoder.\\
 
 The BCH encoding implementation is taken from \emph{Morelos-Zaragozas Encoder/Decoder} for binary BCH codes in C [seb 43]. This algorithm uses systematic encoding to encode the message, hence the encoded codewords contain initial message in it, which is stripped from the codeword to get the helper data, using the BCH(n,k,d) (refer section \ref{bch section}) the codewords are combined in groups of \emph{length k} and extra 0s are added to complete the last set as shown in Figure \ref{ }. In the
 second part of the enrollment of the fuzzy extractor the LR code is applied to the generated codeword, based on the user input the bits are repeated either 7 or 15 times, the Figure \ref{ } shows this LR process with factor 7. It was noted that there were some limitations to the original algorithm and the encoding only works for small values of $m$, after code review and research the error states were removed and/or documented.\\
@@ -420,7 +420,8 @@ The members of the data structure \emph{Item} those are relevant to the BCH deco
 \label{tab:4_BCH_DEC_item_type_limits}
 \end{table}
 
-\subsubsection{Integration Changes}: To integrate the BCH decoder on top of already merged BCH encoder in the toolkit, required careful alterations to the code. The \emph{Main\_Menu} routine of the toolkit was modified to insert a BCH decoder menu that can be invoked by the user. The ``Calculation'' module functions were merged without much conflict with the existing functions, the function \emph{generate\_gf}, responsible for Galios Field computation was unchanged. The other two functions
+\subsubsection{Integration Changes}
+To integrate the BCH decoder on top of already merged BCH encoder in the toolkit, required careful alterations to the code. The \emph{Main\_Menu} routine of the toolkit was modified to insert a BCH decoder menu that can be invoked by the user. The ``Calculation'' module functions were merged without much conflict with the existing functions, the function \emph{generate\_gf}, responsible for Galios Field computation was unchanged. The other two functions
 \emph{read\_p\_decode and gen\_poly\_decode} that are used for polynomial generation were renamed because of the overlapping function names with the encoder. The error messages displaying routine of the ``View module'' was redeclared as  \emph{ErrorMessages\_decode} because the error states and the possible inputs for decoder are different from the BCH encoder. \emph{MajorityVoting} and \emph{ViewFile} were added to the family of BCH functions and correspondingly their declarations written in respective header files. The
 routine \emph{DefineFilename\_BCH} was specifically modified to take two more arguments i.e. input helperdata filename and output recovered key name, since these two arguments were not implemented in the encoder. Accordingly the body of the same routine was changed to display appropriate messages for the input of helperdata and output key name that would be restored after decoding. The other challenge was to find and modify all the invoking points to the newly renamed functions, this was
 resolved by careful code investigation and with the help of insight gained via compiler and linker errors.\\
@@ -436,4 +437,44 @@ For verifying the integrated BCH decoder a similar approach as BCH encoder was t
 	\item Unusual workflows were inspected to assess their impact on Decoder functionality.
 	\item The restored key was matched with the original secret key using the linux commandline utility ``diff''.
 \end{itemize}
+
+\subsection{Golay Encoder}
+This section discusses the Golay Encoder that was integrated in the toolkit. We first discuss the user interface then look at the functions and modules of the Golay encoder followed by a basic description of the important routines in the code and then steps taken to verify the implementation.\\
+
+The UI is similar to BCH encoder but in this case we do not need to set the dimensions of the code ``n, k and d'' because Golay is a static code with the universal dimensions of (23, 12, 7) as seen in section \ref{golay_related}. The user interface is portrayed in Figure \ref{ }, using the first option the user can set the Linear repetition factor as '7' or '15', the offsets of the PUF file can be adjusted using option two. After this it is mandatory to input the secret key filename, to be
+stored securely, and input the PUF filename to generate the helperdata using fuzzy extractor algorithm, using option three and four respectively.The helperdata filename is provided by the user by selecting option five. If all the inputs are satisfied and conditions are met then the helperdata will be generated by choosing the last option six.\\
+
+
+\begin{figure}
+\centering
+\fbox{ \includegraphics[width=0.9\textwidth]{images/golay_encoder_functions.pdf}}
+\caption{Golay Encoder User Interface.}
+\label{img:gui_design}
+\end{figure}
+
+The functions of the Golay Encoder are divided into four modules similar to the BCH encoder depicted in Figure \ref{ }. The \emph{Setting} module contains the familiar functions ``DefineFilename'' and ``DefineSettings'' alongwith ``DefineOffsetlength'' which sets the value of the offsets. The \emph{View} module contains the ``ErrorMessages'' routine which is implemented in the toolkit already to check for correct inputs by the user and other routines to check the progress status and
+clear the screen. The \emph{Calculation} module forms the backbone of the golay encoder the details are listed below:
+
+\begin{itemize}
+	\item \emph{Golay\_encode} routine's main task is to read and allocate memory for the PUF and Key file using their filenames that are given by the user. This routines then makes a call to the ``generateHelperData'' function with the initialized data members of the Item structure and memory pointers to the read files.
+	\item \emph{generateHelperData} generates the encoding table using another internal function \emph{get\_syndrome} (this table is analogous to the generator matrix discussed in section \ref{ } of the Golay Code) , then the seret key is encoded using the Golay Coding technique. The generated Codewords are stored in an array that undergo the linear repetition process and finally the LR\_Encoded codewords are XORed with the PUF response to obatin the
+		helperdata. The generatorHelperData stores the final output in the helperdata filename specified by the user alongwith the ``cfg'' settings i.e Offsets, LR factor and secret key filesize. This information will be read and used in the decoder module.
+	\item \emph{get\_syndrome} function computes the generator polynomial for golay code corresponding to the (23, 12, 7) golay code.
+\end{itemize}
+
+A helper function \emph{SetInputLen} was implemented to aid the encoder functions in calculating the length of the file based on the offsets. This function is called internally before reading and allocating the memory for key and PUF response. It takes two arguments, first the Item structure with intialized data members as filenames and a second integer argument that point to PUF response or secret key, based on these values it calculates the input length as $input\_length =
+orignal\_filesize - (Offset\_end + Offset\_beginning)$. \\
+
+The user interface was designed to follow the same pattern as BCH encoder to simplify the user experience. The ``Main'' module was modified to add one more menu item \emph{Golay\_Encoder\_Menu}. The merging and reuse of the existing functions was done with great care and detail to modularize the code that is suitable for further extension in the future. The verification of the consolidated code was done keeping in mind the the same steps as BCH encoder:
+\begin{enumerate}
+	\item Correctness of each module verified through utilization of test cases.
+	\item All the possible menu options were checked and reviewed for their expected functionality
+	\item Wrong inputs and incorrect state handling was also tested to make sure that the toolkit accepts only legitimate inputs and display appropriate error messages to rectify the error.
+	\item Unusual workflows were inspected to assess their impact on Golay Encoder functionality.
+\end{enumerate}
+
+Due to the static nature of the Golay Code (23, 12, 7) it can only correct upto ``three errors'' per ``twelve bits'' of message. Consequently this code is not suitable for encoding and large secret files. Extensive testing showed that when the resultant helperdata is greater in size compared to the PUF response, the secret file is not recovered completely and via hit and trial the filesize for complete recovery of the secret key was approximated $2600$ bytes. So the recovery of ssh private keys which are
+typically greater than 3000 bytes is not possible using Golay and the user must choose the BCH fuzzy extractor instead.
+
+\subsection{Golay Decoder}
 
