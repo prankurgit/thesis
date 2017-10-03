@@ -448,23 +448,55 @@ stored securely, and input the PUF filename to generate the helperdata using fuz
 \begin{figure}
 \centering
 \fbox{ \includegraphics[width=0.9\textwidth]{images/golay_encoder_functions.pdf}}
-\caption{Golay Encoder User Interface.}
+\caption{Illustration of the Golay Encoder modules and their inter dependency.}
 \label{img:gui_design}
 \end{figure}
 
-The functions of the Golay Encoder are divided into four modules similar to the BCH encoder depicted in Figure \ref{ }. The \emph{Setting} module contains the familiar functions ``DefineFilename'' and ``DefineSettings'' alongwith ``DefineOffsetlength'' which sets the value of the offsets. The \emph{View} module contains the ``ErrorMessages'' routine which is implemented in the toolkit already to check for correct inputs by the user and other routines to check the progress status and
+The functions of the Golay Encoder are divided into four modules similar to the BCH encoder depicted in Figure \ref{ }. The \emph{Setting} module contains the familiar functions ``DefineFilename'' and ``DefineSettings'' alongwith ``DefineOffsetlength'' which sets the value of the offsets. The \emph{View} module contains the ``ErrorMessages'' routine which is implemented in the toolkit already to check for incorrect inputs by the user and other routines to check the progress status and
 clear the screen. The \emph{Calculation} module forms the backbone of the golay encoder the details are listed below:
 
 \begin{itemize}
 	\item \emph{Golay\_encode} routine's main task is to read and allocate memory for the PUF and Key file using their filenames that are given by the user. This routines then makes a call to the ``generateHelperData'' function with the initialized data members of the Item structure and memory pointers to the read files.
 	\item \emph{generateHelperData} generates the encoding table using another internal function \emph{get\_syndrome} (this table is analogous to the generator matrix discussed in section \ref{ } of the Golay Code) , then the seret key is encoded using the Golay Coding technique. The generated Codewords are stored in an array that undergo the linear repetition process and finally the LR\_Encoded codewords are XORed with the PUF response to obatin the
-		helperdata. The generatorHelperData stores the final output in the helperdata filename specified by the user alongwith the ``cfg'' settings i.e Offsets, LR factor and secret key filesize. This information will be read and used in the decoder module.
-	\item \emph{get\_syndrome} function computes the generator polynomial for golay code corresponding to the (23, 12, 7) golay code.
-\end{itemize}
+		helperdata. The generatorHelperData stores the final output in the helperdata filename specified by the user alongwith the ``cfg'' settings i.e Offsets, LR factor and secret key filesize. This information will be read and used in the decoder module. Table \ref{tab:Golay_pattern} summarizes the data structure ``Pattern'' that constitute the cfg settings.
+
+	\item \emph{get\_syndrome} function computes the generator polynomial for golay code corresponding to the (23, 12, 7) golay code. \end{itemize}
+
+\begin{table}[!ht]
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+\multicolumn{1}{l}{\textbf{Name}} & \multicolumn{1}{c}{\textbf{Type}} & \multicolumn{1}{c}{\textbf{Description}}\\
+\midrule
+\hline
+\emph{errorCode} & int & \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Defines the utilized error correction code (0 = Golay, 1 = BCH)\end{tabular}} \\
+
+\emph{Golay\_BCH\_length} & int & \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Defines the \emph{length} of one code word, for Golay and BCH \end{tabular}}\\
+
+\emph{Goly\_d\_BCH\_t} & int & \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Defines for Golay the distance \emph{d} and for BCH the correction capability '\emph{t}' \end{tabular}}\\
+
+\emph{Golay\_k\_BCH\_m} &  int & \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Defines the \emph{message length} for Golay and the parameter \emph{m} for BCH\end{tabular}}\\
+
+\emph{linearRep} & int & \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Defines the utilized linear repetition factor\end{tabular}} \\
+
+\emph{puf\_offSet\_begin} & long & \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Defines the starting point in a binary file (bytes to skip) from beginning \end{tabular}}\\
+
+\emph{puf\_offSet\_end} & long & \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Defines the ending point in a binary file (bytes to skip) from the end \end{tabular}}\\
+
+\emph{original\_filesize} & long & \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Defines the length of the original input key file \end{tabular}}\\
+\hline
+\addlinespace
+\bottomrule
+\end{tabular}
+\end{center}
+\caption{Names and types of each element in the data structure \emph{Pattern} for the \emph{PUF Golay Encoder} and a description regarding their purpose.}
+\label{tab:Golay_pattern}
+\end{table}
 
 A helper function \emph{SetInputLen} was implemented to aid the encoder functions in calculating the length of the file based on the offsets. This function is called internally before reading and allocating the memory for key and PUF response. It takes two arguments, first the Item structure with intialized data members as filenames and a second integer argument that point to PUF response or secret key, based on these values it calculates the input length as $input\_length =
 orignal\_filesize - (Offset\_end + Offset\_beginning)$. \\
 
+\subsubsection{Verification}
 The user interface was designed to follow the same pattern as BCH encoder to simplify the user experience. The ``Main'' module was modified to add one more menu item \emph{Golay\_Encoder\_Menu}. The merging and reuse of the existing functions was done with great care and detail to modularize the code that is suitable for further extension in the future. The verification of the consolidated code was done keeping in mind the the same steps as BCH encoder:
 \begin{enumerate}
 	\item Correctness of each module verified through utilization of test cases.
@@ -477,4 +509,109 @@ Due to the static nature of the Golay Code (23, 12, 7) it can only correct upto 
 typically greater than 3000 bytes is not possible using Golay and the user must choose the BCH fuzzy extractor instead.
 
 \subsection{Golay Decoder}
+The next step after encoding the secret key and obtaining the helper data is to recover the key via golay decoding. The subtext presents the user interface and explains the procedure to restore the securely stored secret key, then the modules and functions of the decoder are illustrated. The discussion then follows the code improvement done to enhance the menu of the toolkit and finally verification strategy to check the integrated changes is shown.\\
 
+The user interface \ref{img:golay_decoder_ui} has five main options where the user must input the helperdata that was generated in the enrollment phase using option one. The other two mandatory options are to set the PUF response filename that is generated from the same device as used in encoding phase and to specify the output key filename where the secret key will be restored. If all the inputs are correctly set then the ``regeneration'' can be performed via option four. The output and status is displayed
+under the \emph{Result} section of the UI whereas \emph{Settings} subsection of the interface shows the filenames. If the input is incorrect or if the given filename is not present on the disk then a suitable error with details to recover from a faulty state is shown to the user.\\
+\begin{figure}
+\centering
+\fbox{ \includegraphics[width=0.9\textwidth]{images/golay_decoder_ui.png}}
+\caption{Conceptual design of the Golay Deocder user interface.}
+\label{img:golay_decoder_ui}
+\end{figure}
+
+\begin{figure}
+\centering
+\fbox{ \includegraphics[width=0.9\textwidth]{images/golay_decoder_functions.pdf}}
+\caption{Illustration of the Golay Decoder modules and their inter dependency.}
+\label{img:golay_decoder_ui}
+\end{figure}
+
+Golay decoder code is partitioned across five modules similar to the ones discussed in Golay encoder as illustrated in Figure \ref{}. The first module is the Main\_Menu function that calls the Golay decoder menu. This menu was implemented and added to the PUF toolkit which on selection points to the user interface with menu items of the decoder \ref{img:golay_decoder_ui}. The golay decoder user interface is implemented in the routine \emph{Golay\_Decoder\_Menu}, where the decode option is linked to the \emph{Golay\_decode}
+function that performs the decoding of the helperdata. The usual routines in the ``View'' module are used to set the helperdata, PUF response and output recovered key filenames. There is no need to set the offsets and orignal key filesize in the decoder menu since during the ``enrollment'' phase these details are appended at the end of helperdata as part of the `cfg' settings. The ``Calculation'' module is crucial to the decoding operation and which follows the below mentioned
+steps:
+\begin{enumerate}
+	\item The Golay decode function reads the `cfg' settings using a sub routine \emph{read\_infos} that reads the settings appended at the end of the helperdata and initializes the correspoding data members of the Item strucuture. The details of the data members used in golay decoding are listed in table \ref{ }. Then based on the settings the input length of the PUF response is calculated as $input\_length = orignal\_filesize - (Offset\_end + Offset\_beginning)$. The files
+		helperdata and PUF response are read and stored in the memory and the control is given to the \emph{recoverOriginalData}.
+	\item The next function \emph{recoverOriginalData} performs the decoding of the helperdata. It first applies ``Majority Voting'' on the encoded helperdata to reverse the effects of the ``Linear Repetition'' done during enrollment phase. With the help of an api \emph{next\_comb} the decoding table for Golay code (23, 12, 7) is calculated that is used to recover the original key. 
+	\item After the restoration of the key is complete it is saved in the output key filename by calling a
+		sub-routine \emph{SaveFile} that takes the recovered key (represented in code as a character array) and output filename as arguments and uses standard C file operations to write to the file.
+\end{enumerate}
+
+The \emph{ErrorMessages} function was used to detect incorrect input and display the errors to the user, since it is redundantly used in the other menu functionalities of the PUF toolkit like BCH encoder, we summarize the Error Codes in the table \ref{tab:Golay_dec_errors}
+
+\begin{table}[!ht]
+\begin{center}
+\begin{tabular}{cp{13cm}}
+\toprule
+\multicolumn{1}{c}{\textbf{Error code}} & \multicolumn{1}{c}{\textbf{Error message}} \\
+\midrule
+\hline
+1 & ERROR! Invalid input - Only digits are allowed! No digit at \emph{pos + 1}.\\
+
+2 & ERROR! Invalid input - Input to long. \\
+
+3 & ERROR! Invalid input - Try again...  \\
+
+4 & ERROR! Opening output file. \\
+
+5 & ERROR! Invalid input - 'Filename' too long. \\
+
+6 & ERROR! Invalid input - No input. \\
+
+7 & ERROR! Reading PUF file. \\
+
+8 & ERROR! Opening PUF file. \\
+
+9 & ERROR! Invalid input - PUF filename is not valid.\\
+
+10 & ERROR! Invalid input - Key filename is not valid.\\
+
+11 & ERROR! Opening HelperData file. \\
+
+12 & ERROR! Reading HelperData file. \\
+
+13 & ERROR! Selected an invalid choice. \\
+
+14 & ERROR! HelperData: The recovered 'decoding information' is invalid! -> Parameter '\emph{m}' is out of range.\\
+
+15 & ERROR! HelperData: The recovered 'decoding information' is invalid! -> Parameter '\emph{t}' is out of range.\\
+
+16 & ERROR! HelperData: The recovered 'decoding information' is invalid! -> Parameter '\emph{length}' is out of range.\\
+
+17 & ERROR! HelperData: The recovered 'decoding information' is invalid! -> Parameter '\emph{LR factor}' is not 7 or 15.\\
+
+18 & ERROR! HelperData: The recovered 'decoding information' is invalid! -> Parameter '\emph{offSet}' is out of range.\\
+
+19 & ERROR! HelperData: The recovered 'decoding information' is invalid! -> Parameter '\emph{filesize}' is out of range.\\
+
+20 & ERROR! Opening file to view.\\
+
+21 & WARNING! Looks like no decoding was performed.\\
+
+22 & Looks like the calculation was not started.\\
+
+23 & ERROR! Looks like the file was empty.\\
+
+24 & ERROR! Looks like the file was not in the supported format.\\
+
+25 & WARNING! Looks like the 'offset' is not set.\\
+
+26 & ERROR! Looks like the 'Output file or Result' is not set/calculated.\\
+\addlinespace
+\bottomrule
+\end{tabular}
+\end{center}
+\caption{Error codes and corresponding error messages for the \emph{PUF Golay Decoder}.}
+\label{tab:Golay_dec_errors}
+\end{table}
+
+\subsubsection{Verification}
+After the merging is complete and the Golay decoder menu is functional it was tested rigrously to make sure all the options work as expected. The same approach for verifiation was taken as mentioned in previous subsections and a final check was done to comapre the recovered key with the original secret to ensure the overall functionality of both the Golay encoder and decoder is correct.
+
+\begin{itemize}
+	\item Every menu item of the golay decoder was checked and review to make sure it behaves as expected.
+	\item Incorrect inputs were inserted deliberiately to verify the ErrorMessages routine display corresponding error messages and ways to recover from the incorrect state of the toolkit.
+	\item Unusual workflows were inspected to assess their impact on Encoder functionality.
+	\item The recovered key was compared with the original secret key via the linux ``diff'' commandline utility and they were found to be identical.
+\end{itemize}
