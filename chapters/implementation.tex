@@ -87,7 +87,7 @@ Rigorously complying to the standardized design guidelines for the toolkit, resu
 This in turn decisively supports developers and researchers in the PUFs reponses evaluation.[seb thesis]
 
 \section{Hamming Distance Menu}
-
+\label{Hamming_Distance_menu}
 The hamming distance functionality was added to and integrated as part of this Master thesis. Hamming Distance between two bit strings of same length is defined as the number of the bits that differ amongst the two binary bit strings. For eg. if we have two string \emph{A = 1100} and \emph{B = 1010} then the hamming distance between them would be ``\emph{two}'', since the bits at second and third position (starting from the left) differ between these two strings. The implementation of
 this functionlality is straightforward, using the in-built \emph{bitwise XOR} operation of the ISO C++ standard and then counting the number of ones in the resulting string, which is nothing but calling the hamming distance function on the resultant string.\\
 
@@ -207,11 +207,12 @@ int hammingwt(char *data, int size)
     return wt;
 }
 \end{lstlisting}
+\label{hammingwt_code}
 \end{minipage}
 \end{center}
 
 \subsection{Intra-Hamming Distance}
-
+\label{intra_hd_section}
 This section explains the Intra-Hamming Distance feature which is comparison of the PUF responses from the same device. As discussed in section \ref{ } we already observed that the PUF responses from the same device are not identical due various factors like voltage fluctuation,  temperature variation and other aging effects, which gives rise to Intra distance within the responses. ``Intra'' means on the inside, so we evaluate the PUF instance from within by assessing the Hamming Distance within
 these responses. Since the hardware from which the SRAM PUFs are obtained are kept in a single directory, we need only to give the ``input path'' for processing Intra Hamming Distance, the output file option is mandatory to process Intra HD because the results must be stored for all the responses in a file to be viewed later. Alongwith the Hamming Distance between PUF responses the fractional distance is also saved for better assessment of the PUF instance.\\
 
@@ -238,6 +239,7 @@ the files, that are compared to the selected input file, are displayed. The Hamm
 \emph{minimal} output style strips off all the path and filename info and only saves the Hamming Distance values seperated by spaces, this type of file format can be used by another metric of the toolkit called Median and Average [seb thesis section median] calculation which accepts only files containing plain numbers seperated with space. The \emph{View} option can be used to look at the output/result file.\\
 
 \subsection{Inter Hamming Distance}
+\label{inter_hd_section}
 Contrary to the comparisons between PUF responses from the same device, Inter Hamming distance evaluates responses from different PUF instance. The co-relation is again based on the same metric Hamming Distance. In this case the toolkit can simulatneously compare from 2 to 99 PUF instances. All the PUF responses from a specific instance are arranged in a single directory so that means the toolkit can take input paths between 2 and 99 to evaluate different PUF devices. The output
 style in addition to compact and minimal has a \emph{detailed} as an alternative. The compact and minimal style formats are same as Intra Hamming Distance, but the detailed style differs from the compact style that it does not implicitly ignores the duplicate symmetric comparisons and therefore maps out all the permutations and combinations between files of different folders. It should be noted that Inter Hamming Distance metric does not compare PUF responses in the same directory. So
 in detailed mode, the first directory all the responses are compared to all the PUF responses from the remaining 3 to 99, then all files in second folder are compared to all the files in all the other folders except its own, and so on. The Figure \ref{ } shows a sample input with 3 input paths, for compact mode we need to ignore the duplicate comparisons so we take the following approach:
@@ -248,6 +250,12 @@ in detailed mode, the first directory all the responses are compared to all the 
 	\item remove the second folder objects from list2.
 	\item iterate over list1 (iteration 5-7) and compare the list1 objects with all files of list2.
 \end{itemize}
+\begin{figure}
+\centering
+\fbox{ \includegraphics[width=0.4\textwidth]{images/Intra.png}}
+\caption{Exemplary illustration of the working principle of the \emph{compact} mode, for the intra-Hamming distance.}
+\label{img:inter_compact}
+\end{figure}
 
 This process is summarized in Figure \ref{ } for three folder input and is generalized for more inputs. We emphasize on the inner workings of the modes because the exact same techniques are used for Jaccardi's index that will be discussed later in this chapter.\\
 
@@ -533,7 +541,7 @@ steps:
 \begin{enumerate}
 	\item The Golay decode function reads the `cfg' settings using a sub routine \emph{read\_infos} that reads the settings appended at the end of the helperdata and initializes the correspoding data members of the Item strucuture. The details of the data members used in golay decoding are listed in table \ref{ }. Then based on the settings the input length of the PUF response is calculated as $input\_length = orignal\_filesize - (Offset\_end + Offset\_beginning)$. The files
 		helperdata and PUF response are read and stored in the memory and the control is given to the \emph{recoverOriginalData}.
-	\item The next function \emph{recoverOriginalData} performs the decoding of the helperdata. It first applies ``Majority Voting'' on the encoded helperdata to reverse the effects of the ``Linear Repetition'' done during enrollment phase. With the help of an api \emph{next\_comb} the decoding table for Golay code (23, 12, 7) is calculated that is used to recover the original key. 
+	\item The next function \emph{recoverOriginalData} performs the decoding of the helperdata. It first applies ``Majority Voting'' on the encoded helperdata to reverse the effects of the ``Linear Repetition'' done during enrollment phase. With the help of an api \emph{next\_comb} the decoding table for Golay code (23, 12, 7) is calculated that is used to recover the original key.
 	\item After the restoration of the key is complete it is saved in the output key filename by calling a
 		sub-routine \emph{SaveFile} that takes the recovered key (represented in code as a character array) and output filename as arguments and uses standard C file operations to write to the file.
 \end{enumerate}
@@ -615,3 +623,97 @@ After the merging is complete and the Golay decoder menu is functional it was te
 	\item Unusual workflows were inspected to assess their impact on Encoder functionality.
 	\item The recovered key was compared with the original secret key via the linux ``diff'' commandline utility and they were found to be identical.
 \end{itemize}
+
+\section{Jaccardi Index}
+\label{jaccardi_index_section}
+This section explains the Jaccardi Index implementation that was developed as a new feature for the toolkit. Then the two sub-menu options Intra Jaccardi and Inter Jaccardi Index are presented as subsections.
+The modules and code structure was inspired from the Hamming Distance Menu since both of the metrics (Hamming Distance and Jaccardi Index) are closely related to each other and operate on either files or folders. We first discuss the definition of Jaccardi Index and its relation to the hamming weight. We then look at the user interface for the Jaccardi Index Menu which contains two more sub
+menu options \emph{Inter} and \emph{Intra Jaccardi index} and then go on to explain the modules of the Jaccardi index. In the end the section presents the verification steps after the development of this new feature was complete.\\
+
+\begin{itemize}
+	\item \emph{Definition}: Jaccardi index between two bytes A and B is defined by the equation \ref{jaccard_eq}
+	\begin{equation}
+	J(A,B) = \frac {|A \cap B|} {|A\cup B|} = \frac{|A \cap B|} {|A| + |B| - |A \cap B|}
+	\label{jaccard_eq}
+	\end{equation}
+	where |A| is the hamming weight of A, |B| is the hamming weight of B and $|A \cap B|$ is the number of times both A and B have one in the same bit position.
+\end{itemize}
+
+For eg. if we have two bytes A = 1100 1111 and B = 1111 0000 then |A| = 6, |B| = 4 and $|A \cap B|$ = 2 (since only first two common positions have ones in both the bytes). Substituting these values in the above equation we get $J(A,B) = (2) / ( 6 + 4 - 2) = 0.25$.\\
+
+\begin{figure}
+\centering
+\fbox{ \includegraphics[width=0.9\textwidth]{images/golay_decoder_ui.png}}
+\caption{Conceptual design of the Jaccardi Index user interface.}
+\label{img:jaccard_ui}
+\end{figure}
+The user interface for the Jaccardi Index menu is similar to the Hamming Distance Menu as shown in Figure \ref{img:jaccard_ui}. Using the first option user can set the offsets from beginning and end of the file and as a result those bytes will be skipped during Jaccardi calculation. The second option lets the user set the output filename which is mandatory since the results will be stored in this file. The third option performs the computation of the Jaccard index between the two given
+files. It first asks for the two filenames to be prompted by the user and then the result alongwith the \emph{Fractional Index} is stored in the output file. Option five and six calls the Intra and Inter Jaccardi Index routines respectively and are discussed in following subsections. The six and the last option can be used to view the output file without exiting the toolkit.\\
+
+The modules of the Jaccardi's index are similar to those of the hamming Distance and therefore this section takes the liberty of not showing it here again.
+Rather than looking at each and every module we look at the main routines and algorithm to calculate the Jaccardi Index.
+\begin{itemize}
+	\item The main Jaccardi index between two files is calculated by the \emph{Jaccard\_Index} that takes data structure Item pointer as an argument with initialized filenames. It first sets the input length of both the files based on the offsets from beginning and end by calling the \emph{SetInputLen} api which was designed specifically for this purpose.
+	\item Then the files are read using the sub-routine \emph{readfile} that takes name of the file, offset from beginning and filesize as 		argument, based on that it reads and mallocs the file in memory and passes back the pointer to the allocated memory back to the caller function.
+	\item To get the common number of ``1s'' at same bit positions in both the files, a bitwise AND operation is performed on the read files and the result is stored in a character array. The resultant character array contains the data with ``1s'' in the same bit position since bitwise AND operation only yeilds result ``one'' both the input bits are ``one''. This operation can be seen in the table \ref{bitwise_AND}.
+
+\begin{table}[!ht]
+\begin{center}
+\begin{tabular}{lc}
+\toprule
+\multicolumn{2}{c}{\textbf{bitwise AND of two bytes A and B}}\\
+\midrule
+Byte A &   1100 0000 \\
+Operation & \&\\
+Byte B &   1111 0011 \\
+Output C &   1100 0000 \\
+\addlinespace
+\bottomrule
+\end{tabular}
+\end{center}
+\caption{bitwise ANDing the two bytes to get the common ones in the same bit position}
+\label{bitwise_AND}
+\end{table}
+
+	\item Once the bitwise AND result is obtained then the calculation of Jaccardi Index is relatively simple. The number of ones in each input files and the bitwise ANDed output file are computed by calling the \emph{hamming\_wt} function explained in the section \ref{Hamming_Distance_menu} under listing \ref{hammingwt_code} and then the values are substituted in the equation \ref{jaccard_eq}.
+	\item An additional metric called Fractional Jaccardi's Index is also calculated using the definition $F(A, B) = J(A, B)/ size(A or B)$ and written to the result file alongwith the Jaccardi Index.
+\end{itemize}
+
+\subsection{Intra Jaccardi Index}
+Instead of computing Jaccardi index between two files, the entire folder containing PUF responses from a single device can be evaluated by selecting the Intra Jaccardi Index sub-menu item. The filename where the results will be written is essential before processing the Intra Jaccardi Index. The menu item asks for an input directory with relative or absolute path on the machine and if the input path is correct and output file is set then the result is generated and stored in the
+output file.\\
+
+Contrary to the intra hamming distance the ``Switch output-style'' (refer section \ref{intra_hd_section}) option was not made available to the user to simplify the functionality. The default output-style was set as \emph{Compact} which is explained with detail in the Intra Hamming Distance section \ref{intra_hd_section} and illustrated in Figure \ref{img:4_intra_WP}. A sample result output file is presented in the Figure \ref{img:intra_jaccardi_compact} which shows the compact mode comparison between the files in the
+directory where the Jaccardi Index in conjunction with fractional Jaccardi Index is written for each comparison.\\
+\begin{figure}
+\centering
+\fbox{ \includegraphics[width=0.9\textwidth]{images/4_intra_compact.png}}
+\caption{A sample output result showing the \emph{compact} output style format for Intra Jaccardi Index }
+\label{img:intra_jaccardi_compact}
+\end{figure}
+
+To realize the Intra Jaccardi Index the function \emph{Jaccard\_Intra} was implemented that takes the directory as input and first checks if the path is valid and there are more than one files present in the folder. Then all filenames with their absolute paths are stored in a standard C++ vector data structure. The \emph{Jaccard\_Intra} then iterates through this vector and computes the Jaccardi Index for each comparison by calling the \emph{Jaccard\_Index} procedure that was explained in the section
+\ref{jaccardi_index_section}
+above. Finally the result is written in each iteration of the loop and appended to the output file.\\
+
+\subsection{Inter Jaccardi Index}
+Unlike its Intra counterpart the Inter Jaccardi Index can be used to evaluate the PUF responses across different devices. It compares the PUF responses in a directory (analogous to a device since all PUF responses from a single device are stored in the same folder) to PUF responses in other directories. The comparison mode or the output-style by default is designed in the code to be ``compact'' since it simplifies the metric and also avoids any duplicate comparisons. The details of
+the compact mode file comparison for Inter Jaccardi index are the same as for Inter Hamming Distance which are explained in detail in the section \ref{inter_hd_section} and the  compact comparison operation between three folders is shown in Figure \ref{img:inter_compact}.\\
+
+The code implementation for Inter Jaccardi Index is achieved by the routine \emph{Jaccard\_Inter} which takes the data structure Item as an argument. The user needs to input the number of paths or folders he/she wants to evaluate, this number is bounded between \emph{two} and \emph{ninety-nine} i.e $2 <= n < 99$, then the folder names with their absolute or relative path are required by the toolkit. All these paths are verified by the code as valid and present in the memory, the
+routine \emph{Jaccard\_Inter} verifies if each given folder has atleast one file. These folder names and paths are then stored in a standard C++ vector which is navigated in compact comparison fashion to compute the Jaccard Index. The nested for loop iterations are abstracted in this text to avoid complexity. In each iteration of the nested loop the comparison between PUF responses of different devices is achieved by redudant calls to the \emph{Jaccard\_Index} function explained in section
+\ref{jaccardi_index_section} and result is written to the output file as specified by the user.\\
+
+\subsection{Verification}
+The merging of a new feature to the toolkit required careful testing to ensure correctness and exceptions to be handled gracefully. Some of the approaches were inspired from the fuzzy extractor testing and are summarized below:
+\begin{itemize}
+	\item All the menu item were checked and reviewed for their expected functionality.
+	\item Testing was done for faulty and incorrect inputs to the Jaccardi Index menu options to ensure relevant error messages are displayed to the user. For eg. incorrect paths or filenames of the directories will be prompted to the user suggesting to enter the paths/filenames again.
+	\item The Jaccardi output file was reviewed to check for proper header information and tables.
+	\item For Intra and Inter Jaccardi index, mandatory option like setting of the offsets and the output file was checked before computing the index. Incase these settings are not configured then relevant error information was displayed to the user.
+\end{itemize}
+
+This marks the completion of the improvement and development phase of the toolkit. Next part of the report discusses the integration of the toolkit to the CogniCrypt opensource libarary by interfacing the C++ apis to the Java runtime via Java Native Interface.
+
+\section{CogniCrypt Integration}
+
