@@ -1,4 +1,4 @@
-This chapter explains about the major tasks implemented in the thesis, new contributions made to the PUF Toolkit. The first part of the chapter briefly explains about the current PUF toolkit implementation, without delving much into the details. The second and more major part talks about the new modifications that were done to the toolkit in the form of BCH fuzzy extractor encoder and decoder integration, which were previously not a part of the main toolkit and presented as seperate executables
+This chapter explains about the major tasks implemented in the thesis and new contributions made to the PUF Toolkit. The first part of the chapter briefly explains about the current PUF toolkit implementation, without delving much into the details. The second and more major part talks about the new modifications that were done to the toolkit in the form of BCH fuzzy extractor encoder and decoder integration, which were previously not a part of the main toolkit and presented as seperate executables
 with seperate menu items. We then go on to explain the Golay code implementation both the decoder and encoder, and explain their integration in the toolkit as a distinct menu item. Then the other modifications like the addition of \emph{'offsets from begining and end', error codes} and other intricate code developement changes are presented together as one section.\\
 
 %TODO: write about hamming distance and jaccardi's index
@@ -85,6 +85,13 @@ recover from the erroneous state. Also for all mandatory inputs a brief guide / 
 
 Rigorously complying to the standardized design guidelines for the toolkit, resulted in a effective and intuitive console user interface.
 This in turn decisively supports developers and researchers in the PUFs reponses evaluation.[seb thesis]
+
+\begin{figure}
+\centering
+\fbox{ \includegraphics[width=0.97\textwidth]{images/PUF_Toolkit.pdf}}
+\caption{Heirarchical Structure of the PUF Toolkit menu and available options}
+\label{img:puf_menu}
+\end{figure}
 
 \section{Hamming Distance Menu}
 \label{Hamming_Distance_menu}
@@ -207,16 +214,15 @@ int hammingwt(char *data, int size)
     return wt;
 }
 \end{lstlisting}
-\label{hammingwt_code}
 \end{minipage}
 \end{center}
 
 \subsection{Intra-Hamming Distance}
 \label{intra_hd_section}
-This section explains the Intra-Hamming Distance feature which is comparison of the PUF responses from the same device. As discussed in section \ref{ } we already observed that the PUF responses from the same device are not identical due various factors like voltage fluctuation,  temperature variation and other aging effects, which gives rise to Intra distance within the responses. ``Intra'' means on the inside, so we evaluate the PUF instance from within by assessing the Hamming Distance within
+This section explains the Intra-Hamming Distance feature which is comparison of the PUF responses from the same device. As discussed in section \ref{intra_inter_section} we already observed that the PUF responses from the same device are not identical due various factors like voltage fluctuation,  temperature variation and other aging effects, which gives rise to Intra distance within the responses. ``Intra'' means on the inside, so we evaluate the PUF instance from within by assessing the Hamming Distance within
 these responses. Since the hardware from which the SRAM PUFs are obtained are kept in a single directory, we need only to give the ``input path'' for processing Intra Hamming Distance, the output file option is mandatory to process Intra HD because the results must be stored for all the responses in a file to be viewed later. Alongwith the Hamming Distance between PUF responses the fractional distance is also saved for better assessment of the PUF instance.\\
 
-A crucial attribute in the ``Switch output-style'' which can be used to change the save format of the output file, there are two possibilities for Intra HD: \emph{compact} and \emph{minimal}. The compact mode takes each file in the directory and recursively compares with all the other files, then the second file is chosen and compared with the all the other except the first one and so on. The fig. \ref{} illustrates this comparison.  The output style ``\emph{compact}'' is the default format style and should be used
+A crucial attribute in the ``Switch output-style'' which can be used to change the save format of the output file, there are two possibilities for Intra HD: \emph{compact} and \emph{minimal}. The compact mode takes each file in the directory and recursively compares with all the other files, then the second file is chosen and compared with the all the other except the first one and so on. The fig. \ref{img:4_intra_WP} illustrates this comparison.  The output style ``\emph{compact}'' is the default format style and should be used
 as an output format for a regular text file. Due to the symmetrical behaviour of the comparison ( A to B = B to A) we need not exhaust all 1-to-1 possible combinations. So in compact mode first entry from the directory is compared to all the other till last entry, then the second entry is compared to the third entry till last file, then the third with fourth entry and so on till we are at the last file which need not be compared to any of the above entries since we have already exhausted the
 symmetric comparisons.\\
 
@@ -242,7 +248,7 @@ the files, that are compared to the selected input file, are displayed. The Hamm
 \label{inter_hd_section}
 Contrary to the comparisons between PUF responses from the same device, Inter Hamming distance evaluates responses from different PUF instance. The co-relation is again based on the same metric Hamming Distance. In this case the toolkit can simulatneously compare from 2 to 99 PUF instances. All the PUF responses from a specific instance are arranged in a single directory so that means the toolkit can take input paths between 2 and 99 to evaluate different PUF devices. The output
 style in addition to compact and minimal has a \emph{detailed} as an alternative. The compact and minimal style formats are same as Intra Hamming Distance, but the detailed style differs from the compact style that it does not implicitly ignores the duplicate symmetric comparisons and therefore maps out all the permutations and combinations between files of different folders. It should be noted that Inter Hamming Distance metric does not compare PUF responses in the same directory. So
-in detailed mode, the first directory all the responses are compared to all the PUF responses from the remaining 3 to 99, then all files in second folder are compared to all the files in all the other folders except its own, and so on. The Figure \ref{ } shows a sample input with 3 input paths, for compact mode we need to ignore the duplicate comparisons so we take the following approach:
+in detailed mode, the first directory all the responses are compared to all the PUF responses from the remaining 3 to 99, then all files in second folder are compared to all the files in all the other folders except its own, and so on. The Figure \ref{img:inter_output} shows a sample output with 3 input paths, for compact mode we need to ignore the duplicate comparisons so we take the following approach:
 \begin{itemize}
 	\item store all the filenames and their corresponding paths from all but last folder in list1.
 	\item store all the filenames and their corresponding paths from all but first folder in list2.
@@ -250,21 +256,29 @@ in detailed mode, the first directory all the responses are compared to all the 
 	\item remove the second folder objects from list2.
 	\item iterate over list1 (iteration 5-7) and compare the list1 objects with all files of list2.
 \end{itemize}
+
 \begin{figure}
 \centering
-\fbox{ \includegraphics[width=0.4\textwidth]{images/Intra.png}}
+\fbox{ \includegraphics[width=0.4\textwidth]{images/4_intra_compact.png}}
+\caption{A sample output showing the visualization of the inter hamming distance \emph{compact} output style format.}
+\label{img:inter_output}
+\end{figure}
+
+\begin{figure}
+\centering
+\fbox{ \includegraphics[width=0.4\textwidth]{images/Inter_itr.png}}
 \caption{Exemplary illustration of the working principle of the \emph{compact} mode, for the intra-Hamming distance.}
 \label{img:inter_compact}
 \end{figure}
 
-This process is summarized in Figure \ref{ } for three folder input and is generalized for more inputs. We emphasize on the inner workings of the modes because the exact same techniques are used for Jaccardi's index that will be discussed later in this chapter.\\
+This process is summarized in Figure \ref{img:inter_compact} for three folder input and is generalized for more inputs. We emphasize on the inner workings of the modes because the exact same techniques are used for Jaccardi's index that will be discussed later in this chapter.\\
 
 \emph{Menu Modifications:} In contrast to the original toolkit where Intra and Inter Hamming Distance were seperated in their own sub-menus, the new changes merges both of them under Hamming Distance Menu. Seeing as it is relevant to combine them if they use the same underlying metric, on the other hand the Hamming Weight menu item was untouched since it takes only one PUF response file as an input and gives out its hamming weight and there is no evaluation between two or
 more files.\\
 
 
 \section{Fuzzy extractor}
-As discussed in section \ref{ } the PUF based secure key storage uses Fuzzy Extractor technique that is divided in three phases \emph{(i)Pre-evaluation}, \emph{(ii) Enrollment} and \emph{(iii) Reconstruction}. We discuss only the later two phases, where these two phases follow a seperate implementation of the respective dedicated functionalities, according to [seb 56]. The enrollment phase employs Pis presented with the help of an entity relation diagram. Similar to BCH encoder
+As discussed in section \ref{fuzzy_section} the PUF based secure key storage uses Fuzzy Extractor technique that is divided in three phases \emph{(i)Pre-evaluation}, \emph{(ii) Enrollment} and \emph{(iii) Reconstruction}. We discuss only the later two phases, where these two phases follow a seperate implementation of the respective dedicated functionalities, according to [seb 56]. The enrollment phase employs Pis presented with the help of an entity relation diagram. Similar to BCH encoder
 section we examine the changes required during merging with the toolkit in the subsection ``Integration Changes'' and finally talk about the verification steps taken to assert the correctness of the merged decoder functionality in the toolkit.\\UF BCH encoder which will be discussed first followed by the Reconstruction phase, that is
 realized by the PUF BCH Decoder implementation. We will not go into the details of the actual implementation of the encoder and decoder since thay are already well documented in [Master theses sebastian], but rather explain the changes made to integrate these functionalities in the PUF toolkit.\\
 
@@ -294,8 +308,8 @@ The concept of fuzzy extractor in combination with BCH coding with linear repeti
 \subsection{PUF BCH Encoder}
 This section first briefly mentions the implementation algorithm used in the BCH encoding of the data, after that the user interface is illustrated followed by a Entity relation diagram that shows major functions of the encoder. The changes are presented as a subsection named integration changes and the section is concluded by showing the steps taken to verify the integrated BCH encoder.\\
 
-The BCH encoding implementation is taken from \emph{Morelos-Zaragozas Encoder/Decoder} for binary BCH codes in C [seb 43]. This algorithm uses systematic encoding to encode the message, hence the encoded codewords contain initial message in it, which is stripped from the codeword to get the helper data, using the BCH(n,k,d) (refer section \ref{bch section}) the codewords are combined in groups of \emph{length k} and extra 0s are added to complete the last set as shown in Figure \ref{ }. In the
-second part of the enrollment of the fuzzy extractor the LR code is applied to the generated codeword, based on the user input the bits are repeated either 7 or 15 times, the Figure \ref{ } shows this LR process with factor 7. It was noted that there were some limitations to the original algorithm and the encoding only works for small values of $m$, after code review and research the error states were removed and/or documented.\\
+The BCH encoding implementation is taken from \emph{Morelos-Zaragozas Encoder/Decoder} for binary BCH codes in C [seb 43]. This algorithm uses systematic encoding to encode the message, hence the encoded codewords contain initial message in it, which is stripped from the codeword to get the helper data, using the BCH(n,k,d) (refer section \ref{bch_section}) the codewords are combined in groups of \emph{length k} and extra 0s are added to complete the last set . In the
+second part of the enrollment of the fuzzy extractor the LR code is applied to the generated codeword, based on the user input the bits are repeated either 7 or 15 times, the Figure \ref{img:4_LR_HD} shows this LR process with factor 7. It was noted that there were some limitations to the original algorithm and the encoding only works for small values of $m$, after code review and research the error states were removed and/or documented.\\
 
 Due to above mentioned limitations, the correct combination of BCH encoding and linear repetition code requires correct handling of the bounds. The length of the secret key in bits is denoted by $N$, to process the entire file with BCH (n,k,d) code we need \emph{len} iterations of encoding, this is defined in equation \ref{4:BCH_len}.
 
@@ -313,7 +327,13 @@ Due to above mentioned limitations, the correct combination of BCH encoding and 
 \end{equation}
 \end{itemize}
 
-The User interface for the BCH sub menu is shown in Figure \ref{ }. The first option is to set the BCH mode in which the user is required to input the codelength $n$ i.e. derived from $m$ such that $(2^{m-1} - 1) < length <= (2^m - 1)$, after that it is also mandatory to enter the desired correction capability $t$ of the BCH (n,k,d) code that in turn will determine the paramter $d$ of the code from the formula \ref{ }.
+\begin{figure}
+\centering
+\fbox{\includegraphics[width=0.9\textwidth]{images/bch_encoder_ui.png}}
+\caption{Console user interface of the \emph{PUF BCH Encoder}.}
+\label{img:4_BCH_ENC_menu}
+\end{figure}
+The User interface for the BCH Encoder sub menu is shown in Figure \ref{img:4_BCH_ENC_menu}. The first option is to set the BCH mode in which the user is required to input the codelength $n$ i.e. derived from $m$ such that $(2^{m-1} - 1) < length <= (2^m - 1)$, after that it is also mandatory to enter the desired correction capability $t$ of the BCH (n,k,d) code that in turn will determine the paramter $d$ of the code from the formula $t = \frac{d}{2} + 1$.
 These values must be consistent with the equations \ref{4:BCH_len} and \ref{4:BCH_LR_len} or else the decoding of the secret key will not be successful. The second option chooses the LR factor as 7 or 15, the third is the familiar offsets selection for the PUF response that will also determine the actual length of the PUF response used to generate the helper data. After this the user must also input the key he/she wants to securely store and the name of the PUF
 response file, finally the output filename for helperdata must be provided to be saved on permanent storage and to be used in the later reconstruction phase of the fuzzy extraction. These discussed inputs are all mandatory in the BCH menu and only then we can use option seven to process and generate the helper data or else the toolkit throws appropriate error messages to the user about missing parameters.\\
 
@@ -449,7 +469,13 @@ For verifying the integrated BCH decoder a similar approach as BCH encoder was t
 \subsection{Golay Encoder}
 This section discusses the Golay Encoder that was integrated in the toolkit. We first discuss the user interface then look at the functions and modules of the Golay encoder followed by a basic description of the important routines in the code and then steps taken to verify the implementation.\\
 
-The UI is similar to BCH encoder but in this case we do not need to set the dimensions of the code ``n, k and d'' because Golay is a static code with the universal dimensions of (23, 12, 7) as seen in section \ref{golay_related}. The user interface is portrayed in Figure \ref{ }, using the first option the user can set the Linear repetition factor as '7' or '15', the offsets of the PUF file can be adjusted using option two. After this it is mandatory to input the secret key filename, to be
+\begin{figure}
+\centering
+\fbox{\includegraphics[width=0.9\textwidth]{images/golay_encoder_ui.png}}
+\caption{Console user interface of the \emph{PUF Golay Encoder}.}
+\label{img:golay_enc_ui}
+\end{figure}
+The UI is similar to BCH encoder but in this case we do not need to set the dimensions of the code ``n, k and d'' because Golay is a static code with the universal dimensions of (23, 12, 7) as seen in section \ref{golay_related}. The user interface is portrayed in Figure \ref{img:golay_enc_ui}, using the first option the user can set the Linear repetition factor as '7' or '15', the offsets of the PUF file can be adjusted using option two. After this it is mandatory to input the secret key filename, to be
 stored securely, and input the PUF filename to generate the helperdata using fuzzy extractor algorithm, using option three and four respectively.The helperdata filename is provided by the user by selecting option five. If all the inputs are satisfied and conditions are met then the helperdata will be generated by choosing the last option six.\\
 
 
@@ -457,15 +483,15 @@ stored securely, and input the PUF filename to generate the helperdata using fuz
 \centering
 \fbox{ \includegraphics[width=0.9\textwidth]{images/golay_encoder_functions.pdf}}
 \caption{Illustration of the Golay Encoder modules and their inter dependency.}
-\label{img:gui_design}
+\label{img:golay_enc_funcs}
 \end{figure}
 
-The functions of the Golay Encoder are divided into four modules similar to the BCH encoder depicted in Figure \ref{ }. The \emph{Setting} module contains the familiar functions ``DefineFilename'' and ``DefineSettings'' alongwith ``DefineOffsetlength'' which sets the value of the offsets. The \emph{View} module contains the ``ErrorMessages'' routine which is implemented in the toolkit already to check for incorrect inputs by the user and other routines to check the progress status and
+The functions of the Golay Encoder are divided into four modules similar to the BCH encoder depicted in Figure \ref{img:golay_enc_funcs}. The \emph{Setting} module contains the familiar functions ``DefineFilename'' and ``DefineSettings'' alongwith ``DefineOffsetlength'' which sets the value of the offsets. The \emph{View} module contains the ``ErrorMessages'' routine which is implemented in the toolkit already to check for incorrect inputs by the user and other routines to check the progress status and
 clear the screen. The \emph{Calculation} module forms the backbone of the golay encoder the details are listed below:
 
 \begin{itemize}
 	\item \emph{Golay\_encode} routine's main task is to read and allocate memory for the PUF and Key file using their filenames that are given by the user. This routines then makes a call to the ``generateHelperData'' function with the initialized data members of the Item structure and memory pointers to the read files.
-	\item \emph{generateHelperData} generates the encoding table using another internal function \emph{get\_syndrome} (this table is analogous to the generator matrix discussed in section \ref{ } of the Golay Code) , then the seret key is encoded using the Golay Coding technique. The generated Codewords are stored in an array that undergo the linear repetition process and finally the LR\_Encoded codewords are XORed with the PUF response to obatin the
+	\item \emph{generateHelperData} generates the encoding table using another internal function \emph{get\_syndrome} (this table is analogous to the generator matrix discussed in section \ref{golay_related} of the Golay Code) , then the seret key is encoded using the Golay Coding technique. The generated Codewords are stored in an array that undergo the linear repetition process and finally the LR\_Encoded codewords are XORed with the PUF response to obatin the
 		helperdata. The generatorHelperData stores the final output in the helperdata filename specified by the user alongwith the ``cfg'' settings i.e Offsets, LR factor and secret key filesize. This information will be read and used in the decoder module. Table \ref{tab:Golay_pattern} summarizes the data structure ``Pattern'' that constitute the cfg settings.
 
 	\item \emph{get\_syndrome} function computes the generator polynomial for golay code corresponding to the (23, 12, 7) golay code. \end{itemize}
@@ -539,7 +565,7 @@ Golay decoder code is partitioned across five modules similar to the ones discus
 function that performs the decoding of the helperdata. The usual routines in the ``View'' module are used to set the helperdata, PUF response and output recovered key filenames. There is no need to set the offsets and orignal key filesize in the decoder menu since during the ``enrollment'' phase these details are appended at the end of helperdata as part of the `cfg' settings. The ``Calculation'' module is crucial to the decoding operation and which follows the below mentioned
 steps:
 \begin{enumerate}
-	\item The Golay decode function reads the `cfg' settings using a sub routine \emph{read\_infos} that reads the settings appended at the end of the helperdata and initializes the correspoding data members of the Item strucuture. The details of the data members used in golay decoding are listed in table \ref{ }. Then based on the settings the input length of the PUF response is calculated as $input\_length = orignal\_filesize - (Offset\_end + Offset\_beginning)$. The files
+	\item The Golay decode function reads the `cfg' settings using a sub routine \emph{read\_infos} that reads the settings appended at the end of the helperdata and initializes the correspoding data members of the Item strucuture. The details of the data members used in golay decoding are listed in table \ref{tab:Golay_pattern}. Then based on the settings the input length of the PUF response is calculated as $input\_length = orignal\_filesize - (Offset\_end + Offset\_beginning)$. The files
 		helperdata and PUF response are read and stored in the memory and the control is given to the \emph{recoverOriginalData}.
 	\item The next function \emph{recoverOriginalData} performs the decoding of the helperdata. It first applies ``Majority Voting'' on the encoded helperdata to reverse the effects of the ``Linear Repetition'' done during enrollment phase. With the help of an api \emph{next\_comb} the decoding table for Golay code (23, 12, 7) is calculated that is used to recover the original key.
 	\item After the restoration of the key is complete it is saved in the output key filename by calling a
@@ -675,7 +701,7 @@ Output C &   1100 0000 \\
 \label{bitwise_AND}
 \end{table}
 
-	\item Once the bitwise AND result is obtained then the calculation of Jaccardi Index is relatively simple. The number of ones in each input files and the bitwise ANDed output file are computed by calling the \emph{hamming\_wt} function explained in the section \ref{Hamming_Distance_menu} under listing \ref{hammingwt_code} and then the values are substituted in the equation \ref{jaccard_eq}.
+	\item Once the bitwise AND result is obtained then the calculation of Jaccardi Index is relatively simple. The number of ones in each input files and the bitwise ANDed output file are computed by calling the \emph{hamming\_wt} function explained in the section \ref{Hamming_Distance_menu} under listing \ref{lst:hammingwt} and then the values are substituted in the equation \ref{jaccard_eq}.
 	\item An additional metric called Fractional Jaccardi's Index is also calculated using the definition $F(A, B) = J(A, B)/ size(A or B)$ and written to the result file alongwith the Jaccardi Index.
 \end{itemize}
 
@@ -713,7 +739,106 @@ The merging of a new feature to the toolkit required careful testing to ensure c
 	\item For Intra and Inter Jaccardi index, mandatory option like setting of the offsets and the output file was checked before computing the index. Incase these settings are not configured then relevant error information was displayed to the user.
 \end{itemize}
 
-This marks the completion of the improvement and development phase of the toolkit. Next part of the report discusses the integration of the toolkit to the CogniCrypt opensource libarary by interfacing the C++ apis to the Java runtime via Java Native Interface.
+This marks the completion of the improvement and development phase of the toolkit. Next part of the report discusses the integration of the toolkit to the CogniCrypt opensource libarary by interfacing the C++ APIs to the Java runtime via Java Native Interface.
 
 \section{CogniCrypt Integration}
+
+To make the C++ source code functions available to the Java runtime they must be interfaced using the Java Native Interface Technology. This section looks at the details of the Java Native interface, most of which is inspired from [jni.pdf], then the code implementation for the JNI is explained. Next the wrapping procedure of the toolkit as a shared library and packaged as a Java Archive (JAR) to be externally linked by the Java source code is clarified. The next subsections describe the Congicrypt and its clafer model
+alongwith the xsl coding techniques to generate the java biolerplate code to assists the java developers.
+
+\subsection{Java Native Interface}
+Java Native Interface standard and programming techniques are defined by Oracle\textsuperscript{TM} as a native programming interface which allows Java code that runs inside a Java Virtual Machine (VM) to interoperate with applications and libraries written in other programming languages, such as C, C++, and assembly [oracle docs]. The JNI does not impose any restriction on the implementation of the underlying Java Virtual Machine so the native code works irrespective of the Virtual machine.\\
+
+To implement the JNI code a lot of help was taken from the tutorial [jni url], for each metric of the toolkit an api was desgined in accordance with the syntax of the JNI. The text explains the development process for a single metric Hamming Distance, these steps are applied to all the other metrics too. The toolkit.java source file was written containing the native interfaces to the functions in the PUF toolkit. For eg. Hamming weight functionality of the toolkit was available via a public \emph{native} java function \emph{hammingwt} that takes ``file/foldername'', ``output filename'' and ``mode''(file mode or folder mode) as arguments.  These native apis are the class member functions of the Java \emph{toolkit} class.\\
+
+The compilation of the toolkit java source was performed resulting in the toolkit.class file. Next the header file to be included in the JNI C++ source code was generated using the ``javah'' utility. The resultant header file contains the syntatical prototypes of the C++ interface functions that must be implemented. Such a file with hamming distance metric is shown in listing \ref{lst:jni_header}.
+\begin{lstlisting}[frame=single,language=C++,
+commentstyle=\color{magenta},
+backgroundcolor=\color{white},
+keywordstyle=\color{blue},
+stringstyle=\color{orange},
+basicstyle = \ttfamily \color{black} \footnotesize,
+caption={Auto generated header file showing the syntax for Java Native Interface function declarations} ,
+label={lst:jni_header},
+captionpos=b,
+numbers=left]
+/* DO NOT EDIT THIS FILE - it is machine generated */
+#include <jni.h>
+/* Header for class jni_toolkit */
+
+#ifndef _Included_jni_toolkit
+#define _Included_jni_toolkit
+#ifdef __cplusplus
+extern "C" {
+#endif
+/*
+ * Class:     jni_toolkit
+ * Method:    hammingwt
+ * Signature: (Ljava/lang/String;Ljava/lang/String;Z)V
+ */
+JNIEXPORT void JNICALL Java_jni_toolkit_hammingwt
+  (JNIEnv *, jclass, jstring, jstring, jboolean);
+\end{lstlisting}
+
+The \emph{Java\_jni\_toolkit\_hammingwt} interface first parses the arguments that it obtained from the java source code. It takes the jstring arguments file/foldername and output filename, and converts them into standard C character array using the standard JNI conversion function \emph{GetStringUTFChars}. The jboolean argument is implicitly an integer so it does not require any transformation. The code then initializes the ``Item'' data structure with these values and calls the \emph{HammingWeight(Item *, int )} function of the toolkit to compute the hamming distance of the file or the entire folder based on the value of $mode$.\\ 
+
+The \emph{ErrorMessages} routine of the toolkit is used to inform the user about invalid inputs and faulty toolkit states. Since these inputs are passed from the java source as strings, the java developers can check at their end for the authenticity of the file/folder names and their path on the machine. Other metrics of the PUF toolkit like ``entropy'', ``median and average'' etc. are implemented similarly in the java source and C++ source code.\\
+
+\subsubsection{Packaging in Java Archive}
+The C++ JNI source code alongwith the entire PUF toolkit must be compiled and linked as a shared library since the Java source code calls the native functions from the shared library or shared object. Before packaging the shared library and other java related class files in a JAR file the toolkit must be compiled as a shared object file. This is achieved by compiling and linking the PUF toolkit with the
+``-fPIC'' and ``-shared'' flag of the GNU g++ compiler. The resultant ``libtoolkit.so'' can then be packaged in a JAR file.\\
+
+JNI standard provide the API \emph{System.loadLibrary} to load the shared objects or Dynamic-Link Libraries (dll) from the java source code, but the CogniCrypt project requires the shared libary and the java toolkit.class to be packaged in a JAR , so that they can be included in the project as an External Libarary. For this purpose, another class is needed that can extract the shared object from the JAR , load it using the standard JNI function and then delete before the Java runtime exits. Such
+a wrapper class was already implemented by [Adam Heinrich] and after little changes it was tailored to meet the needs of this project. To know more details about the implementation of this java source please refer [NativeUtils.java].\\
+
+Once the toolkit.class, NativeUtils.class and libtoolkit.so are compiled they are packaged as a JAR file which is exported in the CogniCrypt as an External Archive.
+
+\subsection{CogniCrypt Clafer Model}
+CogniCrypt was implemented as an Eclipse Plugin to support the Java developers to enable easier use of the Cryptographic APIs [cryp.pdf]. It helps the developers to:
+\begin{itemize}
+	\item Generate secure implementations for cryptograhic tasks like Data Encryption.
+	\item Analyzes the Java code and alerts for insecurely used cryptographic APIs.
+\end{itemize}
+
+CogniCrypt supports various crypto tasks and for the PUF toolkit to be made available in the list, a new task ``Evaluation and Assessment of PUF responses'' was implemented. After selecting the task a few high level questions like if the developer want to evaluate PUF response from a single or multiple device as shown in Figure \ref{img:cogni_ques}, must be answered by the developers.\\
+
+\begin{figure}
+\centering
+\fbox{ \includegraphics[width=0.9\textwidth]{images/4_intra_compact.png}}
+\caption{An example of High level questions asked by the CogniCrypt for the Evaluating PUF responses}
+\label{img:cogni_ques}
+\end{figure}
+
+Once all the questions are acknowledged, based on their answers the CogniCrypt presents a list of the algorithms that are eligible for selection for e.g if the developer answered evalution of PUF response from ``multiple devices'' then Inter Hamming Distance is only shown in the drop down since it is the only metric in the toolkit that takes more than one directory as input. In this case the CogniCrypt generates a java boilerplate code that shows the proper usage of the Inter Hamming Distance
+function of the toolkit with directories (bounded between 2 and 99) as parameters to the API.\\
+
+To achieve the above mentioned functionality the CogniCrypt employs a Clafer based model which is a lightweight modelling language that facilitates a mix of class and feautre modelling [clafer.org, cogni.pdf]. It supports constraint solvers that can generate instances of a model and satisfy its constraints [congi.pdf]. The answers to the high level questions determine the constraints on the model which is composed of different elements known as clafer. For the PUF toolkit each evaluation metric was
+implemented as an clafer element and named as ``Metric'' in the model, one of the sample Metric is presented in listing \ref{lst:pufcfr}. \newpage
+
+\begin{lstlisting}[frame=single,language=C++,
+commentstyle=\color{magenta},
+backgroundcolor=\color{white},
+keywordstyle=\color{blue},
+stringstyle=\color{orange},
+basicstyle = \ttfamily \color{black} \footnotesize,
+caption={Code snippet of a sample metric Hamming Distance in the PUF clafer model} ,
+label={lst:pufcfr},
+captionpos=b,
+numbers=left]
+abstract Metric
+	description -> string
+	fileMode -> FileMode
+	devices -> Devices
+
+Hamming_Distance : Metric
+	[description = "hamming distance"]
+	[fileMode = File || fileMode = Folder]
+	[devices = Single]
+\end{lstlisting}
+
+The hamming distance extends the abstract Metric class that has two enums filemode and devices, and a string element as data members. These elements are initialized in the \emph{Hamming\_distance} class, lines 11-12 make ensures the hamming distance can only be evaluated for a file or an entire folder, such conditions are applied to other metrics too for eg. Inter Hamming distance must always evaluate for multiple devices.\\ 
+
+After the clafer model is finalized and implemented, auto generation of the java code, that shows the developers the correct usage of the PUF toolkit functions, is achieved by the XSL stylesheet. For the PUF Toolkit the already implemented stylesheet in the CogniCrypt was enhanced to support the new functionality. Based on the answers by the developer to the high level questions the algorithm type or the metric is set in the clafer model which can be used in the <xsl if> statements
+for matching and generating appropriate usage sample code. For eg. the listing \ref{ } shows the XSL stylesheet code to match the Hamming Distance metric and consequently produce java code that shows its proper usage.
+
 

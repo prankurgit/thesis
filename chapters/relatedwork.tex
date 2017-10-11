@@ -25,6 +25,7 @@ This section introduces commonly used terms used for describing PUFs and their c
 As discussed in the definition, PUF produces output on being queried with a input. Since the an input may have more than one possible output so PUFs are not functions in mathematical sense rather they are considered function in engineering sense i.e a procedure performed by or acting upon a specific (physical) system. [Th book page 4]. Input to PUF is called \emph{Challenge} and output is termed as \emph{Response}, together they are known as \emph{challenge-response Pair} or \emph{CRP} and the relation imposed between challenges and reponses by a particular PUF is called as its \emph{CRP behavior}. PUF is applied in two phases, first phase is \emph{enrollement}, where a certain number of CRPs are collected from a PUF and stored in \emph{CRP database}. In second phase called \emph{verification}, a challenge from CRP database is applied to the PUF and the produced response is compared with the corresponding response from the database [TH book section 2.1]
 
 \subsubsection{Intra and Inter-Distance metrics}
+\label{intra_inter_section}
 The concept of inter versus intra-(class) distance is inherited from the theory of classification and identification.
 \begin{itemize}
 	\item for a specific challenge, inter-distance between two PUFs instances is the distance between two reponses produced by applying the same challenge to both PUFs.
@@ -190,6 +191,7 @@ These codes can be completely produced by a generator string G, all codevectors 
 This section tries to cover the basics for understanding BCH codes and Golay Codes, in no way we claim the completeness of the mathematical constructs and other proofs that are skipped. Please see the references for more details.\\
 
 \subsection{BCH Codes}
+\label{bch_section}
 The \emph{BCH codes} belong to the class of powerful random error correcting cyclic codes and named after Bose, Chaudhuri and Hocquenghem. These codes exercise great control over code's parameters like code length, information bits etc. The major parameters to the BCH code is length of the input message (input bits) which produces output codewords based on the \emph{BCH mode} selected and number of bit errors that can be corrected with decoding. This section tries to summarize the BCH codes and
 their basic error correcting capability.\\
 
@@ -305,7 +307,7 @@ Output & 10\\
 \end{table}
 
 \subsection{Fuzzy extractor}
-
+\label{fuzzy_section}
 We have already established that external factors like noise, voltage fluctuation, aging etc. instill errors in the PUF responses with some of the bits flipped between two responses from the same device, giving rise to intra distance between them. \emph{Fuzzy Extraction} is a well known technique which aims to rectify these errors with the help of the error correcting codes. In this thesis we have used binary BCH codes, binary linear repetition code, binary majority vote and binary Golay
 codes to realize the PUF based secure key storage.\\
 
