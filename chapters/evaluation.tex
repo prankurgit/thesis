@@ -1,1 +1,30 @@
-The implementation part dealt with the improvement and integration of the PUF Toolkit to the CogniCrypt. This chapter talks about the evaluation of the Toolkit in terms of time and space complexity, percentage of CPU usage and amount of CPU clock cycles (converted to human readable time)
+The evaluation chapter covers the analysis of the integrated code and the improvements done to the toolkit and the evaluation of CogniCrypt interface to the toolkit. This analysis includes appraisal of the Design Guidelines and interpretation of the results of the metrics of the PUF toolkit for PUF response evaluation. The results of the measurements related to CPU usage and time requirements is presented as
+histograms for better assessment of the number of CPU cycles used by the different metrics of the PUF toolkit. For fuzzy extractor techniques the appraisal of the time requirement of the preprcessing  with respect to the parameter $m$ and a PUF response length analysis of the available BCH modes is given.\\
+
+\section{Design Guidelines}
+The user interface should be intuitive and easy-to-use which ensures user-satisfaction and effective use to the tool. While extending the toolkit and implementing new metrics, special consideration was given to the user interface design. The existing toolkit followed the standard guidlines as listed in [seb 45] and are summarized below:
+
+\begin{itemize}
+	\item \textbf{Simple and natural dialogue:} User must be provided with information related to the task such that the comprehension of the task is natural. The mapping of the user's mental model to the work flow of the toolkit has to be accurate. To satisfy this property the sub-menus are in a top-down structure i.e important options are always in the upper section of each menu. These options are also mandatory eg. the settings like offsets and filenames must be set first before
+		progressing to calculation. The sub-menu items after calculation are optional, the toolkit menu follows natural top-down workflow that is inituitive to the user and thus represents a simple and natural dialogue.
+	\item \textbf{Speak the user's language:} The intended user group of the toolkit is assumed to be familiar with some technical vocabulary. Translating each and every instruction into laymans langauage distorts the meaning and is not always helpful. So all the dialogues are written as clear instructions with additional examples given to ensure a successful interaction between user and the program.
+	\item \textbf{Minimize the user's memory load:} To reduce retyping and user load, all the chosen settings are displayed in each menu. The long inputs like the paths to the different folders can be avoided via explained shortcuts. Common settings like offset needed to be set only once and are applied to all the sub-menus. Additionally brief texts and guidelines to relax the short-term memory of the user are provided that promotes a clear design and visual clarity.
+	\item \textbf{Be consistent:} The layout and positioning of the menu items, design concept is consistent throughout and wherever possible exact same words, menu entries and settings options are used for the user to recognize a pattern and prediction of the actions. The control behavior is also consistent, meaning the upper area always shows the important options as mentioned in the text above.
+	\item \textbf{Provide Feedback:} The information header in the toolkit informs the user where he/she is in the menu hierarchy. The Feedback and the input area provides with essential information about the result. Not only for errors, but feedback for each performed action and its status is dispayed.
+	\item \textbf{Provide clearly marked exits:} The ``exit'' or ``back'' is the lowest menu option in each sub-menu level. This facilitates user yo navigate through the hierarchical structure of the menu or to exit the toolkit.
+	\item \textbf{Provide shortcuts:} The selection of each menu entry is implemented as shortcut represented by the corresponding number in front of the option. This helps is fast and spontaneous navigation through the menus.
+	\item \textbf{Good error messages:} Whenever user input is incorrect or toolkit is in faulty state, the reason for the error and information to recover from the erroneous state is given in the feedback area. The instructions are simplified and only relevant information to the error with as much detail as possible is presented thereby assisting user for a fast recovery.
+	\item \textbf{Prevent errors:} The implementation has a two level check for handling the user inputs to ensure that only legitimate inputs will be processed. Further information related to the input format and representative examples of such sample inputs with brief helper text are displayed to the user for him/her to avoid errors. Exhaustive error checking is performed before calculating the metric to assure that all relevant data and settings are set and valid, so as to prevent
+		the program from running into undesired state and crashes.
+\end{itemize}
+
+\subsection{CogniCrypt User interface}
+
+\section{Interpretation of the results for the extended metrics}:
+
+\subsection{Evaluation of the Fuzzy extractor}
+
+PUF response length analysis
+
+\section{Time requirement analysis}
+
