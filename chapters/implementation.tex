@@ -28,7 +28,7 @@ Apart from the above mentioned metrics implementation the PUF based secure key s
 
 \subsection{User Design}
 
-The notion behind the console user interface design by inspired from Nielsen and Molich's nine user interface design guidelines [seb 45]. These guidelines and their resulting effects are shown the table \ref{tab:guidline_design} below:
+The notion behind the console user interface design by inspired from Nielsen and Molich's nine user interface design guidelines [seb 45]. These guidelines and their resulting effects are shown the Table \ref{tab:guidline_design} below:
 
 \begin{table}[!ht]
 \begin{center}
@@ -98,7 +98,7 @@ This in turn decisively supports developers and researchers in the PUFs reponses
 The hamming distance functionality was added to and integrated as part of this Master thesis. Hamming Distance between two bit strings of same length is defined as the number of the bits that differ amongst the two binary bit strings. For eg. if we have two string \emph{A = 1100} and \emph{B = 1010} then the hamming distance between them would be ``\emph{two}'', since the bits at second and third position (starting from the left) differ between these two strings. The implementation of
 this functionlality is straightforward, using the in-built \emph{bitwise XOR} operation of the ISO C++ standard and then counting the number of ones in the resulting string, which is nothing but calling the hamming distance function on the resultant string.\\
 
-As depicted in the figure \ref{img:gui_design} above there are other options like \emph{Intra Hamming Distance} and \emph{Inter Hamming Distance} in the Hamming Distance Menu, that are organized later as subsections where we explain about the different modes and other options and plausible input values the user can select from them. For now we direct our attention at the other menu items.\\
+As depicted in the Figure \ref{img:gui_design} above there are other options like \emph{Intra Hamming Distance} and \emph{Inter Hamming Distance} in the Hamming Distance Menu, that are organized later as subsections where we explain about the different modes and other options and plausible input values the user can select from them. For now we direct our attention at the other menu items.\\
 
 The first menu item is related to the \emph{\textbf{Offsets}} that are mandatory for the user to input and the first query that must be answered after the toolkit is run. Since the PUF toolkit is designed for evalutation of PUF responses that are in binary format and not all the data in PUF reponse binary file is useful for evaluation the user can manually select how much he/she desires to skip the data (in bytes) from the beginning and the end of the file using this \emph{Offsets} option.
 For example the first $400$ bytes of the PUF response of a (TI) Stellaris LM4F120XL Launchpad Evaluation Kit are used during the booting process and are not random, so they are irrelevant in PUF responses evaluation. These kind of device specfic behavior requires suitable handling to ensure valid results.\\
@@ -111,7 +111,7 @@ responses divided by their length. For example if Hamming Distance between two P
 
 The Hamming Distance can be calculated using option \emph{three} that will ask for the two PUF responses binary filenames and if the path and filenames are correct, the results will be displayed in the fourth part of the GUI. If the output filename was given before then the result is also stored in that file and can be viewed using the option \emph{seven}.\\
 
-In order to understand the code flow and working of the hamming distance function it is vital to look at the structure \emph{Item} and its data members. This structure is used by other menus in the toolkit to share the current settings and global configurations like Offsets, filenames, paths etc. and thereby reducing the user's effort and memory load. The table \ref{table:item} only highlights the data members and their purpose that are relevant to Hamming Distance Menu. The other data members
+In order to understand the code flow and working of the hamming distance function it is vital to look at the structure \emph{Item} and its data members. This structure is used by other menus in the toolkit to share the current settings and global configurations like Offsets, filenames, paths etc. and thereby reducing the user's effort and memory load. The Table \ref{table:item} only highlights the data members and their purpose that are relevant to Hamming Distance Menu. The other data members
 for the time being are not shown and will be discussed in relevant sections.\\
 
 \begin{table}[!ht]
@@ -311,397 +311,397 @@ This section first briefly mentions the implementation algorithm used in the BCH
 The BCH encoding implementation is taken from \emph{Morelos-Zaragozas Encoder/Decoder} for binary BCH codes in C [seb 43]. This algorithm uses systematic encoding to encode the message, hence the encoded codewords contain initial message in it, which is stripped from the codeword to get the helper data, using the BCH(n,k,d) (refer section \ref{bch_section}) the codewords are combined in groups of \emph{length k} and extra 0s are added to complete the last set . In the
 second part of the enrollment of the fuzzy extractor the LR code is applied to the generated codeword, based on the user input the bits are repeated either 7 or 15 times, the Figure \ref{img:4_LR_HD} shows this LR process with factor 7. It was noted that there were some limitations to the original algorithm and the encoding only works for small values of $m$, after code review and research the error states were removed and/or documented.\\
 
-Due to above mentioned limitations, the correct combination of BCH encoding and linear repetition code requires correct handling of the bounds. The length of the secret key in bits is denoted by $N$, to process the entire file with BCH (n,k,d) code we need \emph{len} iterations of encoding, this is defined in equation \ref{4:BCH_len}.
+	Due to above mentioned limitations, the correct combination of BCH encoding and linear repetition code requires correct handling of the bounds. The length of the secret key in bits is denoted by $N$, to process the entire file with BCH (n,k,d) code we need \emph{len} iterations of encoding, this is defined in Equation \ref{4:BCH_len}.
 
-\begin{itemize}
-	\item For an input data of length \emph{N} (bits) and a BCH ($n$,$k$,$d$) code, a ‘\emph{len}’ number of BCH encoding iterations have to be performed to process the complete input file [Master thesis seb]:
-\begin{equation}
-	len =\Bigg\lceil\dfrac{N}{k}\Bigg\rceil
-	\label{4:BCH_len}
-\end{equation}
-
-\item For a BCH ($n$,$k$,$d$) code that requires ‘\emph{len}’ BCH encoding iterations to process the complete input file, the result of the linear repetition code has a length of ‘\emph{LengthAfterLR}’ with respect to the chosen linear repetition factor ‘\emph{LRfactor}’ (7 or 15) [Master Thesis Sebastian]:
-\begin{equation}
-	LengthAfterLR = \Bigg\lceil\Bigg(\dfrac{\Bigg(\dfrac{len}{k} * n\Bigg)}{8}\Bigg)\Bigg\rceil * LRfactor
-\label{4:BCH_LR_len}
-\end{equation}
-\end{itemize}
-
-\begin{figure}
-\centering
-\fbox{\includegraphics[width=0.9\textwidth]{images/bch_encoder_ui.png}}
-\caption{Console user interface of the \emph{PUF BCH Encoder}.}
-\label{img:4_BCH_ENC_menu}
-\end{figure}
-The User interface for the BCH Encoder sub menu is shown in Figure \ref{img:4_BCH_ENC_menu}. The first option is to set the BCH mode in which the user is required to input the codelength $n$ i.e. derived from $m$ such that $(2^{m-1} - 1) < length <= (2^m - 1)$, after that it is also mandatory to enter the desired correction capability $t$ of the BCH (n,k,d) code that in turn will determine the paramter $d$ of the code from the formula $t = \frac{d}{2} + 1$.
-These values must be consistent with the equations \ref{4:BCH_len} and \ref{4:BCH_LR_len} or else the decoding of the secret key will not be successful. The second option chooses the LR factor as 7 or 15, the third is the familiar offsets selection for the PUF response that will also determine the actual length of the PUF response used to generate the helper data. After this the user must also input the key he/she wants to securely store and the name of the PUF
-response file, finally the output filename for helperdata must be provided to be saved on permanent storage and to be used in the later reconstruction phase of the fuzzy extraction. These discussed inputs are all mandatory in the BCH menu and only then we can use option seven to process and generate the helper data or else the toolkit throws appropriate error messages to the user about missing parameters.\\
-
-We show the functions of the BCH encoder arranged in modules that are related to each other via Figure \ref{img:bchenc_fns}
-
-\begin{figure}
-\centering
-\fbox{ \includegraphics[width=0.9\textwidth]{images/bch_encoder_functions.pdf}}
-\caption{Dependencies of the BCH Encoder Modules}
-\label{img:bchenc_fns}
-\end{figure}
-
-The data structure \emph{Item} that was discussed in Hamming Distance contains relevant data members related to BCH encoder, which are summarized in the table \ref{tab:4_BCH_item_type_limits}
-
-\begin{table}[!ht]
-\begin{center}
-\begin{tabular}{lll}
-\toprule
-\multicolumn{1}{l}{\textbf{Name}} & \multicolumn{1}{l}{\textbf{Type}} & \multicolumn{1}{c}{\textbf{Description}}\\
-\midrule
-\hline
-\emph{offset\_begin} & long & \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Defines the starting point in a binary file (bytes to skip from beginning) \end{tabular}}\\
-
-\emph{offset\_end} & long & \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Defines the ending point in a binary file (bytes to skip from end) \end{tabular}}\\
-
-\emph{input\_Key\_length} & long & \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Defines the length of the input key file\end{tabular}}\\
-
-\emph{input\_Key\_name} & char [102] & \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Char array for 102 symbols, to define the input key file \end{tabular}}\\
-
-\emph{input\_PUF\_name} & char [102] & \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Char array for 102 symbols, to define the input PUF file \end{tabular}}\\
-
-\emph{output\_HD\_name} &  char [102] & \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Char array for 102 symbols, to define the output helper data file \end{tabular}}\\
-
-\emph{BCHmode} & char [25] & \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Char array for 25 symbols, to define the BCH mode \end{tabular}}\\
-
-\emph{LR} & int & \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Definition of the utilized linear repetition factor \end{tabular}}\\
-
-\emph{result} & char [52] & \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Char array for 52 symbols, to provide feedback \end{tabular}}\\
-\hline
-\addlinespace
-\bottomrule
-\end{tabular}
-\end{center}
-\caption{Names and types of each element in the data structure \emph{Item} for the \emph{PUF BCH Encoder} and a description regarding their purpose.}
-\label{tab:4_BCH_item_type_limits}
-\end{table}
-
-\subsubsection{Integration changes}
-Initially the BCH Menu item was defined in the toolkit module to be called by the main menu, after that support for Offset from beginning and end, depicted in table \ref{tab:4_BCH_DEC_item_type_limits}, was made available similar to Hamming Distance menu. Since the ``Calculation module'' functions of the BCH encoder are all called internally without any dependence on the user, so they were unified with the original PUF Toolkit Calculation module without much hindrance.
-The ``Settings module'' was merged to the toolkit with \emph{DefineFilename\_BCH} was renamed to avoid function name conflict with \emph{DefineFilename} of the toolkit, the former is dedicated to process the input PUF filename, output helperdata file and input secret key of the BCH encoder. The ``File and View modules'' were straightforward to unify with the toolkit, special care was taken to add the BCH global variables and global vectors to the toolkit. Changes in the ``View
-module'' were dominated by the \emph{ErrorMessages} routine, which informs the user about the incorrect input and error states and the ways to recover from them. Major challenges faced during the integration were the same name functions as in the orignal toolkit that resulted in linking errors, they were resolved by renaming them appropriately for BCH encoder and all the declarations of the resulting functions were unified in the header files of the respective modules.\\
-
-\subsubsection{Verification}
-The correctness after merging the BCH encoder was authenticated via exhaustive run through all the test cases. In addition to that a final verification of the entire implementation was done. While doing the verification following main points were given priority:
-
-\begin{itemize}
-	\item Correctness of each module verified through utilization of test cases.
-	\item All the possible menu options were checked and reviewed for their expected functionality
-	\item Wrong inputs and incorrect state handling was also tested to make sure that the toolkit accepts only legitimate inputs and display appropriate error messages to rectify the error.
-	\item Unusual workflows were inspected to assess their impact on Encoder functionality.
-\end{itemize}
-
-\subsection{PUF BCH Decoder}
-We now go on to discuss the second phase of the fuzzy extractor i.e.``regeneration'' that uses PUF BCH Decoder as an essential element to recover the secret key that was encoded in the first phase with the help of the generated helper data and a PUF response from the same device as used in the enrollment phase. Again we do not indulge in the exact implementation details since they are presented with great detail in [Master seb thesis]. This section looks at the user interface of the BCH decoder where the possible inputs and their meaning is discussed, then a summary of the main modules involved in the BCH decoder
-is presented with the help of an entity relation diagram. Similar to BCH encoder section we examine the changes required during merging with the toolkit in the subsection ``Integration Changes'' and finally talk about the verification steps taken to assert the correctness of the merged decoder functionality in the toolkit.\\
-
-The decoder implementation is also the extension of the Morelos-Zaragozas [seb 43] but before applying the decoding functionality, the LR encoded helper data received from the first phase is processed in the majority vote module of the fuzzy extractor as shown in Figure \ref{img:4_MV_codewords}. This counteracts the linear repitition introduced in the LR coding module of the ``enrollment phase''. The fig. \ref{img:4_MV_codewords} shows this operation on the helper data received from fig. \ref{img:4_LR_HD}, notice that the PUF
-response has some bits changed due to the various environmental factors (refer to section [2.1.4]) that introduce intra distance between the PUF reponses from the same device. After the Majority vote operation the BCH decoder recovers the configiration settings \emph{cfg} that are appended in the end of the helper data to satisfy correct boundary conditions as seen in the BCH encoding phase. Usually the BCH(n,k,d) can correct upto $t$ bit flip errors though along with Majority
-Voting and BCH decoding the fuzzy extractor can restore the original input secret key.\\
-
-The User interface is a simple GUI similar to the BCH encoder \ref{img:BCH_decoder_GUI}, but in this case the user need not enter the BCH mode details and offsets since they are predetermined in the encoding part and are saved as \emph{cfg} settings. We only need to give the helper data filename and the PUF response filename to decode and restore the input secret key. The output key filename is required to store the recovered input secret key and using option ``$5$'' the retrieved key can be viewed without
-exiting the toolkit.\\
-
-The five modules of the BCH decoder and their functions are depicted in the Figure \ref{img:bchdec_fns}.
-\begin{figure}
-\centering
-\fbox{ \includegraphics[width=0.9\textwidth]{images/bch_decoder_functions.pdf}}
-\caption{Dependencies of the BCH Encoder Modules}
-\label{img:bchdec_fns}
-\end{figure}
-
-The members of the data structure \emph{Item} those are relevant to the BCH decoder are summarized in the table \ref{tab:4_BCH_DEC_item_type_limits}. The only difference with the encoder is that we need input helperdata filename instead of output helperdata filename and output key filename instead of the input key filename.
-
-\begin{table}[!ht]
-\begin{center}
-\begin{tabular}{lll}
-\toprule
-\multicolumn{1}{l}{\textbf{Name}} & \multicolumn{1}{c}{\textbf{Type}} & \multicolumn{1}{c}{\textbf{Description}}\\
-\midrule
-\hline
-\emph{offset\_begin} & long & \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Defines the starting point in a binary file (bytes to skip from beginning) \end{tabular}}\\
-
-\emph{offset\_end} & long & \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Defines the ending point in a binary file (bytes to skip from end) \end{tabular}}\\
-
-\emph{input\_HD\_name} &  char [102] & \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Char array for 102 symbols, to define the input helper data file \end{tabular}}\\
-
-\emph{input\_PUF\_name} & char [102] & \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Char array for 102 symbols, to define the input PUF file \end{tabular}}\\
-
-\emph{output\_Key\_name} & char [102] & \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Char array for 102 symbols, to define the output key file \end{tabular}}\\
-
-\emph{BCHmode} & char [25] & \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Char array for 25 symbols, to define the BCH mode \end{tabular}}\\
-
-\emph{LR} & int & \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Definition of the utilized linear repetition factor \end{tabular}}\\
-
-\emph{result} & char [52] & \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Char array for 52 symbols, to provide feedback \end{tabular}}\\
-\hline
-\addlinespace
-\bottomrule
-\end{tabular}
-\end{center}
-\caption{Names and types of each element in the data structure \emph{Item} for the \emph{PUF BCH Decoder} and a description regarding their purpose.}
-\label{tab:4_BCH_DEC_item_type_limits}
-\end{table}
-
-\subsubsection{Integration Changes}
-To integrate the BCH decoder on top of already merged BCH encoder in the toolkit, required careful alterations to the code. The \emph{Main\_Menu} routine of the toolkit was modified to insert a BCH decoder menu that can be invoked by the user. The ``Calculation'' module functions were merged without much conflict with the existing functions, the function \emph{generate\_gf}, responsible for Galios Field computation was unchanged. The other two functions
-\emph{read\_p\_decode and gen\_poly\_decode} that are used for polynomial generation were renamed because of the overlapping function names with the encoder. The error messages displaying routine of the ``View module'' was redeclared as  \emph{ErrorMessages\_decode} because the error states and the possible inputs for decoder are different from the BCH encoder. \emph{MajorityVoting} and \emph{ViewFile} were added to the family of BCH functions and correspondingly their declarations written in respective header files. The
-routine \emph{DefineFilename\_BCH} was specifically modified to take two more arguments i.e. input helperdata filename and output recovered key name, since these two arguments were not implemented in the encoder. Accordingly the body of the same routine was changed to display appropriate messages for the input of helperdata and output key name that would be restored after decoding. The other challenge was to find and modify all the invoking points to the newly renamed functions, this was
-resolved by careful code investigation and with the help of insight gained via compiler and linker errors.\\
-
-\subsubsection{Verification}
-For verifying the integrated BCH decoder a similar approach as BCH encoder was taken, the correctness was authenticated by running all the test cases that cover all the code flows including exceptions and error states. A final verification of the entire implementation was done by cross checking the recovered key with the original secret key.
-
-
-\begin{itemize}
-	\item Correctness of each module verified through utilization of test cases.
-	\item All the possible menu options were checked and reviewed for their expected functionality
-	\item Wrong inputs and incorrect state handling was also tested to make sure that the toolkit accepts only legitimate inputs and display appropriate error messages to rectify the error.
-	\item Unusual workflows were inspected to assess their impact on Decoder functionality.
-	\item The restored key was matched with the original secret key using the linux commandline utility ``diff''.
-\end{itemize}
-
-\subsection{Golay Encoder}
-This section discusses the Golay Encoder that was integrated in the toolkit. We first discuss the user interface then look at the functions and modules of the Golay encoder followed by a basic description of the important routines in the code and then steps taken to verify the implementation.\\
-
-\begin{figure}
-\centering
-\fbox{\includegraphics[width=0.9\textwidth]{images/golay_encoder_ui.png}}
-\caption{Console user interface of the \emph{PUF Golay Encoder}.}
-\label{img:golay_enc_ui}
-\end{figure}
-The UI is similar to BCH encoder but in this case we do not need to set the dimensions of the code ``n, k and d'' because Golay is a static code with the universal dimensions of (23, 12, 7) as seen in section \ref{golay_related}. The user interface is portrayed in Figure \ref{img:golay_enc_ui}, using the first option the user can set the Linear repetition factor as '7' or '15', the offsets of the PUF file can be adjusted using option two. After this it is mandatory to input the secret key filename, to be
-stored securely, and input the PUF filename to generate the helperdata using fuzzy extractor algorithm, using option three and four respectively.The helperdata filename is provided by the user by selecting option five. If all the inputs are satisfied and conditions are met then the helperdata will be generated by choosing the last option six.\\
-
-
-\begin{figure}
-\centering
-\fbox{ \includegraphics[width=0.9\textwidth]{images/golay_encoder_functions.pdf}}
-\caption{Illustration of the Golay Encoder modules and their inter dependency.}
-\label{img:golay_enc_funcs}
-\end{figure}
-
-The functions of the Golay Encoder are divided into four modules similar to the BCH encoder depicted in Figure \ref{img:golay_enc_funcs}. The \emph{Setting} module contains the familiar functions ``DefineFilename'' and ``DefineSettings'' alongwith ``DefineOffsetlength'' which sets the value of the offsets. The \emph{View} module contains the ``ErrorMessages'' routine which is implemented in the toolkit already to check for incorrect inputs by the user and other routines to check the progress status and
-clear the screen. The \emph{Calculation} module forms the backbone of the golay encoder the details are listed below:
-
-\begin{itemize}
-	\item \emph{Golay\_encode} routine's main task is to read and allocate memory for the PUF and Key file using their filenames that are given by the user. This routines then makes a call to the ``generateHelperData'' function with the initialized data members of the Item structure and memory pointers to the read files.
-	\item \emph{generateHelperData} generates the encoding table using another internal function \emph{get\_syndrome} (this table is analogous to the generator matrix discussed in section \ref{golay_related} of the Golay Code) , then the seret key is encoded using the Golay Coding technique. The generated Codewords are stored in an array that undergo the linear repetition process and finally the LR\_Encoded codewords are XORed with the PUF response to obatin the
-		helperdata. The generatorHelperData stores the final output in the helperdata filename specified by the user alongwith the ``cfg'' settings i.e Offsets, LR factor and secret key filesize. This information will be read and used in the decoder module. Table \ref{tab:Golay_pattern} summarizes the data structure ``Pattern'' that constitute the cfg settings.
-
-	\item \emph{get\_syndrome} function computes the generator polynomial for golay code corresponding to the (23, 12, 7) golay code. \end{itemize}
-
-\begin{table}[!ht]
-\begin{center}
-\begin{tabular}{lll}
-\toprule
-\multicolumn{1}{l}{\textbf{Name}} & \multicolumn{1}{c}{\textbf{Type}} & \multicolumn{1}{c}{\textbf{Description}}\\
-\midrule
-\hline
-\emph{errorCode} & int & \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Defines the utilized error correction code (0 = Golay, 1 = BCH)\end{tabular}} \\
-
-\emph{Golay\_BCH\_length} & int & \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Defines the \emph{length} of one code word, for Golay and BCH \end{tabular}}\\
-
-\emph{Goly\_d\_BCH\_t} & int & \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Defines for Golay the distance \emph{d} and for BCH the correction capability '\emph{t}' \end{tabular}}\\
-
-\emph{Golay\_k\_BCH\_m} &  int & \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Defines the \emph{message length} for Golay and the parameter \emph{m} for BCH\end{tabular}}\\
-
-\emph{linearRep} & int & \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Defines the utilized linear repetition factor\end{tabular}} \\
-
-\emph{puf\_offSet\_begin} & long & \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Defines the starting point in a binary file (bytes to skip) from beginning \end{tabular}}\\
-
-\emph{puf\_offSet\_end} & long & \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Defines the ending point in a binary file (bytes to skip) from the end \end{tabular}}\\
-
-\emph{original\_filesize} & long & \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Defines the length of the original input key file \end{tabular}}\\
-\hline
-\addlinespace
-\bottomrule
-\end{tabular}
-\end{center}
-\caption{Names and types of each element in the data structure \emph{Pattern} for the \emph{PUF Golay Encoder} and a description regarding their purpose.}
-\label{tab:Golay_pattern}
-\end{table}
-
-A helper function \emph{SetInputLen} was implemented to aid the encoder functions in calculating the length of the file based on the offsets. This function is called internally before reading and allocating the memory for key and PUF response. It takes two arguments, first the Item structure with intialized data members as filenames and a second integer argument that point to PUF response or secret key, based on these values it calculates the input length as $input\_length =
-orignal\_filesize - (Offset\_end + Offset\_beginning)$. \\
-
-\subsubsection{Verification}
-The user interface was designed to follow the same pattern as BCH encoder to simplify the user experience. The ``Main'' module was modified to add one more menu item \emph{Golay\_Encoder\_Menu}. The merging and reuse of the existing functions was done with great care and detail to modularize the code that is suitable for further extension in the future. The verification of the consolidated code was done keeping in mind the the same steps as BCH encoder:
-\begin{enumerate}
-	\item Correctness of each module verified through utilization of test cases.
-	\item All the possible menu options were checked and reviewed for their expected functionality
-	\item Wrong inputs and incorrect state handling was also tested to make sure that the toolkit accepts only legitimate inputs and display appropriate error messages to rectify the error.
-	\item Unusual workflows were inspected to assess their impact on Golay Encoder functionality.
-\end{enumerate}
-
-Due to the static nature of the Golay Code (23, 12, 7) it can only correct upto ``three errors'' per ``twelve bits'' of message. Consequently this code is not suitable for encoding and large secret files. Extensive testing showed that when the resultant helperdata is greater in size compared to the PUF response, the secret file is not recovered completely and via hit and trial the filesize for complete recovery of the secret key was approximated $2600$ bytes. So the recovery of ssh private keys which are
-typically greater than 3000 bytes is not possible using Golay and the user must choose the BCH fuzzy extractor instead.
-
-\subsection{Golay Decoder}
-The next step after encoding the secret key and obtaining the helper data is to recover the key via golay decoding. The subtext presents the user interface and explains the procedure to restore the securely stored secret key, then the modules and functions of the decoder are illustrated. The discussion then follows the code improvement done to enhance the menu of the toolkit and finally verification strategy to check the integrated changes is shown.\\
-
-The user interface \ref{img:golay_decoder_ui} has five main options where the user must input the helperdata that was generated in the enrollment phase using option one. The other two mandatory options are to set the PUF response filename that is generated from the same device as used in encoding phase and to specify the output key filename where the secret key will be restored. If all the inputs are correctly set then the ``regeneration'' can be performed via option four. The output and status is displayed
-under the \emph{Result} section of the UI whereas \emph{Settings} subsection of the interface shows the filenames. If the input is incorrect or if the given filename is not present on the disk then a suitable error with details to recover from a faulty state is shown to the user.\\
-\begin{figure}
-\centering
-\fbox{ \includegraphics[width=0.9\textwidth]{images/golay_decoder_ui.png}}
-\caption{Conceptual design of the Golay Deocder user interface.}
-\label{img:golay_decoder_ui}
-\end{figure}
-
-\begin{figure}
-\centering
-\fbox{ \includegraphics[width=0.9\textwidth]{images/golay_decoder_functions.pdf}}
-\caption{Illustration of the Golay Decoder modules and their inter dependency.}
-\label{img:golay_decoder_ui}
-\end{figure}
-
-Golay decoder code is partitioned across five modules similar to the ones discussed in Golay encoder as illustrated in Figure \ref{}. The first module is the Main\_Menu function that calls the Golay decoder menu. This menu was implemented and added to the PUF toolkit which on selection points to the user interface with menu items of the decoder \ref{img:golay_decoder_ui}. The golay decoder user interface is implemented in the routine \emph{Golay\_Decoder\_Menu}, where the decode option is linked to the \emph{Golay\_decode}
-function that performs the decoding of the helperdata. The usual routines in the ``View'' module are used to set the helperdata, PUF response and output recovered key filenames. There is no need to set the offsets and orignal key filesize in the decoder menu since during the ``enrollment'' phase these details are appended at the end of helperdata as part of the `cfg' settings. The ``Calculation'' module is crucial to the decoding operation and which follows the below mentioned
-steps:
-\begin{enumerate}
-	\item The Golay decode function reads the `cfg' settings using a sub routine \emph{read\_infos} that reads the settings appended at the end of the helperdata and initializes the correspoding data members of the Item strucuture. The details of the data members used in golay decoding are listed in table \ref{tab:Golay_pattern}. Then based on the settings the input length of the PUF response is calculated as $input\_length = orignal\_filesize - (Offset\_end + Offset\_beginning)$. The files
-		helperdata and PUF response are read and stored in the memory and the control is given to the \emph{recoverOriginalData}.
-	\item The next function \emph{recoverOriginalData} performs the decoding of the helperdata. It first applies ``Majority Voting'' on the encoded helperdata to reverse the effects of the ``Linear Repetition'' done during enrollment phase. With the help of an api \emph{next\_comb} the decoding table for Golay code (23, 12, 7) is calculated that is used to recover the original key.
-	\item After the restoration of the key is complete it is saved in the output key filename by calling a
-		sub-routine \emph{SaveFile} that takes the recovered key (represented in code as a character array) and output filename as arguments and uses standard C file operations to write to the file.
-\end{enumerate}
-
-The \emph{ErrorMessages} function was used to detect incorrect input and display the errors to the user, since it is redundantly used in the other menu functionalities of the PUF toolkit like BCH encoder, we summarize the Error Codes in the table \ref{tab:Golay_dec_errors}
-
-\begin{table}[!ht]
-\begin{center}
-\begin{tabular}{cp{13cm}}
-\toprule
-\multicolumn{1}{c}{\textbf{Error code}} & \multicolumn{1}{c}{\textbf{Error message}} \\
-\midrule
-\hline
-1 & ERROR! Invalid input - Only digits are allowed! No digit at \emph{pos + 1}.\\
-
-2 & ERROR! Invalid input - Input to long. \\
-
-3 & ERROR! Invalid input - Try again...  \\
-
-4 & ERROR! Opening output file. \\
-
-5 & ERROR! Invalid input - 'Filename' too long. \\
-
-6 & ERROR! Invalid input - No input. \\
-
-7 & ERROR! Reading PUF file. \\
-
-8 & ERROR! Opening PUF file. \\
-
-9 & ERROR! Invalid input - PUF filename is not valid.\\
-
-10 & ERROR! Invalid input - Key filename is not valid.\\
-
-11 & ERROR! Opening HelperData file. \\
-
-12 & ERROR! Reading HelperData file. \\
-
-13 & ERROR! Selected an invalid choice. \\
-
-14 & ERROR! HelperData: The recovered 'decoding information' is invalid! -> Parameter '\emph{m}' is out of range.\\
-
-15 & ERROR! HelperData: The recovered 'decoding information' is invalid! -> Parameter '\emph{t}' is out of range.\\
-
-16 & ERROR! HelperData: The recovered 'decoding information' is invalid! -> Parameter '\emph{length}' is out of range.\\
-
-17 & ERROR! HelperData: The recovered 'decoding information' is invalid! -> Parameter '\emph{LR factor}' is not 7 or 15.\\
-
-18 & ERROR! HelperData: The recovered 'decoding information' is invalid! -> Parameter '\emph{offSet}' is out of range.\\
-
-19 & ERROR! HelperData: The recovered 'decoding information' is invalid! -> Parameter '\emph{filesize}' is out of range.\\
-
-20 & ERROR! Opening file to view.\\
-
-21 & WARNING! Looks like no decoding was performed.\\
-
-22 & Looks like the calculation was not started.\\
-
-23 & ERROR! Looks like the file was empty.\\
-
-24 & ERROR! Looks like the file was not in the supported format.\\
-
-25 & WARNING! Looks like the 'offset' is not set.\\
-
-26 & ERROR! Looks like the 'Output file or Result' is not set/calculated.\\
-\addlinespace
-\bottomrule
-\end{tabular}
-\end{center}
-\caption{Error codes and corresponding error messages for the \emph{PUF Golay Decoder}.}
-\label{tab:Golay_dec_errors}
-\end{table}
-
-\subsubsection{Verification}
-After the merging is complete and the Golay decoder menu is functional it was tested rigrously to make sure all the options work as expected. The same approach for verifiation was taken as mentioned in previous subsections and a final check was done to comapre the recovered key with the original secret to ensure the overall functionality of both the Golay encoder and decoder is correct.
-
-\begin{itemize}
-	\item Every menu item of the golay decoder was checked and review to make sure it behaves as expected.
-	\item Incorrect inputs were inserted deliberiately to verify the ErrorMessages routine display corresponding error messages and ways to recover from the incorrect state of the toolkit.
-	\item Unusual workflows were inspected to assess their impact on Encoder functionality.
-	\item The recovered key was compared with the original secret key via the linux ``diff'' commandline utility and they were found to be identical.
-\end{itemize}
-
-\section{Jaccardi Index}
-\label{jaccardi_index_section}
-This section explains the Jaccardi Index implementation that was developed as a new feature for the toolkit. Then the two sub-menu options Intra Jaccardi and Inter Jaccardi Index are presented as subsections.
-The modules and code structure was inspired from the Hamming Distance Menu since both of the metrics (Hamming Distance and Jaccardi Index) are closely related to each other and operate on either files or folders. We first discuss the definition of Jaccardi Index and its relation to the hamming weight. We then look at the user interface for the Jaccardi Index Menu which contains two more sub
-menu options \emph{Inter} and \emph{Intra Jaccardi index} and then go on to explain the modules of the Jaccardi index. In the end the section presents the verification steps after the development of this new feature was complete.\\
-
-\begin{itemize}
-	\item \emph{Definition}: Jaccardi index between two bytes A and B is defined by the equation \ref{jaccard_eq}
+	\begin{itemize}
+		\item For an input data of length \emph{N} (bits) and a BCH ($n$,$k$,$d$) code, a ‘\emph{len}’ number of BCH encoding iterations have to be performed to process the complete input file [Master thesis seb]:
 	\begin{equation}
-	J(A,B) = \frac {|A \cap B|} {|A\cup B|} = \frac{|A \cap B|} {|A| + |B| - |A \cap B|}
-	\label{jaccard_eq}
+		len =\Bigg\lceil\dfrac{N}{k}\Bigg\rceil
+		\label{4:BCH_len}
 	\end{equation}
-	where |A| is the hamming weight of A, |B| is the hamming weight of B and $|A \cap B|$ is the number of times both A and B have one in the same bit position.
-\end{itemize}
 
-For eg. if we have two bytes A = 1100 1111 and B = 1111 0000 then |A| = 6, |B| = 4 and $|A \cap B|$ = 2 (since only first two common positions have ones in both the bytes). Substituting these values in the above equation we get $J(A,B) = (2) / ( 6 + 4 - 2) = 0.25$.\\
+	\item For a BCH ($n$,$k$,$d$) code that requires ‘\emph{len}’ BCH encoding iterations to process the complete input file, the result of the linear repetition code has a length of ‘\emph{LengthAfterLR}’ with respect to the chosen linear repetition factor ‘\emph{LRfactor}’ (7 or 15) [Master Thesis Sebastian]:
+	\begin{equation}
+		LengthAfterLR = \Bigg\lceil\Bigg(\dfrac{\Bigg(\dfrac{len}{k} * n\Bigg)}{8}\Bigg)\Bigg\rceil * LRfactor
+	\label{4:BCH_LR_len}
+	\end{equation}
+	\end{itemize}
 
-\begin{figure}
-\centering
-\fbox{ \includegraphics[width=0.9\textwidth]{images/golay_decoder_ui.png}}
-\caption{Conceptual design of the Jaccardi Index user interface.}
-\label{img:jaccard_ui}
-\end{figure}
-The user interface for the Jaccardi Index menu is similar to the Hamming Distance Menu as shown in Figure \ref{img:jaccard_ui}. Using the first option user can set the offsets from beginning and end of the file and as a result those bytes will be skipped during Jaccardi calculation. The second option lets the user set the output filename which is mandatory since the results will be stored in this file. The third option performs the computation of the Jaccard index between the two given
-files. It first asks for the two filenames to be prompted by the user and then the result alongwith the \emph{Fractional Index} is stored in the output file. Option five and six calls the Intra and Inter Jaccardi Index routines respectively and are discussed in following subsections. The six and the last option can be used to view the output file without exiting the toolkit.\\
+	\begin{figure}
+	\centering
+	\fbox{\includegraphics[width=0.9\textwidth]{images/bch_encoder_ui.png}}
+	\caption{Console user interface of the \emph{PUF BCH Encoder}.}
+	\label{img:4_BCH_ENC_menu}
+	\end{figure}
+	The User interface for the BCH Encoder sub menu is shown in Figure \ref{img:4_BCH_ENC_menu}. The first option is to set the BCH mode in which the user is required to input the codelength $n$ i.e. derived from $m$ such that $(2^{m-1} - 1) < length <= (2^m - 1)$, after that it is also mandatory to enter the desired correction capability $t$ of the BCH (n,k,d) code that in turn will determine the paramter $d$ of the code from the formula $t = \frac{d}{2} + 1$.
+	These values must be consistent with the equations \ref{4:BCH_len} and \ref{4:BCH_LR_len} or else the decoding of the secret key will not be successful. The second option chooses the LR factor as 7 or 15, the third is the familiar offsets selection for the PUF response that will also determine the actual length of the PUF response used to generate the helper data. After this the user must also input the key he/she wants to securely store and the name of the PUF
+	response file, finally the output filename for helperdata must be provided to be saved on permanent storage and to be used in the later reconstruction phase of the fuzzy extraction. These discussed inputs are all mandatory in the BCH menu and only then we can use option seven to process and generate the helper data or else the toolkit throws appropriate error messages to the user about missing parameters.\\
 
-The modules of the Jaccardi's index are similar to those of the hamming Distance and therefore this section takes the liberty of not showing it here again.
-Rather than looking at each and every module we look at the main routines and algorithm to calculate the Jaccardi Index.
-\begin{itemize}
-	\item The main Jaccardi index between two files is calculated by the \emph{Jaccard\_Index} that takes data structure Item pointer as an argument with initialized filenames. It first sets the input length of both the files based on the offsets from beginning and end by calling the \emph{SetInputLen} api which was designed specifically for this purpose.
-	\item Then the files are read using the sub-routine \emph{readfile} that takes name of the file, offset from beginning and filesize as 		argument, based on that it reads and mallocs the file in memory and passes back the pointer to the allocated memory back to the caller function.
-	\item To get the common number of ``1s'' at same bit positions in both the files, a bitwise AND operation is performed on the read files and the result is stored in a character array. The resultant character array contains the data with ``1s'' in the same bit position since bitwise AND operation only yeilds result ``one'' both the input bits are ``one''. This operation can be seen in the table \ref{bitwise_AND}.
+	We show the functions of the BCH encoder arranged in modules that are related to each other via Figure \ref{img:bchenc_fns}
 
-\begin{table}[!ht]
-\begin{center}
-\begin{tabular}{lc}
-\toprule
-\multicolumn{2}{c}{\textbf{bitwise AND of two bytes A and B}}\\
-\midrule
-Byte A &   1100 0000 \\
-Operation & \&\\
-Byte B &   1111 0011 \\
-Output C &   1100 0000 \\
-\addlinespace
-\bottomrule
-\end{tabular}
-\end{center}
-\caption{bitwise ANDing the two bytes to get the common ones in the same bit position}
-\label{bitwise_AND}
-\end{table}
+	\begin{figure}
+	\centering
+	\fbox{ \includegraphics[width=0.9\textwidth]{images/bch_encoder_functions.pdf}}
+	\caption{Dependencies of the BCH Encoder Modules}
+	\label{img:bchenc_fns}
+	\end{figure}
 
-	\item Once the bitwise AND result is obtained then the calculation of Jaccardi Index is relatively simple. The number of ones in each input files and the bitwise ANDed output file are computed by calling the \emph{hamming\_wt} function explained in the section \ref{Hamming_Distance_menu} under listing \ref{lst:hammingwt} and then the values are substituted in the equation \ref{jaccard_eq}.
+	The data structure \emph{Item} that was discussed in Hamming Distance contains relevant data members related to BCH encoder, which are summarized in the Table \ref{tab:4_BCH_item_type_limits}
+
+	\begin{table}[!ht]
+	\begin{center}
+	\begin{tabular}{lll}
+	\toprule
+	\multicolumn{1}{l}{\textbf{Name}} & \multicolumn{1}{l}{\textbf{Type}} & \multicolumn{1}{c}{\textbf{Description}}\\
+	\midrule
+	\hline
+	\emph{offset\_begin} & long & \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Defines the starting point in a binary file (bytes to skip from beginning) \end{tabular}}\\
+
+	\emph{offset\_end} & long & \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Defines the ending point in a binary file (bytes to skip from end) \end{tabular}}\\
+
+	\emph{input\_Key\_length} & long & \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Defines the length of the input key file\end{tabular}}\\
+
+	\emph{input\_Key\_name} & char [102] & \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Char array for 102 symbols, to define the input key file \end{tabular}}\\
+
+	\emph{input\_PUF\_name} & char [102] & \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Char array for 102 symbols, to define the input PUF file \end{tabular}}\\
+
+	\emph{output\_HD\_name} &  char [102] & \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Char array for 102 symbols, to define the output helper data file \end{tabular}}\\
+
+	\emph{BCHmode} & char [25] & \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Char array for 25 symbols, to define the BCH mode \end{tabular}}\\
+
+	\emph{LR} & int & \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Definition of the utilized linear repetition factor \end{tabular}}\\
+
+	\emph{result} & char [52] & \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Char array for 52 symbols, to provide feedback \end{tabular}}\\
+	\hline
+	\addlinespace
+	\bottomrule
+	\end{tabular}
+	\end{center}
+	\caption{Names and types of each element in the data structure \emph{Item} for the \emph{PUF BCH Encoder} and a description regarding their purpose.}
+	\label{tab:4_BCH_item_type_limits}
+	\end{table}
+
+	\subsubsection{Integration changes}
+	Initially the BCH Menu item was defined in the toolkit module to be called by the main menu, after that support for Offset from beginning and end, depicted in Table \ref{tab:4_BCH_DEC_item_type_limits}, was made available similar to Hamming Distance menu. Since the ``Calculation module'' functions of the BCH encoder are all called internally without any dependence on the user, so they were unified with the original PUF Toolkit Calculation module without much hindrance.
+	The ``Settings module'' was merged to the toolkit with \emph{DefineFilename\_BCH} was renamed to avoid function name conflict with \emph{DefineFilename} of the toolkit, the former is dedicated to process the input PUF filename, output helperdata file and input secret key of the BCH encoder. The ``File and View modules'' were straightforward to unify with the toolkit, special care was taken to add the BCH global variables and global vectors to the toolkit. Changes in the ``View
+	module'' were dominated by the \emph{ErrorMessages} routine, which informs the user about the incorrect input and error states and the ways to recover from them. Major challenges faced during the integration were the same name functions as in the orignal toolkit that resulted in linking errors, they were resolved by renaming them appropriately for BCH encoder and all the declarations of the resulting functions were unified in the header files of the respective modules.\\
+
+	\subsubsection{Verification}
+	The correctness after merging the BCH encoder was authenticated via exhaustive run through all the test cases. In addition to that a final verification of the entire implementation was done. While doing the verification following main points were given priority:
+
+	\begin{itemize}
+		\item Correctness of each module verified through utilization of test cases.
+		\item All the possible menu options were checked and reviewed for their expected functionality
+		\item Wrong inputs and incorrect state handling was also tested to make sure that the toolkit accepts only legitimate inputs and display appropriate error messages to rectify the error.
+		\item Unusual workflows were inspected to assess their impact on Encoder functionality.
+	\end{itemize}
+
+	\subsection{PUF BCH Decoder}
+	We now go on to discuss the second phase of the fuzzy extractor i.e.``regeneration'' that uses PUF BCH Decoder as an essential element to recover the secret key that was encoded in the first phase with the help of the generated helper data and a PUF response from the same device as used in the enrollment phase. Again we do not indulge in the exact implementation details since they are presented with great detail in [Master seb thesis]. This section looks at the user interface of the BCH decoder where the possible inputs and their meaning is discussed, then a summary of the main modules involved in the BCH decoder
+	is presented with the help of an entity relation diagram. Similar to BCH encoder section we examine the changes required during merging with the toolkit in the subsection ``Integration Changes'' and finally talk about the verification steps taken to assert the correctness of the merged decoder functionality in the toolkit.\\
+
+	The decoder implementation is also the extension of the Morelos-Zaragozas [seb 43] but before applying the decoding functionality, the LR encoded helper data received from the first phase is processed in the majority vote module of the fuzzy extractor as shown in Figure \ref{img:4_MV_codewords}. This counteracts the linear repitition introduced in the LR coding module of the ``enrollment phase''. The fig. \ref{img:4_MV_codewords} shows this operation on the helper data received from fig. \ref{img:4_LR_HD}, notice that the PUF
+	response has some bits changed due to the various environmental factors (refer to section [2.1.4]) that introduce intra distance between the PUF reponses from the same device. After the Majority vote operation the BCH decoder recovers the configiration settings \emph{cfg} that are appended in the end of the helper data to satisfy correct boundary conditions as seen in the BCH encoding phase. Usually the BCH(n,k,d) can correct upto $t$ bit flip errors though along with Majority
+	Voting and BCH decoding the fuzzy extractor can restore the original input secret key.\\
+
+	The User interface is a simple GUI similar to the BCH encoder \ref{img:BCH_decoder_GUI}, but in this case the user need not enter the BCH mode details and offsets since they are predetermined in the encoding part and are saved as \emph{cfg} settings. We only need to give the helper data filename and the PUF response filename to decode and restore the input secret key. The output key filename is required to store the recovered input secret key and using option ``$5$'' the retrieved key can be viewed without
+	exiting the toolkit.\\
+
+	The five modules of the BCH decoder and their functions are depicted in the Figure \ref{img:bchdec_fns}.
+	\begin{figure}
+	\centering
+	\fbox{ \includegraphics[width=0.9\textwidth]{images/bch_decoder_functions.pdf}}
+	\caption{Dependencies of the BCH Encoder Modules}
+	\label{img:bchdec_fns}
+	\end{figure}
+
+	The members of the data structure \emph{Item} those are relevant to the BCH decoder are summarized in the Table \ref{tab:4_BCH_DEC_item_type_limits}. The only difference with the encoder is that we need input helperdata filename instead of output helperdata filename and output key filename instead of the input key filename.
+
+	\begin{table}[!ht]
+	\begin{center}
+	\begin{tabular}{lll}
+	\toprule
+	\multicolumn{1}{l}{\textbf{Name}} & \multicolumn{1}{c}{\textbf{Type}} & \multicolumn{1}{c}{\textbf{Description}}\\
+	\midrule
+	\hline
+	\emph{offset\_begin} & long & \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Defines the starting point in a binary file (bytes to skip from beginning) \end{tabular}}\\
+
+	\emph{offset\_end} & long & \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Defines the ending point in a binary file (bytes to skip from end) \end{tabular}}\\
+
+	\emph{input\_HD\_name} &  char [102] & \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Char array for 102 symbols, to define the input helper data file \end{tabular}}\\
+
+	\emph{input\_PUF\_name} & char [102] & \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Char array for 102 symbols, to define the input PUF file \end{tabular}}\\
+
+	\emph{output\_Key\_name} & char [102] & \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Char array for 102 symbols, to define the output key file \end{tabular}}\\
+
+	\emph{BCHmode} & char [25] & \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Char array for 25 symbols, to define the BCH mode \end{tabular}}\\
+
+	\emph{LR} & int & \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Definition of the utilized linear repetition factor \end{tabular}}\\
+
+	\emph{result} & char [52] & \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Char array for 52 symbols, to provide feedback \end{tabular}}\\
+	\hline
+	\addlinespace
+	\bottomrule
+	\end{tabular}
+	\end{center}
+	\caption{Names and types of each element in the data structure \emph{Item} for the \emph{PUF BCH Decoder} and a description regarding their purpose.}
+	\label{tab:4_BCH_DEC_item_type_limits}
+	\end{table}
+
+	\subsubsection{Integration Changes}
+	To integrate the BCH decoder on top of already merged BCH encoder in the toolkit, required careful alterations to the code. The \emph{Main\_Menu} routine of the toolkit was modified to insert a BCH decoder menu that can be invoked by the user. The ``Calculation'' module functions were merged without much conflict with the existing functions, the function \emph{generate\_gf}, responsible for Galios Field computation was unchanged. The other two functions
+	\emph{read\_p\_decode and gen\_poly\_decode} that are used for polynomial generation were renamed because of the overlapping function names with the encoder. The error messages displaying routine of the ``View module'' was redeclared as  \emph{ErrorMessages\_decode} because the error states and the possible inputs for decoder are different from the BCH encoder. \emph{MajorityVoting} and \emph{ViewFile} were added to the family of BCH functions and correspondingly their declarations written in respective header files. The
+	routine \emph{DefineFilename\_BCH} was specifically modified to take two more arguments i.e. input helperdata filename and output recovered key name, since these two arguments were not implemented in the encoder. Accordingly the body of the same routine was changed to display appropriate messages for the input of helperdata and output key name that would be restored after decoding. The other challenge was to find and modify all the invoking points to the newly renamed functions, this was
+	resolved by careful code investigation and with the help of insight gained via compiler and linker errors.\\
+
+	\subsubsection{Verification}
+	For verifying the integrated BCH decoder a similar approach as BCH encoder was taken, the correctness was authenticated by running all the test cases that cover all the code flows including exceptions and error states. A final verification of the entire implementation was done by cross checking the recovered key with the original secret key.
+
+
+	\begin{itemize}
+		\item Correctness of each module verified through utilization of test cases.
+		\item All the possible menu options were checked and reviewed for their expected functionality
+		\item Wrong inputs and incorrect state handling was also tested to make sure that the toolkit accepts only legitimate inputs and display appropriate error messages to rectify the error.
+		\item Unusual workflows were inspected to assess their impact on Decoder functionality.
+		\item The restored key was matched with the original secret key using the linux commandline utility ``diff''.
+	\end{itemize}
+
+	\subsection{Golay Encoder}
+	This section discusses the Golay Encoder that was integrated in the toolkit. We first discuss the user interface then look at the functions and modules of the Golay encoder followed by a basic description of the important routines in the code and then steps taken to verify the implementation.\\
+
+	\begin{figure}
+	\centering
+	\fbox{\includegraphics[width=0.9\textwidth]{images/golay_encoder_ui.png}}
+	\caption{Console user interface of the \emph{PUF Golay Encoder}.}
+	\label{img:golay_enc_ui}
+	\end{figure}
+	The UI is similar to BCH encoder but in this case we do not need to set the dimensions of the code ``n, k and d'' because Golay is a static code with the universal dimensions of (23, 12, 7) as seen in section \ref{golay_related}. The user interface is portrayed in Figure \ref{img:golay_enc_ui}, using the first option the user can set the Linear repetition factor as '7' or '15', the offsets of the PUF file can be adjusted using option two. After this it is mandatory to input the secret key filename, to be
+	stored securely, and input the PUF filename to generate the helperdata using fuzzy extractor algorithm, using option three and four respectively.The helperdata filename is provided by the user by selecting option five. If all the inputs are satisfied and conditions are met then the helperdata will be generated by choosing the last option six.\\
+
+
+	\begin{figure}
+	\centering
+	\fbox{ \includegraphics[width=0.9\textwidth]{images/golay_encoder_functions.pdf}}
+	\caption{Illustration of the Golay Encoder modules and their inter dependency.}
+	\label{img:golay_enc_funcs}
+	\end{figure}
+
+	The functions of the Golay Encoder are divided into four modules similar to the BCH encoder depicted in Figure \ref{img:golay_enc_funcs}. The \emph{Setting} module contains the familiar functions ``DefineFilename'' and ``DefineSettings'' alongwith ``DefineOffsetlength'' which sets the value of the offsets. The \emph{View} module contains the ``ErrorMessages'' routine which is implemented in the toolkit already to check for incorrect inputs by the user and other routines to check the progress status and
+	clear the screen. The \emph{Calculation} module forms the backbone of the golay encoder the details are listed below:
+
+	\begin{itemize}
+		\item \emph{Golay\_encode} routine's main task is to read and allocate memory for the PUF and Key file using their filenames that are given by the user. This routines then makes a call to the ``generateHelperData'' function with the initialized data members of the Item structure and memory pointers to the read files.
+		\item \emph{generateHelperData} generates the encoding table using another internal function \emph{get\_syndrome} (this table is analogous to the generator matrix discussed in section \ref{golay_related} of the Golay Code) , then the seret key is encoded using the Golay Coding technique. The generated Codewords are stored in an array that undergo the linear repetition process and finally the LR\_Encoded codewords are XORed with the PUF response to obatin the
+			helperdata. The generatorHelperData stores the final output in the helperdata filename specified by the user alongwith the ``cfg'' settings i.e Offsets, LR factor and secret key filesize. This information will be read and used in the decoder module. Table \ref{tab:Golay_pattern} summarizes the data structure ``Pattern'' that constitute the cfg settings.
+
+		\item \emph{get\_syndrome} function computes the generator polynomial for golay code corresponding to the (23, 12, 7) golay code. \end{itemize}
+
+	\begin{table}[!ht]
+	\begin{center}
+	\begin{tabular}{lll}
+	\toprule
+	\multicolumn{1}{l}{\textbf{Name}} & \multicolumn{1}{c}{\textbf{Type}} & \multicolumn{1}{c}{\textbf{Description}}\\
+	\midrule
+	\hline
+	\emph{errorCode} & int & \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Defines the utilized error correction code (0 = Golay, 1 = BCH)\end{tabular}} \\
+
+	\emph{Golay\_BCH\_length} & int & \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Defines the \emph{length} of one code word, for Golay and BCH \end{tabular}}\\
+
+	\emph{Goly\_d\_BCH\_t} & int & \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Defines for Golay the distance \emph{d} and for BCH the correction capability '\emph{t}' \end{tabular}}\\
+
+	\emph{Golay\_k\_BCH\_m} &  int & \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Defines the \emph{message length} for Golay and the parameter \emph{m} for BCH\end{tabular}}\\
+
+	\emph{linearRep} & int & \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Defines the utilized linear repetition factor\end{tabular}} \\
+
+	\emph{puf\_offSet\_begin} & long & \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Defines the starting point in a binary file (bytes to skip) from beginning \end{tabular}}\\
+
+	\emph{puf\_offSet\_end} & long & \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Defines the ending point in a binary file (bytes to skip) from the end \end{tabular}}\\
+
+	\emph{original\_filesize} & long & \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Defines the length of the original input key file \end{tabular}}\\
+	\hline
+	\addlinespace
+	\bottomrule
+	\end{tabular}
+	\end{center}
+	\caption{Names and types of each element in the data structure \emph{Pattern} for the \emph{PUF Golay Encoder} and a description regarding their purpose.}
+	\label{tab:Golay_pattern}
+	\end{table}
+
+	A helper function \emph{SetInputLen} was implemented to aid the encoder functions in calculating the length of the file based on the offsets. This function is called internally before reading and allocating the memory for key and PUF response. It takes two arguments, first the Item structure with intialized data members as filenames and a second integer argument that point to PUF response or secret key, based on these values it calculates the input length as $input\_length =
+	orignal\_filesize - (Offset\_end + Offset\_beginning)$. \\
+
+	\subsubsection{Verification}
+	The user interface was designed to follow the same pattern as BCH encoder to simplify the user experience. The ``Main'' module was modified to add one more menu item \emph{Golay\_Encoder\_Menu}. The merging and reuse of the existing functions was done with great care and detail to modularize the code that is suitable for further extension in the future. The verification of the consolidated code was done keeping in mind the the same steps as BCH encoder:
+	\begin{enumerate}
+		\item Correctness of each module verified through utilization of test cases.
+		\item All the possible menu options were checked and reviewed for their expected functionality
+		\item Wrong inputs and incorrect state handling was also tested to make sure that the toolkit accepts only legitimate inputs and display appropriate error messages to rectify the error.
+		\item Unusual workflows were inspected to assess their impact on Golay Encoder functionality.
+	\end{enumerate}
+
+	Due to the static nature of the Golay Code (23, 12, 7) it can only correct upto ``three errors'' per ``twelve bits'' of message. Consequently this code is not suitable for encoding and large secret files. Extensive testing showed that when the resultant helperdata is greater in size compared to the PUF response, the secret file is not recovered completely and via hit and trial the filesize for complete recovery of the secret key was approximated $2600$ bytes. So the recovery of ssh private keys which are
+	typically greater than 3000 bytes is not possible using Golay and the user must choose the BCH fuzzy extractor instead.
+
+	\subsection{Golay Decoder}
+	The next step after encoding the secret key and obtaining the helper data is to recover the key via golay decoding. The subtext presents the user interface and explains the procedure to restore the securely stored secret key, then the modules and functions of the decoder are illustrated. The discussion then follows the code improvement done to enhance the menu of the toolkit and finally verification strategy to check the integrated changes is shown.\\
+
+	The user interface as shown in Figure \ref{img:golay_decoder_ui} has five main options where the user must input the helperdata that was generated in the enrollment phase using option one. The other two mandatory options are to set the PUF response filename that is generated from the same device as used in encoding phase and to specify the output key filename where the secret key will be restored. If all the inputs are correctly set then the ``regeneration'' can be performed via option four. The output and status is displayed
+	under the \emph{Result} section of the UI whereas \emph{Settings} subsection of the interface shows the filenames. If the input is incorrect or if the given filename is not present on the disk then a suitable error with details to recover from a faulty state is shown to the user.\\
+	\begin{figure}
+	\centering
+	\fbox{ \includegraphics[width=0.9\textwidth]{images/golay_decoder_ui.png}}
+	\caption{Conceptual design of the Golay Deocder user interface.}
+	\label{img:golay_decoder_ui}
+	\end{figure}
+
+	\begin{figure}
+	\centering
+	\fbox{ \includegraphics[width=0.9\textwidth]{images/golay_decoder_functions.pdf}}
+	\caption{Illustration of the Golay Decoder modules and their inter dependency.}
+	\label{img:golay_decoder_fns}
+	\end{figure}
+
+	Golay decoder code is partitioned across five modules similar to the ones discussed in Golay encoder as illustrated in Figure \ref{img:golay_decoder_fns}. The first module is the Main\_Menu function that calls the Golay decoder menu. This menu was implemented and added to the PUF toolkit which on selection points to the user interface with menu items of the decoder TODO refer. The golay decoder user interface is implemented in the routine \emph{Golay\_Decoder\_Menu}, where the decode option is linked to the \emph{Golay\_decode}
+	function that performs the decoding of the helperdata. The usual routines in the ``View'' module are used to set the helperdata, PUF response and output recovered key filenames. There is no need to set the offsets and orignal key filesize in the decoder menu since during the ``enrollment'' phase these details are appended at the end of helperdata as part of the `cfg' settings. The ``Calculation'' module is crucial to the decoding operation and which follows the below mentioned
+	steps:
+	\begin{enumerate}
+		\item The Golay decode function reads the `cfg' settings using a sub routine \emph{read\_infos} that reads the settings appended at the end of the helperdata and initializes the correspoding data members of the Item strucuture. The details of the data members used in golay decoding are listed in Table \ref{tab:Golay_pattern}. Then based on the settings the input length of the PUF response is calculated as $input\_length = orignal\_filesize - (Offset\_end + Offset\_beginning)$. The files
+			helperdata and PUF response are read and stored in the memory and the control is given to the \emph{recoverOriginalData}.
+		\item The next function \emph{recoverOriginalData} performs the decoding of the helperdata. It first applies ``Majority Voting'' on the encoded helperdata to reverse the effects of the ``Linear Repetition'' done during enrollment phase. With the help of an api \emph{next\_comb} the decoding table for Golay code (23, 12, 7) is calculated that is used to recover the original key.
+		\item After the restoration of the key is complete it is saved in the output key filename by calling a
+			sub-routine \emph{SaveFile} that takes the recovered key (represented in code as a character array) and output filename as arguments and uses standard C file operations to write to the file.
+	\end{enumerate}
+
+	The \emph{ErrorMessages} function was used to detect incorrect input and display the errors to the user, since it is redundantly used in the other menu functionalities of the PUF toolkit like BCH encoder, we summarize the Error Codes in the Table \ref{tab:Golay_dec_errors}
+
+	\begin{table}[!ht]
+	\begin{center}
+	\begin{tabular}{cp{13cm}}
+	\toprule
+	\multicolumn{1}{c}{\textbf{Error code}} & \multicolumn{1}{c}{\textbf{Error message}} \\
+	\midrule
+	\hline
+	1 & ERROR! Invalid input - Only digits are allowed! No digit at \emph{pos + 1}.\\
+
+	2 & ERROR! Invalid input - Input to long. \\
+
+	3 & ERROR! Invalid input - Try again...  \\
+
+	4 & ERROR! Opening output file. \\
+
+	5 & ERROR! Invalid input - 'Filename' too long. \\
+
+	6 & ERROR! Invalid input - No input. \\
+
+	7 & ERROR! Reading PUF file. \\
+
+	8 & ERROR! Opening PUF file. \\
+
+	9 & ERROR! Invalid input - PUF filename is not valid.\\
+
+	10 & ERROR! Invalid input - Key filename is not valid.\\
+
+	11 & ERROR! Opening HelperData file. \\
+
+	12 & ERROR! Reading HelperData file. \\
+
+	13 & ERROR! Selected an invalid choice. \\
+
+	14 & ERROR! HelperData: The recovered 'decoding information' is invalid! -> Parameter '\emph{m}' is out of range.\\
+
+	15 & ERROR! HelperData: The recovered 'decoding information' is invalid! -> Parameter '\emph{t}' is out of range.\\
+
+	16 & ERROR! HelperData: The recovered 'decoding information' is invalid! -> Parameter '\emph{length}' is out of range.\\
+
+	17 & ERROR! HelperData: The recovered 'decoding information' is invalid! -> Parameter '\emph{LR factor}' is not 7 or 15.\\
+
+	18 & ERROR! HelperData: The recovered 'decoding information' is invalid! -> Parameter '\emph{offSet}' is out of range.\\
+
+	19 & ERROR! HelperData: The recovered 'decoding information' is invalid! -> Parameter '\emph{filesize}' is out of range.\\
+
+	20 & ERROR! Opening file to view.\\
+
+	21 & WARNING! Looks like no decoding was performed.\\
+
+	22 & Looks like the calculation was not started.\\
+
+	23 & ERROR! Looks like the file was empty.\\
+
+	24 & ERROR! Looks like the file was not in the supported format.\\
+
+	25 & WARNING! Looks like the 'offset' is not set.\\
+
+	26 & ERROR! Looks like the 'Output file or Result' is not set/calculated.\\
+	\addlinespace
+	\bottomrule
+	\end{tabular}
+	\end{center}
+	\caption{Error codes and corresponding error messages for the \emph{PUF Golay Decoder}.}
+	\label{tab:Golay_dec_errors}
+	\end{table}
+
+	\subsubsection{Verification}
+	After the merging is complete and the Golay decoder menu is functional it was tested rigrously to make sure all the options work as expected. The same approach for verifiation was taken as mentioned in previous subsections and a final check was done to comapre the recovered key with the original secret to ensure the overall functionality of both the Golay encoder and decoder is correct.
+
+	\begin{itemize}\itemsep-\the\parsep
+		\item Every menu item of the golay decoder was checked and review to make sure it behaves as expected.
+		\item Incorrect inputs were inserted deliberiately to verify the ErrorMessages routine display corresponding error messages and ways to recover from the incorrect state of the toolkit.
+		\item Unusual workflows were inspected to assess their impact on Encoder functionality.
+		\item The recovered key was compared with the original secret key via the linux ``diff'' commandline utility and they were found to be identical.
+	\end{itemize}
+
+	\section{Jaccardi Index}
+	\label{jaccardi_index_section}
+	This section explains the Jaccardi Index implementation that was developed as a new feature for the toolkit. Then the two sub-menu options Intra Jaccardi and Inter Jaccardi Index are presented as subsections.
+	The modules and code structure was inspired from the Hamming Distance Menu since both of the metrics (Hamming Distance and Jaccardi Index) are closely related to each other and operate on either files or folders. We first discuss the definition of Jaccardi Index and its relation to the hamming weight. We then look at the user interface for the Jaccardi Index Menu which contains two more sub
+	menu options \emph{Inter} and \emph{Intra Jaccardi index} and then go on to explain the modules of the Jaccardi index. In the end the section presents the verification steps after the development of this new feature was complete.\\
+
+	\begin{itemize}
+		\item \textbf{Definition}: Jaccardi index between two bytes A and B is defined by the Equation \ref{jaccard_eq}
+		\begin{equation}
+		J(A,B) = \frac {|A \cap B|} {|A\cup B|} = \frac{|A \cap B|} {|A| + |B| - |A \cap B|}
+		\label{jaccard_eq}
+		\end{equation}
+		where |A| is the hamming weight of A, |B| is the hamming weight of B and $|A \cap B|$ is the number of times both A and B have one in the same bit position.
+	\end{itemize}
+
+	For eg. if we have two bytes A = 1100 1111 and B = 1111 0000 then |A| = 6, |B| = 4 and $|A \cap B|$ = 2 (since only first two common positions have ones in both the bytes). Substituting these values in the above equation we get $J(A,B) = (2) / ( 6 + 4 - 2) = 0.25$.\\
+
+	\begin{figure}[h]
+	\centering
+	\fbox{ \includegraphics[width=0.9\textwidth]{images/golay_decoder_ui.png}}
+	\caption{Conceptual design of the Jaccardi Index user interface.}
+	\label{img:jaccard_ui}
+	\end{figure}
+	The user interface for the Jaccardi Index menu is similar to the Hamming Distance Menu as shown in Figure \ref{img:jaccard_ui}. Using the first option user can set the offsets from beginning and end of the file and as a result those bytes will be skipped during Jaccardi calculation. The second option lets the user set the output filename which is mandatory since the results will be stored in this file. The third option performs the computation of the Jaccard index between the two given
+	files. It first asks for the two filenames to be prompted by the user and then the result alongwith the \emph{Fractional Index} is stored in the output file. Option five and six calls the Intra and Inter Jaccardi Index routines respectively and are discussed in following subsections. The six and the last option can be used to view the output file without exiting the toolkit.\\
+
+	The modules of the Jaccardi's index are similar to those of the hamming Distance and therefore this section takes the liberty of not showing it here again.
+	Rather than looking at each and every module we look at the main routines and algorithm to calculate the Jaccardi Index.
+	\begin{itemize}
+		\item The main Jaccardi index between two files is calculated by the \emph{Jaccard\_Index} that takes data structure Item pointer as an argument with initialized filenames. It first sets the input length of both the files based on the offsets from beginning and end by calling the \emph{SetInputLen} api which was designed specifically for this purpose.
+		\item Then the files are read using the sub-routine \emph{readfile} that takes name of the file, offset from beginning and filesize as 		argument, based on that it reads and mallocs the file in memory and passes back the pointer to the allocated memory back to the caller function.
+		\item To get the common number of ``1s'' at same bit positions in both the files, a bitwise AND operation is performed on the read files and the result is stored in a character array. The resultant character array contains the data with ``1s'' in the same bit position since bitwise AND operation only yeilds result ``one'' both the input bits are ``one''. This operation can be seen in the Table \ref{bitwise_AND}.
+
+	\begin{table}[!ht]
+	\begin{center}
+	\begin{tabular}{lc}
+	\toprule
+	\multicolumn{2}{c}{\textbf{bitwise AND of two bytes A and B}}\\
+	\midrule
+	Byte A &   1100 0000 \\
+	Operation & \&\\
+	Byte B &   1111 0011 \\
+	Output C &   1100 0000 \\
+	\addlinespace
+	\bottomrule
+	\end{tabular}
+	\end{center}
+	\caption{bitwise ANDing the two bytes to get the common ones in the same bit position}
+	\label{bitwise_AND}
+	\end{table}
+
+		\item Once the bitwise AND result is obtained then the calculation of Jaccardi Index is relatively simple. The number of ones in each input files and the bitwise ANDed output file are computed by calling the \emph{hamming\_wt} function explained in the section \ref{Hamming_Distance_menu} under listing \ref{lst:hammingwt} and then the values are substituted in the Equation \ref{jaccard_eq}.
 	\item An additional metric called Fractional Jaccardi's Index is also calculated using the definition $F(A, B) = J(A, B)/ size(A or B)$ and written to the result file alongwith the Jaccardi Index.
 \end{itemize}
 
@@ -711,7 +711,8 @@ output file.\\
 
 Contrary to the intra hamming distance the ``Switch output-style'' (refer section \ref{intra_hd_section}) option was not made available to the user to simplify the functionality. The default output-style was set as \emph{Compact} which is explained with detail in the Intra Hamming Distance section \ref{intra_hd_section} and illustrated in Figure \ref{img:4_intra_WP}. A sample result output file is presented in the Figure \ref{img:intra_jaccardi_compact} which shows the compact mode comparison between the files in the
 directory where the Jaccardi Index in conjunction with fractional Jaccardi Index is written for each comparison.\\
-\begin{figure}
+
+\begin{figure}[h]
 \centering
 \fbox{ \includegraphics[width=0.9\textwidth]{images/4_intra_compact.png}}
 \caption{A sample output result showing the \emph{compact} output style format for Intra Jaccardi Index }
@@ -802,7 +803,7 @@ CogniCrypt was implemented as an Eclipse Plugin to support the Java developers t
 
 CogniCrypt supports various crypto tasks and for the PUF toolkit to be made available in the list, a new task ``Evaluation and Assessment of PUF responses'' was implemented. After selecting the task a few high level questions like if the developer want to evaluate PUF response from a single or multiple device as shown in Figure \ref{img:cogni_ques}, must be answered by the developers.\\
 
-\begin{figure}
+\begin{figure}[h]
 \centering
 \fbox{ \includegraphics[width=0.9\textwidth]{images/4_intra_compact.png}}
 \caption{An example of High level questions asked by the CogniCrypt for the Evaluating PUF responses}
@@ -813,7 +814,6 @@ Once all the questions are acknowledged, based on their answers the CogniCrypt p
 function of the toolkit with directories (bounded between 2 and 99) as parameters to the API.\\
 
 To achieve the above mentioned functionality the CogniCrypt employs a Clafer based model which is a lightweight modelling language that facilitates a mix of class and feautre modelling [clafer.org, cogni.pdf]. It supports constraint solvers that can generate instances of a model and satisfy its constraints [congi.pdf]. The answers to the high level questions determine the constraints on the model which is composed of different elements known as clafer. For the PUF toolkit each evaluation metric was
-implemented as an clafer element and named as ``Metric'' in the model, one of the sample Metric is presented in listing \ref{lst:pufcfr}. \newpage
 
 \begin{lstlisting}[frame=single,language=C++,
 commentstyle=\color{magenta},

@@ -14,7 +14,7 @@ The definition of PUFs is taken from Gassend et al.[seb 17]:
 
 \emph{A Physical(ly) Unclonable Function (PUF) is a function that maps challenges to responses, that is embodied by a physical device, and that verifies the following properties:\\
 1. Easy to evaluate: The physical device is easily capable of evaluating the function in a short amount of time.\\
-2. Hard to characterize: From a polynomial number of plausible physical measurements (in particular, determination of chosen challenge-response pairs), an attacker who no longer has the device, and who can only use a polynomial amount of resources (time, matter, etc \ldots) can only extract a negligible amount of information about the response to a randomly chosen challenge.\\}
+2. Hard to characterize: From a polynomial number of plausible physical measurements (in particular, determination of chosen challenge-response pairs), an attacker who no longer has the device, and who can only use a polynomial amount of resources (time, matter, etc.) can only extract a negligible amount of information about the response to a randomly chosen challenge.\\}
 
 To simplify, PUFs are functions that use hardware manufacturing process variations to generate a random output. They are easy to evaluate means that for a given input, result is extracted without much effort. Unclonable implies the output function cannot be duplicated to make another PUF. Random response means it contains equal number of ones and zeros.
 
@@ -46,7 +46,7 @@ The following sections talk about the classification of PUFs that are subdivided
 	\item Algorithmic properties of the challenge-reponse behavior
 \end{enumerate}
 
-The first criteria for classification is the implementation technology of the construction. PUFs can be realized with different technologies and materials like glass, plasctic, paper, electronic components and integrated circuits (ICs). Essentially there are two classes in this group based on the \emph{electronic} nature of the identifying features.
+The first criteria for classification is the implementation technology of the construction. PUFs can be realized with different technologies and materials like glass, plasctic, paper, electronic components and integrated circuits (ICs). Essentially there are two classes in this group based on the \emph{electronic} nature of the identifying features.\\
 
 \textbf{Non-electronic PUFs} are PUFs whose physical microstructure where the nature of the components in the system that contributes to the random physical microstructure of unique PUF is of non-electronic origin. It should be noted that keyword 'non-electronical' only reflects the origin of the PUF behavior, post processing (like fuzzy extraction) or intermediate steps can be electronic. Examples can be Optical PUFs where the core element is an optical microstucture constructed by mixing microscopic refractive glass spheres in a transparent epoxy plate[Th book section 3.1.1]. A unique response is obtained upon irradiating the transparent material with laser, this can interperted as a PUF response. Another example is Paper-based PUFs where the random fiber structure of the paper is scanned using a laser.The reflection from the erratic fiber serves as a unique identifier and can be considered as a PUF response. [th book section 3.1.2].
 
@@ -144,7 +144,7 @@ $\mu_{intra}$ = 25.25\%. One of the main limitation of such an optical PUF is th
 \label{img:3}
 \end{figure}
 
-\section{linear codes, bch , golay}
+\section{Linear codes, bch , golay}
 In order to understand the working of the toolkit and fuzzy extractors (discussed later in section ) we need to look at the two specific type of linear codes. The following sections and subsections discuss the basics of linear codes and their mathematical constructs. After the intial explanation of what linear codes are, we go on to explain BCH codes and golay codes that are used in the PUF toolkit to extract private and public keys in conjugation with SRAM PUFs. The second part
 gives the details about two important concepts related to coding known as Majority voting and a simple Linear repetition code.The last part of
 this section deals with a technique called fuzzy extractor that takes the concepts of the linear codes, LR codes, Majority voting and combines them to preevaluate and generate the helper data for a specific PUF repsonse used for secure key storage on the PUF instance.The major
@@ -153,7 +153,7 @@ content for these sections is inspired from [ln, bf book chap 2].\\
 Before diving into linear codes let us first look at the definition of Field from the book [chap 2]:\\
 \textbf{Definition} A field F is given by a triple (S, +, ·), where S is the set of elements containing
 special elements 0 and 1 and +, · are functions $F \times F \rightarrow F$ with the following properties:
-\begin{itemize}
+\begin{itemize}\itemsep-\the\parsep
 	\item Closure: For every a, b $\in$ S, we have both a + b $\in$ S and a · b $\in$ S.
 	\item Associativity: + and · are associative, that is, for every a, b, c $\in$ S, a +(b +c) = (a +b)+c and a · (b · c) = (a · b) · c.
 	\item Commutativity: + and · are commutative, that is, for every a, b $\in$ S, a + b = b + a and a · b = b · a.
@@ -165,7 +165,7 @@ special elements 0 and 1 and +, · are functions $F \times F \rightarrow F$ with
 \textbf{Lemma} Let p be a prime. Then $F_p = (\left\{0, 1, . . . , p - 1\right\}, +_p , \cdot_p )$ is a field, where $+_p$ and $\cdot_p$ are
 addition and multiplication mod p. [bf chap2]
 
-example $F_2 = \left\{0,1\right\}$ is a binary finite field with two symbols 0 and 1 where + and $\cdot$ are operations modulo 2.
+example $F_2 = \left\{0,1\right\}$ is a binary finite field with two symbols 0 and 1 where + and $\cdot$ are operations modulo 2.\\
 
 \textbf{Linear Subspaces},  before defining Codes and linear Codes we need to know what is a linear subspace.
 \textbf{Definition} $ S \subseteq F_q^n $ is a linear if the following properties are satisfied:[bf chap2]
@@ -182,7 +182,7 @@ Now, we can define a \textbf{linear Code} as a code of length n over the field F
 If C is a linear code that, as a vector space over the field F , has dimension k,
 then we say that C is an [n, k] linear code over F , or an [n, k] code [linear.pdf]. The \emph{distance} of the code is number of symbols changes required in a codeword to assume another codeword. eg. let C(3,3) is a subspace $F_2^3$ if two code words 000 and 111 , then distance between them is 3 since we need to change three symbols 0 to 1.
 The \emph{rate} of an [n, k] linear code is \textbf{k/n}. If C has minimum distance d, then C is an [n, k, d] linear code over F .
-The number n - k is called the \emph{redundancy} of C [linear.pdf]
+The number n - k is called the \emph{redundancy} of C [linear.pdf]\\
 
 \textbf{Cyclic Code} is a linear block code where if c is a codeword, then all the cyclic shifts of c are also codewords.
 example {000, 110, 101, 011} is a cyclic code.
@@ -212,7 +212,7 @@ has a generator polynomial $g(x) = LCM\{\phi_{b}(x), \phi_{b+1}(x),...,\phi_{b+2
 polynomial $v(x)$ which is a multiple of $g(x)$. If the generator polynomial $g(x)$ of a cyclic ($n$, $k$, $d$) code has $l$ consecutive roots: $\alpha^b$, $\alpha^{b+1}$,$\alpha^{b+l-1}$, then $d \geq 2l +1$. In the encoding phase, the input to the BCH code will be transformed block-wise into the corresponding code words. In the decoding phase, these code words are decoded and at max $t$ bit errors in each code word can be corrected. The $GF(2^m)$ arithmetic is used to find the error positions
 in the code words during the decoding. This is done by solving a set of equations, which are obtained from the error polynomial $e(x)$ and the zeros of the code $\alpha^j$, for $b \geq j \geq b + 2t_d - 1$.’’ [seb 42]. The BCH decoding uses syndrome systematic decoding technique, which allows for an efficient hardware implementation. Following steps summarizes the decoding:
 
-\begin{itemize}
+\begin{itemize}\itemsep-\the\parsep %TODO did not make spaces
 \item The syndromes are computed through the evaluation of the received polynomial at the zeros of the code.
 \item The coefficients of the error-locator polynomial $\sigma(x)$ must be solved for.
 \item The inverses of the roots of $\sigma(x)$ have to be calculated, which inform about the error locations $\alpha^{j1}$,...,$\alpha^{jv}$
@@ -230,7 +230,7 @@ the golay code G23 i.e a [23, 12, 7] code, so we will be only concerned with the
 
 \tab \tab \tab $p_{2,1} = p_{3,2} = p_{i+1,i} = . . . . . = p_{n,n-1} = p_{1,n} = 1$
 
-We define matrix B as follows:\\
+We define matrix B as follows:\\\\
 \tab \tab \tab B = $ \begin{bmatrix}u & 1 \\u P & 1 \\u P^2 & 1\\u P^3 & 1\\u P^4 & 1\\u P^5 & 1\\u P^6 & 1\\u P^7 & 1\\u P^8 & 1\\u P^9 & 1\\u P^{10} & 1\\ & \\J & 0\end{bmatrix} = \begin{bmatrix}1\:1\:0\:1\:1\:1\:0\:0\:0\:1\:0 & 1 \\ 1\:0\:1\:1\:1\:0\:0\:0\:1\:0\:1 & 1 \\ 0\:1\:1\:1\:0\:0\:0\:1\:0\:1\:1 & 1 \\ 1\:1\:1\:0\:0\:0\:1\:0\:1\:1\:0 & 1 \\ 1\:1\:0\:0\:0\:1\:0\:1\:1\:0\:1 & 1 \\ 1\:0\:0\:0\:1\:0\:1\:1\:0\:1\:1 & 1 \\ 0\:0\:0\:1\:0\:1\:1\:0\:1\:1\:1 & 1 \\ 0\:0\:1\:0\:1\:1\:0\:1\:1\:1\:0 & 1 \\
 0\:1\:0\:1\:1\:0\:1\:1\:1\:0\:0 & 1 \\ 1\:0\:1\:1\:0\:1\:1\:1\:0\:0\:0 & 1 \\ 0\:1\:1\:0\:1\:1\:1\:0\:0\:0\:1 & 1\\ & \\J & 0\end{bmatrix} $\\
 
@@ -257,7 +257,7 @@ corrected received word is $v = w + u$ and we denote the received word $w$ as $w
 	\item Finally after correcting the received codeword $u$ remove the last digit.
 \end{enumerate}
 
-\subsubsection{linear repetition code}
+\subsubsection{Linear repetition code}
 \label{fzex_lr}
 The following two subsections talk about Linear repetition code and Majority Voting which are crucial to the enrollment and reconstruction phase in the fuzzy extractor (discussed in section [ ]). The text is inpsired from sebastian Master Thesis.[ ]
 
@@ -311,6 +311,12 @@ Output & 10\\
 We have already established that external factors like noise, voltage fluctuation, aging etc. instill errors in the PUF responses with some of the bits flipped between two responses from the same device, giving rise to intra distance between them. \emph{Fuzzy Extraction} is a well known technique which aims to rectify these errors with the help of the error correcting codes. In this thesis we have used binary BCH codes, binary linear repetition code, binary majority vote and binary Golay
 codes to realize the PUF based secure key storage.\\
 
+\begin{figure}[htp]
+\centering
+\fbox{ \includegraphics[width=0.8\textwidth]{images/BCH_pre-evaluation.png}}
+\caption{Conceptual design of the pre-evaluation phase for a PUF-based secure key storage.}
+\label{img:fz_1}
+\end{figure}
 The influence of noise and other environmental conditions can be pre-evaluated, so a selection of competent error correction algorithms can be optimized and an efficient implementation of a fuzzy extractor to regulate the variations can be established. Most implementations of fuzzy extractors utilize a static approach, which implies that the enlisted error correction code has a static maximum error
 correctiion capability. The Golay (23, 12, 7) code can correct upto three errors but the environmetal factors like aging effects render this code useless because they can introduce more errors than expected, so in the thesis BCH code is also used as a building block in the fuzzy extractor. There are three major steps to implement a secure key recovery using Fuzzy extractor. In the first phase we discard the unreliable PUF bits to reduce the burden on the error correction scheme that is called
 Prevaluation. The second phase is called generation/enrollement followed by the reproduction phase.\\
@@ -318,11 +324,11 @@ Prevaluation. The second phase is called generation/enrollement followed by the 
 \textbf{Pre-evaluation}: The PUF response properties are evaluated in this step. Some parameters that effect the PUF instance are static and remain constant with different PUF response generations, so measurements can be compensated for these parameters. Pre-evaluating the response also gives insight into the instensity of noise disturbance that can occur, consequently a BCH mode can be selected to adapt and correct errors instilled in the PUF-response by that noise. The conceptual
 design for this phase is illustrated in Figure \ref{img:fz_1}.\\
 
-\begin{figure}
+\begin{figure}[htp]
 \centering
-\fbox{ \includegraphics[width=0.8\textwidth]{images/BCH_pre-evaluation.png}}
-\caption{Conceptual design of the pre-evaluation phase for a PUF-based secure key storage.}
-\label{img:fz_1}
+\fbox{ \includegraphics[width=0.97\textwidth]{images/BCH_KeyStorage_Enrollment.png}}
+\caption{Conceptual design of the enrollment phase for a PUF-based secure key storage.}
+\label{img:fz_2}
 \end{figure}
 
 \textbf{Generation}: The second phase also called the enrollment phase. It takes the secret key $s$, to be stored in the PUF-based secure key storage, and generates the matching helper data $hd_s$. The design for the generator is depicted in fig. \ref{img:fz_2}  The secret $s$ is provided as input to the BCH (n, k, d) encoder that is configurable via the input line \emph{cfg}, this results in the output of BCH encoded codewords $C_s$, since we are using systematic encoding BCH algorithm this means that
@@ -330,19 +336,13 @@ the encoded secret $s$ is contained in the codevectors. We denote this encoding 
 Only the non-secret part (part of the output from BCH encoder that does not contains secret $s$) is taken from the codeword $C_s$ and a linear repitition code LR is applied to it to generate $LR_s$, denoted in the text as $LR_s = LR(C_s)$. In the end helper data $hd_s$ for the secret key $s$ is derived by XORing the PUF response PR and $LR_s$ along with the configuration settings concatenated to the XORed result. This process is expressed in an equation as $hd_s = (PR \xor LR_s) \cup cfg$.
 The helper data is stored in the non-volatile memory of the hardware device:$store(hd_s)$. The last step in this phase is cleanup where all the generated values $C_s, LR_s and PR$ are erased.\\
 
-\begin{figure}
-\centering
-\fbox{ \includegraphics[width=0.97\textwidth]{images/BCH_KeyStorage_Enrollment.png}}
-\caption{Conceptual design of the enrollment phase for a PUF-based secure key storage.}
-\label{img:fz_2}
-\end{figure}
-
-\textbf{Reconstruction}: After storing the key as helperdata the same secret key $s$ must be restored. First the `cfg' setting that was appended to the end of the helperdata is stripped. A new PUF response from the same device $PR'$ is XORed with stripped helperdata $hd_s$ to get $LR'_s$: $LR'_s = PR' \xor (hd_s\\cfg)$. Next a Majority vote algrorithm (refer section bla [ ]) is applied to $LR'$ from which the encoded codeword $C'_s$ is recovered: $C'_s = MJ\_VOTE(LR'_s)$. After this the
-reconstruction of the secret key $s$ is done by feeding the obtained $C'_s$ in the BCH (n,k,d) decoder: $C'_s = BCH(n,k,d)_{cfg}\_DEC(C'_s)$. The last step is similar to the generation phase i.e the cleanup of $PR', cfg and LR'_s$. The reproduced secret key $s$ is also erased after usage. An illustration for the reconstruction design is depicted in Figure \ref{img:fz_3}.
-
-\begin{figure}
+\begin{figure}[htp]
 \centering
 \fbox{ \includegraphics[width=0.97\textwidth]{images/BCH_KeyStorage_Reconstruction.png}}
 \caption{Conceptual design of the reconstruction phase for a PUF-based secure key storage.}
 \label{img:fz_3}
 \end{figure}
+
+\textbf{Reconstruction}: After storing the key as helperdata the same secret key $s$ must be restored. First the `cfg' setting that was appended to the end of the helperdata is stripped. A new PUF response from the same device $PR'$ is XORed with stripped helperdata $hd_s$ to get $LR'_s$: $LR'_s = PR' \xor (hd_s\\cfg)$. Next a Majority vote algrorithm (refer section bla [ ]) is applied to $LR'$ from which the encoded codeword $C'_s$ is recovered: $C'_s = MJ\_VOTE(LR'_s)$. After this the
+reconstruction of the secret key $s$ is done by feeding the obtained $C'_s$ in the BCH (n,k,d) decoder: $C'_s = BCH(n,k,d)_{cfg}\_DEC(C'_s)$. The last step is similar to the generation phase i.e the cleanup of $PR', cfg and LR'_s$. The reproduced secret key $s$ is also erased after usage. An illustration for the reconstruction design is depicted in Figure \ref{img:fz_3}.
+
