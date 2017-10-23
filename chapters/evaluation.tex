@@ -77,23 +77,36 @@ For completeness the table \ref{tab:metrics} summarizes the result interpretatio
 \label{tab:metrics}
 \end{table}
 
-\textbf{Time requirements:} To test the new metrics of the toolkit an analysis of the time taken by the calculation APIs for the PUF response evaluation of multiple instances was performed. The time taken by the user to input the settings was skipped, the measurement of the time was done using the standard ``clock()'' API of the GNU C library which is used to determine the process time (refer to manpage of clock for more detail). For testing, the SRAM PUF responses from Texas Instrument (TI) Stellaris LM4F120XL LaunchPad Evaluation Kits with a
-size of 32 Kilobytes and an offset of 400 bytes from beginning were used. The analysis was performed on an Intel i3 quad core CPU with 2.00 GHz and 3 GB RAM. The results of the time requirements for Intra Jaccardi Index and Inter Jaccardi Index are visualized in Figures \ref{img:time_intra} and \ref{img:time_inter} respectively. The time taken analysis for the Jaccardi Index is not represented since it is constant around $0.7$ milliseconds.
-
 \begin{figure}
 \centering
-%\fbox{ \includegraphics[width=0.97\textwidth]{images/time2a.png}}
-\caption{Time requirement measurements of the \emph{Intra-Jaccardi Index}.}
+\fbox{ \includegraphics[width=0.97\textwidth]{images/intra_time.pdf}}
+\caption{Time requirement measurements of the \emph{Intra-Jaccardi Index} with PUF response of 32 kilobytes.}
 \label{img:time_intra}
 \end{figure}
 
 \begin{figure}
 \centering
-%\fbox{ \includegraphics[width=0.97\textwidth]{images/time2a.png}}
-\caption{Time requirement measurements of the \emph{Inter-Jaccardi Index}.}
+\fbox{ \includegraphics[width=0.97\textwidth]{images/inter_time.pdf}}
+\caption{Time requirement measurements of the \emph{Inter-Jaccardi Index} with PUF response of size 32 kilobytes.}
 \label{img:time_inter}
 \end{figure}
 
+\textbf{Time requirements:} To test the new metrics of the toolkit an analysis of the time taken by the calculation APIs for the PUF response evaluation of multiple instances was performed. The time taken by the user to input the settings was skipped, the measurement of the time was done using the standard ``clock()'' API of the GNU C library which is used to determine the process time (refer to manpage of clock for more detail). For testing, the SRAM PUF responses from Texas Instrument (TI) Stellaris LM4F120XL LaunchPad Evaluation Kits with a
+size of 32 Kilobytes and an offset of 400 bytes from beginning were used. The analysis was performed on an Intel i3 quad core CPU with 2.00 GHz and 3 GB RAM. The results of the time requirements for Intra Jaccardi Index and Inter Jaccardi Index are visualized in Figures \ref{img:time_intra} and \ref{img:time_inter} respectively. The Figures \ref{img:cpu_intra} and \ref{img:cpu_inter} show the average percentage of CPU usage for Intra and Inter-Jaccardi Index with the same parameters. The time taken analysis for the Jaccardi Index is not represented since it is constant around $0.7$ milliseconds.
+
+\begin{figure}
+\centering
+\fbox{ \includegraphics[width=0.97\textwidth]{images/intra_cpu.pdf}}
+\caption{Visualization of CPU usage by the \emph{Intra-Jaccardi Index} for folders containing multiple PUF response of size 32 kilobytes.}
+\label{img:cpu_intra}
+\end{figure}
+
+\begin{figure}
+\centering
+\fbox{ \includegraphics[width=0.97\textwidth]{images/inter_cpu.pdf}}
+\caption{Visualization of the CPU usage by the \emph{Inter-Jaccardi Index} between mutiple folders containing multiple PUF response of size 32 kilobytes.}
+\label{img:cpu_inter}
+\end{figure}
 \subsection{Evaluation of the Fuzzy extractor}
 To evaluate the fuzzy extractor we compare both the coding techniques, Golay Code and BCH code used in the fuzzy implementation. Both of which are assisted with linear repetition algorithm and majority voting procedure. The error correction capability $t$ of golay code is limited to maximum of three bit errors for a message length of \emph{12 bits}. Both the codes are linear codes so they take the same parameters (n, k, d), where $n$ is the length (in bits) of the encoded codeword, $k$ is the
 length (message length) of the input secret/message that is fed to the encoder and $d$ is the minimal hamming distance from which the error correcting capablity is derived using the formula $t = \lfloor(d-1)/2\rfloor$. The golay code uses a lookup table to encode the \emph{12 bits} of message to \emph{23 bits} of codeword, incase there are more than three bits of errors introduced while processing PUF instance for response (due to external noise and environmental factors) then the decoding lookup
@@ -170,7 +183,7 @@ n & k & d & t & n & k & d & t & n & k & d & t & n & k & d & t \\
 \end{itemize}
 
 The pre-evaluation is inevitable for an effective and efficient development of PUF-based security approaches and it should be included in the developement cycle of the PUF-based security algorithms. The pre-evaluation of the TI Stellaris LM4F120XL Launchpad Kit showed that the complete SRAM from this hardware cannot be considered as a PUF, because of the boot process which effects the randomness of the first  $400$ bytes and renders these bytes not to be considered a part of the PUF response.
-Without pre-evaluation such exceptional behavior cannot be discovered which could result in an insecure implementation of the PUF-based security approaches. For determining the required error correction capability of the BCH code, the pre-evaluation of the PUF instance is critical for the selection of the optimal parameters. These two scenarios illustrate that the pre-evaluation must be considered as a decisive factor in the developement of the PUF-based security appraches.
+Without pre-evaluation such exceptional behavior might not be discovered which can result in an insecure implementation of the PUF-based security approaches. For determining the required error correction capability of the BCH code, the pre-evaluation of the PUF instance is critical for the selection of the optimal parameters. These two scenarios illustrate that the pre-evaluation must be considered as a decisive factor in the developement of the PUF-based security appraches.
 
 
 \section{Time requirement analysis}
@@ -179,7 +192,7 @@ The BCH code is highly configurable that means the parameters m, n, t can be con
 the adaptation of the fuzzy extractor is intended for hardware machine with limited resources. For testing, all possible m (in range [4,14]), the corresponding maximum n ( $2^{n-1} - 1 < n <= 2^{n} - 1$) and the highest possible error correction capability t were chosen. The time requirement analysis was performed on an Intel i3 quad core CPU with 2.0 GHz and 3 GB RAM. The results of the time measurements for the BCH mode pre-processing are visualized in Figure \ref{img:bch_time}.
 
 The golay code is a static (23, 12, 7) code where the user is not required to input any parameters. The pre-processing time of the golay code remains constant and is not an timing overhead, so it can be ignored. The time required for encoding and decoding steps depends on the size of the file that is to be encoded/decoded. For the analysis we used a PUF response from (TI) Stellaris LM4F120XL LaunchPad Evaluation Kits and the size was varied with the help of offsets, the original size of
-the PUF response was 32 Kilobytes. The Figure \ref{img:golay_enc_time} and \ref{img:golay_dec_time} illustrates the encoding and decoding analysis of golay code as a histogram respectively.\\
+the PUF response was 32 Kilobytes. The Figure \ref{img:golay_enc_time} and \ref{img:golay_dec_time} illustrates the encoding and decoding analysis of golay code with different file sizes as a bar graph.\\
 
 \begin{figure}
 \centering
