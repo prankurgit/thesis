@@ -2,7 +2,7 @@ The evaluation chapter covers the analysis of the integrated code and the improv
 histograms for better assessment of the number of CPU cycles used by the different metrics of the PUF toolkit. For fuzzy extractor techniques, the appraisal of the time requirement of the preprocessing  with respect to the parameter $m$ and a PUF response length analysis of the available BCH modes is given.\\
 
 \section{Design Guidelines}
-The user interface should be intuitive and easy-to-use which ensures user-satisfaction and effective use to the tool. While extending the toolkit and implementing new metrics, special consideration was given to the user interface design. The existing toolkit followed the standard guidelines as listed in [seb 45] and are summarized below:
+The user interface should be intuitive and easy-to-use which ensures user-satisfaction and effective use to the tool. While extending the toolkit and implementing new metrics, special consideration was given to the user interface design. The existing toolkit followed the standard guidelines as listed in \cite{67} and are summarized below:
 
 \begin{itemize}
 	\item \textbf{Simple and natural dialogue:} User must be provided with information related to the task such that the comprehension of the task is natural. The mapping of the user's mental model to the workflow of the toolkit has to be accurate. To satisfy this property the sub-menus are in a top-down structure i.e important options are always in the upper section of each menu. These options are also mandatory eg. the settings like offsets and file names must be set first before
@@ -30,7 +30,7 @@ folders the CogniCrypts selects Inter-Hamming Distance. Such a question dialog b
 \label{img:cogni_ui}
 \end{figure}
 
-To further enhance the developer experience and improve the UI a survey was taken and the suggestions of the Java developers were integrated into the CogniCrypt. For details of the survey please refer to the research paper [crypto\_icse.pdf]
+To further enhance the developer experience and improve the UI a survey was taken and the suggestions of the Java developers were integrated into the CogniCrypt. For details of the survey please refer to the research paper \cite{crypto_icse}.
 
 \section{Interpretation of the results for the extended metrics}
 The interpretation for the core metrics that were implemented already in the toolkit is explained in detail in \cite{71}. This section presents the interpretation of the extended metrics and also touches upon the hamming weight interpretation since it is a base metric upon which other PUF evaluation metrics are built.
@@ -46,7 +46,7 @@ The interpretation for the core metrics that were implemented already in the too
 		uniqueness. Slight deviations from this ideal number are always acceptable.
 \end{itemize}
 
-For completeness table \ref{tab:metrics} summarizes the result interpretation of the metrics with respect to the utilized use case. The table also contains metrics from the original toolkit and are not explained in detail to avoid redundancy. To know more about the metrics in the previous version of the toolkit refer to [seb thesis section evaluation].\\
+For completeness table \ref{tab:metrics} summarizes the result interpretation of the metrics with respect to the utilized use case. The table also contains metrics from the original toolkit and are not explained in detail to avoid redundancy. To know more about the metrics in the previous version of the toolkit refer to \cite{71}.\\
 
 \begin{table}[!ht]
 \centering

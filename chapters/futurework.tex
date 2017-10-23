@@ -9,14 +9,14 @@ There can be new metrics added to the Toolkit that will further enhance the Tool
 \item The \emph{identification of extremely unstable PUF cells} of a PUF instance, especially for SRAM or memory based PUFs, can support the approaches that need an almost perfect random behavior of a PUF. This means the probability of occurrence of a $0$ or $1$ in a PUF cell is identical and equal to 0.5 ($p = 0.5$). This identification can be used in the realization of a Random number Generator (RNG).
 \end{itemize}
 
-\subsection{Fuzzy Extractor}
+\section{Fuzzy Extractor}
 The fuzzy extractor of the PUF Toolkit can be extended to support new Error Coding Techniques which will allow for a comprehensive evaluation and comparison of the properties amongst the different fuzzy extractor implementations. A possible selection of the error correcting mechanisms that can be added to the fuzzy extractor is:
 \begin{itemize}
 \item \emph{Reed Solomon Code}, which is derived from the BCH code but belongs to the class of non-binary cyclic error codes.
-\item \emph{Reed-Muller Code}, which belongs to a class of linear block codes rich in algebraic and geometric structure and also includes Extended Hamming code [muller.pdf]
+\item \emph{Reed-Muller Code}, which belongs to a class of linear block codes rich in algebraic and geometric structure and also includes Extended Hamming code \cite{reed}.
 \end{itemize}
 
-\subsection{CogniCrypt}
+\section{CogniCrypt}
 The current version of the CongiCrypt integrated PUF Toolkit does not contain the new metrics eg. Jaccardi Index and the fuzzy extractor functionality. These metrics can be interfaced to the Java-based OpenSource library as part of a future endeavor. The UI of the CongiCrypt library can be modified to show an interpretation of the results for different metrics in a color format. For eg. red means PUF response is not random therefore is insecure to be applied to a PUF-based secure approach, green means the PUF
 response is random/unique and can be used in further security applications etc.\\
 

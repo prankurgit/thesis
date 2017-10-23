@@ -2,10 +2,10 @@ As the internet grows so does the threat to its infrastructure.
 In recent wake of heartbleed bugs, threat to cloud storage and NSA debacle tracking private data, security becomes more important than ever.\\
 
 Well known protection mechanisms like symmetric share key based or asymmetric public/private key based requires algorithms to generate secure keys and/or pass certificates between two communicating parties. Generation and storage of keys and certificates on embedded devices with limited hardware resources is cost ineffective. Securing the data in the memory requires specialized hardware security modules which is expensive. For eg., A specialized tamper-proof hardware costs more than 3000USD
-\cite{os8}\\
+\cite{os8}.\\
 
 Physical(ly) Unclonable functions (PUFs) \cite{os9} provide a low-cost solution to the economic problem of key-generation on limited resource hardware embedded devices. PUFs are a result of the manufacturing variations while printing the Integrated Circuits (ICs), these variations are unclonable which means even the manufacturer cannot generate two identical ICs. PUFs depends on its physical microstructure and exhibit challenge/response behavior to evaluate its structure. It is a hardware analog to
-one-way function that is easy to evaluate but difficult to predict. When a physical stimulus is applied to the structure (challenge) it outputs an unpredictable (but repeatable) response which depends on the physical factors introduced during manufacture of the PUF. So the PUF is unique and can be seen as a fingerprint of hardware.\cite{15}\\
+one-way function that is easy to evaluate but difficult to predict. When a physical stimulus is applied to the structure (challenge) it outputs an unpredictable (but repeatable) response which depends on the physical factors introduced during manufacture of the PUF. So the PUF is unique and can be seen as a fingerprint of hardware\cite{15}.\\
 
 A fuzzy extractor \cite{fuzzy} can be applied to the PUF to derive an exclusive and strong cryptographic key from the underlying physical microstructure. Since the output from the evaluation is reproducible and unique so every time the same key is generated. Some PUFs like SRAM PUFs may not need additional costs and are generated implicitly by variations in the manufacturing of SRAM modules itself.\\
 
@@ -31,8 +31,8 @@ Then wrap the toolkit in Jar to be accessible by CogniCrypt via Java Native Inte
 In particular, the contribution of this work is characterized by the following points:
 
 \begin{itemize}
-	\item Improvement of a console user interface for the PUF Toolkit in C++
-	\item Implementation of specific software tools with respect to PUF relevant metrics in C++
+	\item Improvement of a console user interface for the PUF Toolkit in C++.
+	\item Implementation of specific software tools with respect to PUF relevant metrics in C++.
 		\begin{itemize}
 			\item Hamming Distance Menu
 			\item Golay encoder 
@@ -41,11 +41,13 @@ In particular, the contribution of this work is characterized by the following p
 			\item Intra Jaccard Index
 			\item Inter Jaccard Index
 		\end{itemize}
-	\item BCH encoder and decoder integration to the PUF Toolkit
-	\item Augmenting the offset functionality
-	\item Enhancing the toolkit to output fractional distance
-	\item Wrapping the toolkit via JNI to be made accessible in CogniCrypt
-	\item UI implementation for Cognicrypt module to generate boilerplate code
+	\item BCH encoder and decoder integration to the PUF Toolkit.
+	\item Augmenting the offset functionality.
+	\item Enhancing the toolkit to output fractional distance.
+	\item Wrapping the toolkit via JNI to be made accessible in CogniCrypt.
+	\item UI implementation for Cognicrypt module to generate boilerplate code.
 \end{itemize}
 
-\section{outline} %TODO 
+\section{Outline}
+The present work is divided into the following chapters: Chapter 2 covers the state of the art research with a focus on Physical(ly) Unclonable Functions, their definition, classification, working principles, and categorization.In addition, some information and mathematical concepts behind linear codes and cyclic codes like BCH error correction code are given. In Chapter 3, the original version of the PUF Toolkit is summarized and extended metrics implementation and improvement
+to the Toolkit is explained. The integration of the fuzzy extractor to the toolkit and extension of the fuzzy extractor is present thereafter. The integration of the PUF Toolkit into CogniCrypt, an Opensource Java-based library is presented towards the end of Chapter 3. The testing and evaluation of the Toolkit are presented in Chapter 4. A final conclusion can be found in Chapter 5 and future work is proposed in Chapter 6.
