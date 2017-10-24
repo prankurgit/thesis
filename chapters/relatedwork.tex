@@ -1,14 +1,14 @@
-This chapters explains the related work that is helpful in understanding the concepts, mathematical constructs, terms, and definitions that are necessary to understand the working details of the thesis. The first part discusses Physical(ly) Unclonable Functions, second part introduces the concept of the BCH Code, third part talks about Golay code constructs and finally a synopsis of Jaccard Index is presented.
+This chapters explains the related work that is helpful in understanding the concepts, mathematical constructs, terms, and definitions that are necessary to understand the working details of the thesis. The first part discusses Physical(ly) Unclonable Functions, second part introduces the concept of the BCH code, third part talks about Golay code constructs and finally a synopsis of Jaccard Index is presented.
 
 \section{Physical(ly) Unclonable Functions - Background}
-In order for the reader to have a better understanding of the fundamentals of Physical(ly) Unclonable Functions, this section discusses some basics of PUFs. Initially the historical emergence of PUFs is presented, followed by a general definition of PUF. Then the PUFs are classified and a selection of different types of PUFs is presented. Lastly, the basics of linear codes like BCH and Golay codes are discussed that form the basis for the fuzzy extractor. Work in this section is mostly derived
+In order for the reader to have a better understanding of the fundamentals of Physical(ly) Unclonable Functions, this section discusses some basics of PUFs. Initially the historical emergence of PUFs is presented, followed by a general definition of the PUF. Then the PUFs are classified and a selection of different types of PUFs is presented. Lastly, the basics of linear codes like BCH and Golay codes are discussed that form the basis for the fuzzy extractor. Work in this section is mostly derived
 from \cite{17,18}.\\
 
 \subsection{History and origins}
-Physical(ly) Unclonable Function (PUF) are based on unique and non-reproducible artifacts, which were caused by production variances during manufacturing processes presented in the early eighties \cite{16}. Fingerprint identification of humans goes back to at least nineteenth century \cite{th21} and from that emerged the field of biometrics. In the twentieth century, random patterns in paper and optical tokens were used for exclusive identification of currency notes and strategic arms \cite{2,8,53}. A
-formalization of this concept was introduced in the beginning of the twenty-first century. In 2001, Pappu et al. \cite{19,39} presented \emph{physical one-way functions}. The next year 2002, Gassend et al. \cite{21} proposed a silicon-based PUF approach as a \emph{physical random function}. This led to coining of the acronym PUF (\emph{Physical(ly) Unclonable Functions}) to avoid confusion with the concept of pseudo-random functions (PRF), which was an already established concept in cryptography.\\
+Physical(ly) Unclonable Functions (PUFs) are based on unique and non-reproducible artifacts, which were caused by production variances during manufacturing processes. PUFs were first presented in the early eighties \cite{16}. Fingerprint identification of humans goes back to at least nineteenth century \cite{th21} and from that emerged the field of biometrics. In the twentieth century, random patterns in paper and optical tokens were used for exclusive identification of currency notes and strategic arms \cite{2,8,53}. A
+formalization of this concept was introduced in the beginning of the twenty-first century. In 2001, Pappu et al. \cite{19,39} presented \emph{physical one-way functions}. The next year 2002, Gassend et al. \cite{21} proposed a silicon-based PUF approach as a \emph{physical random function}. This led to coining of the acronym PUF (\emph{Physical(ly) Unclonable Function}) to avoid confusion with the concept of pseudo-random functions (PRF), which was an already established concept in cryptography.\\
 
-The promising properties of PUFs like physical unclonability and tamper evidence which are favorable for security mechanisms, lead to the increase in popularity of PUFs and in coming years new types of PUFs were proposed. Due to their practical usages and encouraging properties the interest in PUFs has risen significantly, they are still a hot topic in the field of Hardware security and can contribute to the evolution of security mechanism and applications.\\
+The promising properties of PUFs like physical unclonability and tamper evidence which are favorable for security mechanisms, led to the increase in popularity of PUFs and in coming years new types of PUFs were proposed. Due to their practical usages and encouraging properties the interest in PUFs has risen significantly; they are still a hot topic in the field of hardware security and can contribute to the evolution of security mechanism and applications.\\
 
 \subsection{Definition}
 The definition of PUFs is taken from Gassend et al.\cite{21}:
@@ -17,28 +17,28 @@ The definition of PUFs is taken from Gassend et al.\cite{21}:
 1. Easy to evaluate: The physical device is easily capable of evaluating the function in a short amount of time.\\
 2. Hard to characterize: From a polynomial number of plausible physical measurements (in particular, determination of chosen challenge-response pairs), an attacker who no longer has the device, and who can only use a polynomial amount of resources (time, matter, etc.) can only extract a negligible amount of information about the response to a randomly chosen challenge.\\}
 
-To simplify, PUFs are functions that use hardware manufacturing process variations to generate a random output. They are easy to evaluate means that for a given input, the result is extracted without much effort. Unclonable implies the output function cannot be duplicated to make another PUF. Random response means it contains an equal number of ones and zeros.
+To simplify, PUFs are functions that use hardware manufacturing process variations to generate a random output. They are easy to evaluate which means that for a given input, the result is extracted without much effort. Unclonable keyword implies the output function cannot be duplicated to make another PUF. Random response means it contains an equal number of ones and zeros.
 
-\subsection{PUF terminolgies}
+\subsection{PUF terminologies}
 This section introduces commonly used terms used for describing PUFs and their characteristics. Work in this subsection is inspired from \cite{thbook}
 
 \subsubsection{Challenge and Responses}
-As discussed in the definition, PUF produces output on being queried with an input. Since the input may have more than one possible output so PUFs are not functions in a mathematical sense rather they are considered function in engineering sense i.e a procedure performed by or acting upon a specific (physical) system. \cite{thbook}. The input to PUF is called \emph{Challenge} and output is termed as \emph{Response}, together they are known as \emph{challenge-response Pair} or \emph{CRP} and
-the relation imposed between challenges and responses by a particular PUF is called as its \emph{CRP behavior}. PUF is applied in two phases, the first phase is \emph{enrollment}, where a certain number of CRPs are collected from a PUF and stored in \emph{CRP database}. In the second phase called \emph{verification}, a challenge from CRP database is applied to the PUF and the produced response is compared with the corresponding response from the database (section 2.1 \cite{thbook}).
+As discussed in the definition, PUF produces output on being queried with an input. Since the input may have more than one possible output so PUFs are not functions in a mathematical sense rather they are considered function in engineering sense i.e a procedure performed by or acting upon a specific (physical) system. \cite{thbook}. The input to PUF is called \emph{Challenge} and output is termed as \emph{Response}, together they are known as \emph{Challenge-Response Pair} or \emph{CRP} and
+the relation imposed between challenges and responses by a particular PUF is called as its \emph{CRP behavior}. PUF is applied in two phases, the first phase is \emph{enrollment}, where a certain number of CRPs are collected from a PUF and stored in a \emph{CRP database}. In the second phase called \emph{verification}, a challenge from CRP database is applied to the PUF and the produced response is compared with the corresponding response from the database (section 2.1 \cite{thbook}).
 
-\subsubsection{Intra and Inter-Distance metrics}
+\subsubsection{Intra-and Inter-Distance metrics}
 \label{intra_inter_section}
-The concept of inter versus intra-(class) distance is inherited from the theory of classification and identification.
+The concept of inter-versus intra-(class) distance is inherited from the theory of classification and identification:
 \begin{itemize}
 	\item for a specific challenge, inter-distance between two PUFs instances is the distance between two responses produced by applying the same challenge to both PUFs.
 	\item for a specific challenge, the intra-distance between two evaluations of the single PUF is the distance between two responses produced by applying the same challenge twice to the same PUF. (section 2.2 \cite{thbook})
 \end{itemize}
 
-In our case we deal with challenges and responses output in bit strings (after decoding and quantization of analog physical stimuli and measured effect), so Hamming Distance is a good metric to measure the difference in the responses i.e. degree by which the responses from the same challenge differ. To amplify the hamming distance it is often expressed as a fraction of the length of the considered strings, in that case it is known as \emph{fractional Hamming distance}
+In our case, we deal with challenges and responses that are output in bit strings (after decoding and quantization of analog physical stimuli and measured effect), so Hamming Distance is a good metric to measure the difference in the responses i.e. degree by which the responses from the same challenge differ. To amplify the Hamming distance it is often expressed as a fraction of the length of the considered strings, in that case it is known as \emph{fractional Hamming distance}
 
 \subsection{Reliability Issues}
-As pointed out earlier in introduction PUF is sensitive to external factors and therefore the output of PUF is not consistent. These factors can be inevitable random noise or measurement uncertainties which give rise to the intra distance between PUF responses (section 2.3 \cite{thbook}). Apart from these undesirable effects PUFs are susceptible to other sources of noise e.g. varying temperature or supply voltage on PUFs integrated circuit, these factors contribute to a \emph{systematic} effect on
-response measurement. Another cause for unreliable responses is the \emph{aging effect}, which causes gradual degradation of the device resulting in varying PUF responses. Consequently, PUF responses need post-processing techniques to be applicable in practical security scenarios. One such case is extracting a reliable key from PUF that requires a technique called Fuzzy Extractor (covered in more detailed in later section TODO write the section name)
+As pointed out earlier in the introduction, PUF is sensitive to external factors and therefore the output of PUF is not consistent. These factors can be inevitable random noise or measurement uncertainties which give rise to the intra-distance between PUF responses (section 2.3 \cite{thbook}). Apart from these undesirable effects PUFs are susceptible to other sources of noise e.g. varying temperature or supply voltage on PUFs integrated circuit, these factors contribute to a \emph{systematic} effect on
+response measurement. Another cause for unreliable responses is the \emph{aging effect}, which causes gradual degradation of the device resulting in varying PUF responses. Consequently, PUF responses need post-processing techniques to be applicable in practical security scenarios. One such case is extracting a reliable key from PUF that requires a scheme called Fuzzy Extractor (covered in more detailed in later section \ref{fuzzy_section}).
 
 \subsection{Classifications}
 The popularity of PUFs and immense research on the topic has resulted in various concepts and constructions, we talk about the ones that are concerned with this thesis and for completeness briefly describe other classifications.\\
@@ -51,32 +51,32 @@ The following sections talk about the classification of PUFs that are subdivided
 
 The first criterion for classification is the implementation technology of the construction. PUFs can be realized with different technologies and materials like glass, plastic, paper, electronic components and integrated circuits (ICs). Essentially there are two classes in this group based on the \emph{electronic} nature of the identifying features.\\
 
-\textbf{Non-electronic PUFs} are PUFs whose physical microstructure where the nature of the components in the system that contributes to the random physical microstructure of unique PUF is of non-electronic origin. It should be noted that keyword 'non-electronic' only reflects the origin of the PUF behavior, post-processing (like fuzzy extraction) or intermediate steps can be electronic. Examples can be Optical PUFs where the core element is an optical microstructure constructed by mixing
-microscopic refractive glass spheres in a transparent epoxy plate ( section 3.1.1 \cite{thbook}). A unique response is obtained upon irradiating the transparent material with a laser, this can be interpreted as a PUF response. Another example is Paper-based PUFs where the random fiber structure of the paper is scanned using a laser.The reflection from the erratic fiber serves as a unique identifier and can be considered as a PUF response \cite{thbook}.
+\textbf{Non-electronic PUFs} are PUFs where the nature of the components in the system that contributes to the random physical microstructure of unique PUF is of non-electronic origin. It should be noted that keyword 'non-electronic' only reflects the origin of the PUF behavior, post-processing (like fuzzy extraction) or intermediate steps can be electronic. Examples can be Optical PUFs where the core element is an optical microstructure constructed by mixing
+microscopic refractive glass spheres in a transparent epoxy plate (section 3.1.1 of \cite{thbook}). A unique response is obtained upon irradiating the transparent material with a laser, this can be interpreted as a PUF response. Another example are Paper-based PUFs where the random fiber structure of the paper is scanned using a laser. The reflection from the erratic fiber serves as a unique identifier and can be considered as a PUF response \cite{thbook}.
 
 \textbf{Electronic PUFs} proposed construction contains random variations derived from electronic properties of the underlying material e.g. resistance, capacitance etc. \emph{Silicon PUFs} are a major subclass of electronic PUFs. They were the first practical realization of PUFs introduced by Gassend et al. \cite{21}. Since Silicon PUFs can be connected to the integrated circuit on the same chip, they can be instantly deployed as hardware building block in cryptographic implementations. \cite{17}.
-Another eg. is a construction RF-DNA where copper wires are arranged randomly on a silicone medium to generate PUF responses.\\
+Another example is a construction called RF-DNA where copper wires are arranged randomly on a silicone medium to generate PUF responses.\\
 
-The second classification which is based on the construction properties subdivides the PUFs in \textbf{Intrinisic PUFs} and \textbf{Non-Intrinsic PUFs}. Initially proposed by Guajardo et al. \cite{11}, \emph{Intrinsic PUFs} must meet following two conditions
+The second classification which is based on the construction properties subdivides the PUFs in \textbf{Intrinisic PUFs} and \textbf{Non-Intrinsic PUFs}. Initially proposed by Guajardo et al. \cite{11}, \emph{Intrinsic PUFs} must meet following two conditions:
 \begin{itemize}
 	\item the evaluation of the PUF is performed internally (the measurement instrument is integrated into the device).
 	\item the random instance specific features are implicitly imported during its manufacturing process.
 \end{itemize}
 
-We look with some detail in the above two conditions. First one states that the evaluation that is physical measurement can be internal or external. An external evaluation is the measurement of features that are externally observable and is done with the help of equipment external to the physical entity. Internal evaluations, on the other hand, are measurements features that are internal to the instance and is performed by equipment absolutely embedded in the instance itself. There are some
-advantages for internal evaluations, one there is a less security risk since the measurement entity is embedded in the instance and the PUF response is protected from the outside world. Also, there is a practical leverage because every PUF instance can evaluate itself without any external restriction. Hindrance from outside influences and measurement errors is also minimized in the internal evaluation. With \emph{Non-intrinsic PUFs}, the external measurement can pose a security
+We look with some detail in the above two conditions. First one states that the evaluation, which is a physical measurement, can be internal or external. An external evaluation is the measurement of features that are externally observable and is done with the help of equipment external to the physical entity. Internal evaluations, on the other hand, are measurements of features that are internal to the instance and is performed by equipment absolutely embedded in the instance itself. There are some
+advantages for internal evaluations, one there is a less security risk since the measurement entity is embedded in the instance and the PUF response is protected from the outside world. Also, there is a practical leverage because every PUF instance can evaluate itself without any external restriction. Hindrance from outside influences and measurement errors are also minimized in the internal evaluation. With \emph{Non-intrinsic PUFs}, the external measurement can pose a security
 hazard if an adversary observes the PUF response.\\
 
-The Second one distinguishes between the source of the random variations. The manufacturer can explicitly add randomization procedure to introduce random features that are later measured during PUF evaluation or measured random features can be an implicit side-effect introduced during the production of the integrated circuit and PUF instance. This means they arise naturally and cannot be controlled by the manufacturer, hence even he/she cannot reproduce and clone the same random features. These
+The second one distinguishes between the source of the random variations. The manufacturer can explicitly add randomization procedure to introduce random features that are later measured during PUF evaluation or measured random features can be an implicit side-effect introduced during the production of the integrated circuit and PUF instance. This means they arise naturally and cannot be controlled by the manufacturer, hence even he/she cannot reproduce and clone the same random features. These
 implicit random variations incorporated during manufacturing are called \emph{process variations} come at no extra cost, so they incur no additional cost and are attractive from economic viewpoint.\\
 
-The final classification is based on the Challenge-Response behavior security properties. Guajardo et al. \cite{11} introduced the concept of \textbf{Strong} and \textbf{Weak PUFs} which was further expanded by Rührmair et al.\cite{29}. They state that a Strong PUF is a PUF that adversary can have access to for a long period of time and still he/she cannot uncover the working of the PUF function or how the PUF is evaluated to map to specific response. In other words, we can still come up with a
-new challenge that the adversary does not know what the response to it will be. Consequently, this implies that
+The final classification is based on the Challenge-Response behavior security properties. Guajardo et al. \cite{11} introduced the concept of \textbf{Strong} and \textbf{Weak PUFs} which was further expanded by Rührmair et al.\cite{29}. They state that a Strong PUF is a PUF that an adversary can have access to for a long period of time and still he/she cannot uncover the working of the PUF function or how the PUF is evaluated to map to a specific response. In other words, we can still come up with a
+new challenge that the adversary does not know what the response to it will be. Consequently, this implies that:
 \begin{itemize}
-	\item considered PUF has a very large challenge set, or else the adversary can apply brute force to know responses to all challenges.
+	\item the considered PUF has a very large challenge set, or else the adversary can apply brute force to know responses to all challenges.
 	\item it is not possible to know the mapping function between CRPs based on observed CRPs, that means PUF is unpredictable.
 \end{itemize}
-PUFs that are not \emph{Strong PUFs} and those who have a small challenge set are called \emph{Weak PUFs}. Naturally Strong PUFs are favored in a good securely designed application as compared to Weak PUFs. However, construction of such a Strong and practical (intrinsic) PUFs is rather difficult and still an open problem \cite{29}.\\
+PUFs that are not \emph{Strong PUFs} and those which have a small challenge set are called \emph{Weak PUFs}. Naturally Strong PUFs are favored in a good securely designed application as compared to Weak PUFs. However, construction of such a Strong and practical (intrinsic) PUFs is rather difficult and still an open problem \cite{29}.\\
 
 \subsection{PUF types}
 This section presents a selection of different PUF constructions according to \cite{17}. The general working principles of different PUF realizations are explained accompanied with security-related information.
@@ -89,11 +89,11 @@ response of the arbiter cannot be precisely determined based on the design. As w
 behavior.\\
 
 In case both paths happen to have same nominal delays (due to complex nature of the electronic circuitry and used gates), both signals arrive almost synchronously at the arbiter in which case arbiter circuit goes in a \emph{metastable state} and logic output of the arbiter circuit is temporarily unknown (electronically, voltage of arbiter output is between levels for a logic high and low). After a short random backoff time arbiter switches from its metastable state and outputs a random binary
-value not dependant on the conclusion of the race, but in this case, the output of the arbiter is not device-specific and not static. This phenomenon is the origin of unreliability (noise) of the responses of an arbiter PUF.\\
+value not dependent on the conclusion of the race, but in this case, the output of the arbiter is not device-specific and not static. This phenomenon is the origin of unreliability (noise) of the responses in an arbiter PUF.\\
 
-The implementation of arbiter PUF two delay paths consists of a chain of switch blocks that connects two input signals to its two outputs either in a cross or straight configuration. This configuration is modifiable via a configurable selection bit. The Figure \ref{img:arbiter} shows the inner cross-section of the switches, which are logically implemented as 2-to-1 multiplexers (muxes). A total n number of switch blocks are linked with each block having a selection bit (n configuration bit vector) to
-configure a total of 2$^n$ possible delay path pairs. This n-bit vector is considered as challenge, and the random process variations in the delay paths make sure that the input-output delays are different and each 2$^n$ leads to a race to be resolved by arbiter circuit. The final output bit from the arbiter is considered as response to the PUF challenge. Arbiter circuit can be implemented as a simple SR NAND latch or some other digital latch/flip-flop. Following two conditions are
-important to determine PUF response depends individually on process variations on the delay parameters:
+The implementation of arbiter PUF consists of two delay paths which contain a chain of switch blocks that connects two input signals to its two outputs either in a cross or straight configuration. This configuration is modifiable via a configurable selection bit. The Figure \ref{img:arbiter} shows the inner cross-section of the switches, which are logically implemented as 2-to-1 multiplexers (muxes). A total n number of switch blocks are linked with each block having a selection bit (n configuration bit-vector) to
+configure a total of 2$^n$ possible delay path pairs. This n-bit vector is considered as a challenge, and the random process variations in the delay paths make sure that the input-output delays are different and each of the 2$^n$ paths leads to a race to be resolved by the arbiter circuit. The final output bit from the arbiter is considered as a response to the PUF challenge. Arbiter circuit can be implemented as a simple SR NAND latch or some other digital latch/flip-flop. Following two conditions are
+important to determine if the PUF response depends individually on process variations or on the delay parameters:
 \begin{itemize}
 	\item the delay paths are designed to be symmetrical, the cause of any difference is process variation.
 	\item arbiter circuit must not be biased for one input over other.
@@ -102,7 +102,7 @@ important to determine PUF response depends individually on process variations o
 \begin{figure}
 	\centering
 	\fbox{ \includegraphics[width=0.9\textwidth]{images/arbiter_4.png}}
-	\caption{Construction of a basic arbiter PUF, \emph{switching blocks} realized with muxes and a \emph{SR latch} realized with NAND gates, modified graphic based on \cite{17,18,38}}
+	\caption{Construction of a basic arbiter PUF, \emph{switching blocks} realized with muxes and an \emph{SR latch} realized with NAND gates, modified graphic based on \cite{17,18,38}}
 	\label{img:arbiter}
 \end{figure}
 
@@ -112,8 +112,8 @@ networks (ANNs) and support-vector machines (SVMs) can be employed to implicitly
 
 \subsubsection{SRAM PUFs}
 \label{srampufs}
-The concept of an SRAM PUF was introduced by Guajardo et al. \cite{11} and Holcomb et al. \cite{50} in 2007. Static Random-Access Memory (SRAM) is a digital memory technology based on bistable circuits. (section 2.4.4 \cite{17}). It consists of six MOSFETs transistors, out of which four are contained in two invertors. Each invertor comprises of one p-MOS and one n-MOS MOSFET. As you can see from Figure \ref{img:sram} the invertors are cross-coupled at SRAMs cell core. In the terms of mathematical logic, the circuit has two stable states (bistable), each state represented by a binary
-digit (0 or 1) that is stored in the cell. Two MOSFETs are used to read and write the cell contents. A SRAM cell is volatile and does not store its state on power-off.\\
+The concept of an SRAM PUF was introduced by Guajardo et al. \cite{11} and Holcomb et al. \cite{50} in 2007. Static Random-Access Memory (SRAM) is a digital memory technology based on bistable circuits. (section 2.4.4 of \cite{17}). It consists of six MOSFETs transistors, out of which four are contained in two inverters. Each inverter comprises of one p-MOS and one n-MOS MOSFET. As you can see from Figure \ref{img:sram} the inverters are cross-coupled at the SRAM cell's core. In the terms of mathematical logic, the circuit has two stable states (bistable), each state represented by a binary
+digit (0 or 1) that is stored in the cell. Two MOSFETs are used to read and write the cell contents. An SRAM cell is volatile and does not store its state on power-off.\\
 
 \begin{figure}
 \centering
@@ -122,35 +122,42 @@ digit (0 or 1) that is stored in the cell. Two MOSFETs are used to read and writ
 \label{img:sram}
 \end{figure}
 
-There are three possible operating points, two are stable and one is metastable as shown in Figure \ref{img:sram}. The deviation from stable points is automatically restored to its original point due to the feedback from the circuit. Adversely any deviation from a metastable point is amplified by the positive feedback from the circuit and cell moves to either of the stable points. After the supply voltage $V_{DD}$ comes up the cell shifts to one of the preferred stable points, which is determined by the difference in
-strength (device mismatch) of the MOSFETs in the cross-coupled invertor circuit. Due to performance and efficiency reasons, the invertors are designed to be perfectly in sync, the device mismatch is a result of the random process variations in the silicon production process. This random preferred initial operating point is unique to a specific cell. For a small mismatch, the preferred initial stable point is determined by the sign of the mismatch, though voltage noise can render the cell to
+There are three possible operating points, two are stable and one is metastable as shown in Figure \ref{img:sram}. The deviation from stable points is automatically restored to its original point due to the feedback from the circuit. Adversely any deviation from a metastable point is amplified by the positive feedback from the circuit and cell moves to either of the stable points. After the supply voltage $V_{DD}$ comes up, the cell shifts to one of the preferred stable points, which is determined by the difference in
+strength (device mismatch) of the MOSFETs in the cross-coupled inverter circuit. Due to performance and efficiency reasons, the inverters are designed to be perfectly in sync, the device mismatch is a result of the random process variations in the silicon production process. This random preferred initial operating point is unique to a specific cell. For a small mismatch, the preferred initial stable point is determined by the sign of the mismatch, though voltage noise can render the cell to
 power-up in a non-preferred state. Finally the cells with almost zero mismatch power-up in the metastable state and shift to one of the stable points randomly.\\
 
-Most SRAM cells have strongly preferred cell-specific initial state due to the magnitude of the process variations on the device mismatch, only a small number of the cells have weakly preferred or no preferred state, hence a typical SRAM cell exhibits strong PUF behavior. These cells are arranged in a large array giving millions of response bits, challenge for this cell assembly is the address of the cell.\\
+Most SRAM cells have strongly preferred cell-specific initial state due to the magnitude of the process variations on the device mismatch; only a small number of the cells have weakly preferred or no preferred state, hence a typical SRAM cell exhibits strong PUF behavior. These cells are arranged in a large array giving millions of response bits, challenge for this cell assembly is the address of the cell.\\
 
 \subsubsection{Ring Oscillator PUF}
 
-Proposed by Gassend et al. \cite{21} it is another type of delay-based intrinsic PUF. There are two parts to ring oscillator PUF, first is the ring oscillator and other is the frequency counter which are arranged in a configuration as shown in the Figure \ref{img:ring} and connected to a response generating algorithm. Gassend et al. uses a variant of the switch block base delay line similar to arbiter PUF \ref{arbiterpuf} which is transformed in an oscillator with the help of a negative feedback.
-An AND gate is added to turn off/on the oscillation, which is fed to a frequency counter that counts the number of oscillating cycles in a fixed time interval. The same setup for ring oscillator on another device with the same implementation has different counter value because of the silicon process variations which forms the basis of the PUF response.\\
-
-\begin{figure}
+\begin{figure}[t!]
 \centering
 \fbox{ \includegraphics[width=0.9\textwidth]{images/ringPUF_1.png}}
 \caption{Construction of a basic ring oscillator PUF as proposed by Gassend et al. \cite{21,17}.}
 \label{img:ring}
 \end{figure}
 
+\begin{figure}[h!]
+\centering
+\fbox{ \includegraphics[width=0.9\textwidth]{images/ringPUF_2.png}}
+\caption{Construction of a ring oscillator PUF as proposed by Suh and Devadas \cite{8,17}.}
+\label{img:ring_suh}
+\end{figure}
+
+Proposed by Gassend et al. \cite{21} it is another type of delay-based intrinsic PUF. There are two parts to ring oscillator PUF, first is the ring oscillator and other is the frequency counter which are arranged in a configuration as shown in the Figure \ref{img:ring} and connected to a response generating algorithm. Gassend et al. uses a variant of the switch block base delay line similar to arbiter PUF \ref{arbiterpuf} which is transformed in an oscillator with the help of a negative feedback.
+An AND gate is added to turn off/on the oscillation, which is fed to a frequency counter that counts the number of oscillating cycles in a fixed time interval. The same setup for ring oscillator on another device with the same implementation has different counter value because of the silicon process variations which forms the basis of the PUF response.\\
+
 There are some other side effects associated with ring oscillator PUFs, one of them is significant influence from the environmental conditions like temperature changes and voltage fluctuations. The frequency changes introduced by these factors outweigh the deviations caused by the process variations, so to counteract these changes we need a post-processing technique known as \emph{compensated measuring}. The main idea is to calculate the ratio of the frequency of two ring oscillators
-on the same device since they both are affected by identical environmental factors, hence the ratio would be more uniform. According to observations average intra-distance distance between evaluations is approximately less than the average inter-distance by 50\% (section 2.4.2 \cite{17})
+on the same device since they both are affected by identical environmental factors, hence the ratio would be more uniform. According to observations average intra-distance distance between evaluations is approximately 10\% and the average inter-distance is approximately 50\% (section 2.4.2 \cite{17})
 
 \subsubsection{Optical PUFs}
 
-Even before the introduction of PUFs an unclonable identification system based on random optical reflection patterns was proposed in \cite{th53}. Proposed by Pappu et al. as Physical one-way functions (POWF) optical PUF contains a microstructure constructed by blending microscopic (500 $\mu$m) refractive glass spheres in a miniature (10 x 10 x 2.54 $mm$) transparent epoxy plate. This token is illuminated with a helium-neon laser which produces an irregular wavefront,
-the cause for this irregularity is the multiple scattering of the laser by the refractive particles. Finally, a CCD camera captures the speckle pattern and digitally processed by applying Gabor Hash to it as a feature extraction procedure (\cite{thbook} section 3.1.1). The final output is a string of bits that deviates significantly if the orientation of the laser beam is even minutely changed.\\
+Even before the introduction of PUFs an unclonable identification system based on random optical reflection patterns was proposed in \cite{th53}. Proposed by Pappu et al. as Physical One-Way Functions (POWFs), optical PUFs contain a microstructure constructed by blending microscopic (500 $\mu$m) refractive glass spheres in a miniature (10 x 10 x 2.54 $mm$) transparent epoxy plate. This token is illuminated with a helium-neon laser which produces an irregular wavefront;
+the cause for this irregularity is the multiple scattering of the laser by the refractive particles. Finally, a CCD camera captures the speckle pattern and digitally processes it by applying Gabor hash to it as a feature extraction procedure (section 3.1.1 of \cite{thbook}). The final output is a string of bits that deviates significantly if the orientation of the laser beam is even minutely changed.\\
 
-Challenge is made up from the exact positioning of the laser and the resulting Gabor hash of the emerged speckle pattern is considered as response. The operation and implementation for optical PUF are shown in Figure \ref{img:optical}. A number of experiments were performed by \cite{19,39} for testing the characteristics of the optical PUF and following text summarizes their results. The values are taken from the \cite{19,39}. Total four optical tokens used with 576 individual challenges, for the
-responses intra and inter-distance measures were evaluated with average inter-distance of $\mu_{inter}$ = 49.79\% and average intra-distance of
-$\mu_{intra}$ = 25.25\%. One of the main limitation of such an optical PUF is the burdensome large setup consisting of a laser and mechanical positioning system. They are classified as Non-electronic, non-intrinsic and strong PUFs.\\
+The PUF challenge is made up from the exact positioning of the laser and the resulting Gabor hash of the emerged speckle pattern is considered as a response. The operation and implementation for optical PUFs are shown in Figure \ref{img:optical}. A number of experiments were performed in \cite{19,39} for testing the characteristics of the optical PUFs and the following text summarizes their results. The values are taken from \cite{19,39}. In total, four optical tokens were used with 576
+individual challenges, to calculate the PUF responses. Intra- and inter-Hamming distances were evaluated with an average inter-distance of $\mu_{inter}$ = 49.79\% and average intra-distance of
+$\mu_{intra}$ = 25.25\%. One of the main limitations of such an optical PUF is the burdensome large setup consisting of a laser and mechanical positioning system. They are classified as non-electronic, non-intrinsic and strong PUFs.\\
 
 \begin{figure}
 \centering
@@ -159,14 +166,14 @@ $\mu_{intra}$ = 25.25\%. One of the main limitation of such an optical PUF is th
 \label{img:optical}
 \end{figure}
 
-\section{Linear codes, bch , golay}
-In order to understand the working of the toolkit and fuzzy extractors (discussed later in section), we need to look at the two specific type of linear codes. The following sections and subsections discuss the basics of linear codes and their mathematical constructs. After the initial explanation of what linear codes are, we go on to explain BCH codes and Golay codes that are used in the PUF toolkit to extract private and public keys in conjugation with SRAM PUFs. The second part
-gives the details about two important concepts related to coding known as Majority voting and a simple Linear repetition code.The last part of
-this section deals with a technique called fuzzy extractor that takes the concepts of the linear codes, LR codes, Majority Voting and combines them to reevaluate and generate the helper data for a specific PUF response used for secure key storage on the PUF instance.The major
+\section{Linear Codes, BCH and Golay Codes}
+In order to understand the working of the toolkit and fuzzy extractors (discussed later in section \ref{fuzzy_section}), we need to look at two specific types of linear codes. The following sections discuss the basics of linear codes and their mathematical constructs. After the initial explanation of what linear codes are, we go on to explain BCH codes and Golay codes that are used in the PUF toolkit to extract private and public keys in conjunction with PUFs. The second part
+gives the details about two important concepts related to coding known as Majority Voting and a simple Linear Repetition Code.The last part of
+this section deals with a technique called fuzzy extractor that takes the concepts of the linear codes, LR codes, Majority Voting and combines them to reevaluate and generate the helper data for a specific PUF response used for secure key storage on the PUF instance. The major
 content for these sections is inspired from \cite{chap2}.\\
 
-Before diving into linear codes let us first look at the definition of Field from the book \cite{chap2}:\\
-\textbf{Definition} A field F is given by a triple (S, +, ·), where S is the set of elements containing
+Before diving into linear codes let us first look at the definition of a field in mathematics from the book \cite{chap2}:\\
+\textbf{Definition 1:} A field F is given by a triplet (S, +, ·), where S is the set of elements containing
 special elements 0 and 1 and +, · are functions $F \times F \rightarrow F$ with the following properties:
 \begin{itemize}\itemsep-\the\parsep
 	\item Closure: For every a, b $\in$ S, we have both a + b $\in$ S and a · b $\in$ S.
@@ -174,34 +181,34 @@ special elements 0 and 1 and +, · are functions $F \times F \rightarrow F$ with
 	\item Commutativity: + and · are commutative, that is, for every a, b $\in$ S, a + b = b + a and a · b = b · a.
 	\item Distributivity: · distributes over +, that is for every a, b, c $\in$ S, a · (b + c) = a · b + a · c.
 	\item Identity: For every a $\in$ S, a + 0 = a and a · 1 = a.
-	\item Inverse: For every a $\in$ S, there exists its unique additive inverse -a such that a + (-a) = 0. Also for every a $\in S \backslash \left\{0\right\}$ there exists its unique multiplicative inverse $a^{-1}$ such that a · $a^{-1}$ = 1.
+	\item Inverse: For every a $\in$ S, there exists a unique additive inverse -a such that a + (-a) = 0. Also for every a $\in S \backslash \left\{0\right\}$ there exists a unique multiplicative inverse a$^{-1}$ such that a · a$^{-1}$ = 1.
 \end{itemize}
 
-\textbf{Lemma} Let p be a prime. Then $F_p = (\left\{0, 1, . . . , p - 1\right\}, +_p , \cdot_p )$ is a field, where $+_p$ and $\cdot_p$ are
+\textbf{Lemma:} Let p be a prime. Then $F_p = (\left\{0, 1, . . . , p - 1\right\}, +_p , \cdot_p )$ is a field, where $+_p$ and $\cdot_p$ are
 addition and multiplication mod p. \cite{chap2}
 
-example $F_2 = \left\{0,1\right\}$ is a binary finite field with two symbols 0 and 1 where + and $\cdot$ are operations modulo 2.\\
+For example, $F_2 = \left\{0,1\right\}$ is a binary finite field with two symbols 0 and 1 where + and $\cdot$ are operations modulo 2.\\
 
-\textbf{Linear Subspaces},  before defining Codes and linear Codes we need to know what is a linear subspace.
-\textbf{Definition} $ S \subseteq F_q^n $ is a linear if the following properties are satisfied:\cite{chap2}
+\textbf{Linear Subspaces.} Before defining linear codes we need to know what is a linear subspace.\\
+\textbf{Definition 2:} $ S \subseteq F_q^n $ is a linear subspace if the following properties are satisfied \cite{chap2}:
 \begin{enumerate}
 	\item For every $x,y \in S, x+y \in S$, where addition is vector addition over $F_q$
 	\item For every $a \in F_q$ and $x \in S, a\cdot x\in S$, where multiplication is over $F_q$
 \end{enumerate}
 
-A simple example to understand above Definition and Lemma is $F_5^3$\\
+A simple example to understand above-mentioned Definition 2 and Lemma is $F_5^3$\\
 S = \{(0, 0, 0), (1, 1, 1), (2, 2, 2), (3, 3, 3), (4, 4, 4)\}.
-As you can see (1, 1, 1) + (3, 3, 3) = (4, 4, 4) $\in S$ and 2.(4, 4, 4) mod 5 = (3, 3, 3) $\in S$ as stated in the definition
+As you can see (1, 1, 1) + (3, 3, 3) = (4, 4, 4) $\in S$ and 2$\cdot$(4, 4, 4) mod 5 = (3, 3, 3) $\in S$ as stated in the Definition 2.
 
-Now, we can define a \textbf{linear Code} as a code of length n over the field F is a subspace of $F^n$ . The words of the codespace $F^n$ are vectors, and we often refer to codewords as codevectors.
+Now, we can define a \textbf{linear code} as a code of length n over the field F which is a subspace of $F^n$ . The words of the codespace $F^n$ are vectors, and we often refer to codewords as codevectors.
 If C is a linear code that, as a vector space over the field F , has dimension k,
-then we say that C is an [n, k] linear code over F , or an [n, k] code \cite{linear}. The \emph{distance} of the code is the number of symbols changes required in a codeword to assume another codeword. eg. let C(3,3) is a subspace $F_2^3$ if two codewords 000 and 111 , then distance between them is 3 since we need to change three symbols 0 to 1.
-The \emph{rate} of an [n, k] linear code is \textbf{k/n}. If C has minimum distance d, then C is an [n, k, d] linear code over F .
-The number n - k is called the \emph{redundancy} of C \cite{linear}\\
+then we say that C is an [n, k] linear code over F , or an [n, k] code \cite{linear}. The \emph{distance} of the code is the number of symbol changes required in a codeword to assume another codeword. E.g., Let C(3,3) be a subspace in $F_2^3$, with two codewords 000 and 111; then the distance between them is 3 since we need to change three symbols, from 0 to 1.
+The \emph{rate} of an [n, k] linear code is \textbf{k/n}. If C has a minimum distance d, then C is an [n, k, d] linear code over F .
+The number n - k is called the \emph{redundancy} of C \cite{linear}.\\
 
-\textbf{Cyclic Code} is a linear block code where if \emph{c} is a codeword, then all the cyclic shifts of $c$ are also codewords.
-example {000, 110, 101, 011} is a cyclic code.
-These codes can be completely produced by a generator string G, all codevectors are multiples of G.\\
+A \textbf{cyclic code} is a linear block code where, if \emph{c} is a codeword, then all the cyclic shifts of $c$ are also codewords.
+For example a code with codewords {000, 110, 101, 011} is a cyclic code.
+These codes can be completely produced by a generator string G, where all codevectors are multiples of G.\\
 
 This section tries to cover the basics for understanding BCH codes and Golay Codes, in no way we claim the completeness of the mathematical constructs and other proofs that are skipped. Please see the references for more details.\\
 
@@ -210,12 +217,12 @@ This section tries to cover the basics for understanding BCH codes and Golay Cod
 The \emph{BCH codes} belong to the class of powerful random error correcting cyclic codes and named after Bose, Chaudhuri and Hocquenghem. These codes exercise great control over code's parameters like code length, information bits etc. The major parameters to the BCH code are the length of the input message (input bits) which produces output codewords based on the \emph{BCH mode} selected and a number of bit errors that can be corrected with decoding. This section tries to summarize the BCH codes and
 their basic error correcting capability.\\
 
-As discussed BCH code is made up of three code parameters or has three dimensions; the code length \emph{n} of the codevectors, that are generated from the input bits of length \emph{k} and lastly a very important parameter \emph{d} that is called minimum distance, this \emph{d} is responsible for deriving the error correcting capability of BCH code $t = \frac{d}{2} + 1$ i.e maximum number of bit errors the code can correct. These parameters are inter-dependant on each other
-and cannot be set directly, alternatively to set the legitimate BCH modes the user needs to set $m$ and $t$. The parameter $m$ determines the degree of the primitive polynomial $p(x)$ that is used in computing the Galois Field $GF(2^m)$ and also to calculate the coefficients of $p(x)$ which are crucial for code generation. The length of the codewords must fall within the range: $2^{m-1} - 1 < n \leq$ $2^m - 1$. The other parameter $t$ ascertains the maximal error correcting capability
-for the code and has explicit influence over redundancy created via encoding process. The minimum distance parameter $d$ is calculated via the formula $d = 2 * t + 1$, the redundancy bits that are mandatory for a successful bit correction in the codeword are calculated w.r.t $d$. So we can infer that the error correction is restricted by code length $n$ and the number of input bits $k$ are defined by the $k = n - redundancy$, where the value of $t$ must be such that $k \geq 2$. Now we can
+A BCH code consists of three code parameters or has three dimensions; the code length \emph{n} of the codevectors, that are generated from the input bits of length \emph{k} and lastly a very important parameter \emph{d} that is called minimum distance, this \emph{d} is responsible for deriving the error correcting capability of BCH code $t = \frac{d}{2} + 1$, i.e. the maximum number of bit errors the code can correct. These parameters are inter-dependent on each other
+and cannot be set directly; alternatively to set the legitimate BCH modes the user needs to set $m$ and $t$. The parameter $m$ determines the degree of the primitive polynomial $p(x)$ that is used in computing the Galois Field $GF(2^m)$ and also to calculate the coefficients of $p(x)$ which are crucial for code generation. The length of the codewords must fall within the range: $2^{m-1} - 1 < n \leq$ $2^m - 1$. The other parameter $t$ ascertains the maximal error correcting capability
+for the code and has explicit influence over redundancy created via the encoding process. The minimum distance parameter $d$ is calculated via the formula $d = 2 * t + 1$, the redundancy bits that are mandatory for a successful bit correction in the codeword are calculated w.r.t. $d$. So we can infer that the error correction is restricted by code length $n$ and the number of input bits $k$ are defined by $k = n - redundancy$, where the value of $t$ must be such that $k \geq 2$. Now we can
 formally define BCH code, this definition is taken from \cite{66}:\\
 
-For a positive integer $m$ (m $\geq$ 4 and m $\leq$ 14) and $t$ ($t < 2^{m-1}$), there exists a binary BCH ($n$, $k$, $d$) code with the parameter:
+For a positive integer $m$ (m $\geq$ 4 and m $\leq$ 14) and $t$ ($t < 2^{m-1}$), there exists a binary BCH ($n$, $k$, $d$) code with the following parameters:
 \begin{itemize}
 \item \textbf{Block length:} $n = 2^m - 1$
 \item \textbf{Number of redundancy bits:} $n - k \leq mt$
@@ -225,16 +232,16 @@ For a positive integer $m$ (m $\geq$ 4 and m $\leq$ 14) and $t$ ($t < 2^{m-1}$),
 ``For the construction of BCH codes, the roots of their generator polynomials specified by their zeros are used. A BCH code of $d_{min}$ $\geq$ $2t_d + 1$ is a cyclic code with a generator polynomial $g(x)$ that has $2t_d$ consecutive roots $\alpha^b$, $\alpha^{b+1}$,$\alpha^{b+2t_d-1}$ and is able to correct $t$ or fewer bit errors for a block of $n = 2^m - 1$. The generator polynomial of that code is specified by its roots from the Galois field $GF(2^m)$. A binary BCH ($n$, $k$, $d_{min}$) code
 has a generator polynomial $g(x) = LCM\{\phi_{b}(x), \phi_{b+1}(x),...,\phi_{b+2t_{d}-1}(x)\}$, length $n = LCM\{n_b,n_{b+1},...,n_{b+2t_d-1}\}$ and dimension $k = n - deg[g(x)]$. The \emph{BCH bound} is the lower bound of a BCH code’s minimum distance and can be used to estimate the error-correcting capabilities of cyclic codes. The elements $\alpha^b$, $\alpha^{b+1}$,$\alpha^{b+2t_d-1}$ are roots of the generator polynomial $g(x)$ and every codeword $v$ in the BCH code is associated with a
 polynomial $v(x)$ which is a multiple of $g(x)$. If the generator polynomial $g(x)$ of a cyclic ($n$, $k$, $d$) code has $l$ consecutive roots: $\alpha^b$, $\alpha^{b+1}$,$\alpha^{b+l-1}$, then $d \geq 2l +1$. In the encoding phase, the input to the BCH code will be transformed block-wise into the corresponding codewords. In the decoding phase, these codewords are decoded and at max $t$ bit errors in each codeword can be corrected. The $GF(2^m)$ arithmetic is used to find the error positions
-in the codewords during the decoding. This is done by solving a set of equations, which are obtained from the error polynomial $e(x)$ and the zeros of the code $\alpha^j$, for $b \geq j \geq b + 2t_d - 1$.’’ \cite{66}. The BCH decoding uses syndrome systematic decoding technique, which allows for an efficient hardware implementation. Following steps summarizes the decoding:
+in the codewords during the decoding. This is done by solving a set of equations, which are obtained from the error polynomial $e(x)$ and the zeros of the code $\alpha^j$, for $b \geq j \geq b + 2t_d - 1$.’’ \cite{66}. The BCH decoding uses a syndrome systematic decoding technique, which allows for an efficient hardware implementation. Following steps summarize the decoding:
 
 \begin{itemize}\itemsep-\the\parsep %TODO did not make spaces
 \item The syndromes are computed through the evaluation of the received polynomial at the zeros of the code.
 \item The coefficients of the error-locator polynomial $\sigma(x)$ must be solved for.
-\item The inverses of the roots of $\sigma(x)$ have to be calculated, which inform about the error locations $\alpha^{j1}$,...,$\alpha^{jv}$
-\item The decoded error locations can then be used to inverse the bits at the corresponding position and thereby correcting the errors
+\item The inverses of the roots of $\sigma(x)$ have to be calculated, which inform about the error locations $\alpha^{j1}$,...,$\alpha^{jv}$.
+\item The decoded error locations can then be used to inverse the bits at the corresponding position, and thereby correcting the errors.
 \end{itemize}
 
-This concludes our discussion of the BCH code, for more details and the inner workings of the BCH encoder and decoder please refer \cite{66}
+This concludes our discussion of the BCH code, for more details and the inner workings of the BCH encoder and decoder please refer to \cite{66}.
 
 \subsection{Golay Codes}
 \label{golay_related}

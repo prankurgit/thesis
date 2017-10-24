@@ -260,7 +260,7 @@ the files, that are compared to the selected input file, are displayed. The Hamm
 \label{img:inter_compact}
 \end{figure}
 
-\subsection{Inter Hamming Distance}
+\subsection{Inter-Hamming Distance}
 \label{inter_hd_section}
 Contrary to the comparisons between PUF responses from the same device, Inter Hamming distance evaluates responses from different PUF instance. The co-relation is again based on the same metric Hamming Distance. In this case, the toolkit can simultaneously compare from 2 to 99 PUF instances. All the PUF responses from a specific instance are arranged in a single directory so that means the toolkit can take input paths between 2 and 99 to evaluate different PUF devices. The output
 style in addition to compact and minimal has a \emph{detailed} as an alternative. The compact and minimal style formats are same as Intra Hamming Distance, but the detailed style differs from the compact style that it does not implicitly ignores the duplicate symmetric comparisons and therefore maps out all the permutations and combinations between files of different folders. It should be noted that Inter Hamming Distance metric does not compare PUF responses in the same directory. So
@@ -571,7 +571,7 @@ second part of the enrollment of the fuzzy extractor, the LR code is applied to 
 	\label{img:golay_decoder_fns}
 	\end{figure}
 
-	Golay decoder code is partitioned across five modules similar to the ones discussed in Golay encoder as illustrated in Figure \ref{img:golay_decoder_fns}. The first module is the Main\_Menu function that calls the Golay decoder menu. This menu was implemented and added to the PUF toolkit which on selection points to the user interface with menu items of the decoder TODO refer. The Golay Decoder user interface is implemented in the routine \emph{Golay\_Decoder\_Menu}, where the decode option is linked to the \emph{Golay\_decode}
+	Golay decoder code is partitioned across five modules similar to the ones discussed in Golay encoder as illustrated in Figure \ref{img:golay_decoder_fns}. The first module is the Main\_Menu function that calls the Golay decoder menu. This menu was implemented and added to the PUF toolkit which on selection points to the user interface with menu items of the decoder. The Golay Decoder user interface is implemented in the routine \emph{Golay\_Decoder\_Menu}, where the decode option is linked to the \emph{Golay\_decode}
 	function that performs the decoding of the helper data. The usual routines in the ``View'' module are used to set the helper data, PUF response and output recovered key filenames. There is no need to set the offsets and original key filesize in the decoder menu since during the ``enrollment'' phase these details are appended at the end of helper data as part of the `cfg' settings. The ``Calculation'' module is crucial to the decoding operation and which follows the below-mentioned
 	steps:
 	\begin{enumerate}
@@ -714,7 +714,7 @@ second part of the enrollment of the fuzzy extractor, the LR code is applied to 
 	\item An additional metric called Fractional Jaccard's Index is also calculated using the definition $F(A, B) = J(A, B)/ size(A or B)$ and written to the result file along with the Jaccard Index.
 \end{itemize}
 
-\subsection{Intra Jaccard Index}
+\subsection{Intra-Jaccard Index}
 Instead of computing Jaccard index between two files, the entire folder containing PUF responses from a single device can be evaluated by selecting the Intra Jaccard Index sub-menu item. The filename where the results will be written is essential before processing the Intra Jaccard Index. The menu item asks for an input directory with a relative or absolute path on the machine and if the input path is correct and an output file is set then the result is generated and stored in the
 output file.\\
 
@@ -732,7 +732,7 @@ To realize the Intra Jaccard Index the function \emph{Jaccard\_Intra} was implem
 \ref{jaccardi_index_section}
 above. Finally, the result is written in each iteration of the loop and appended to the output file.\\
 
-\subsection{Inter Jaccard Index}
+\subsection{Inter-Jaccard Index}
 Unlike its Intra counterpart, the Inter Jaccard Index can be used to evaluate the PUF responses across different devices. It compares the PUF responses in a directory (analogous to a device since all PUF responses from a single device are stored in the same folder) to PUF responses in other directories. The comparison mode or the output-style by default is designed in the code to be ``compact'' since it simplifies the metric and also avoids any duplicate comparisons. The details of
 the compact mode file comparison for Inter Jaccard index are the same as for Inter Hamming Distance which is explained in detail in section \ref{inter_hd_section} and the  compact comparison operation between three folders is shown in Figure \ref{img:inter_compact}.\\
 
