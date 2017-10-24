@@ -194,7 +194,7 @@ The BCH code is highly configurable that means the parameters m, n, t can be con
 the adaptation of the fuzzy extractor is intended for hardware machine with limited resources. For testing, all possible m (in the range [4,14]), the corresponding maximum n ( $2^{n-1} - 1 < n <= 2^{n} - 1$) and the highest possible error correction capability t were chosen. The time requirement analysis was performed on an Intel i3 quad core CPU with 2.0 GHz and 3 GB RAM. The results of the time measurements for the BCH mode pre-processing are visualized in Figure \ref{img:bch_time}.
 
 The Golay code is a static (23, 12, 7) code where the user is not required to input any parameters. The pre-processing time of the Golay code remains constant and is not a timing overhead, so it can be ignored. The time required for encoding and decoding steps depends on the size of the file that is to be encoded/decoded. For the analysis, we used a PUF response from (TI) Stellaris LM4F120XL LaunchPad Evaluation Kits and the size was varied with the help of offsets, the original size of
-the PUF response was 32 Kilobytes. Figure \ref{img:golay_enc_time} and \ref{img:golay_dec_time} illustrates the encoding and decoding analysis of Golay code with different file sizes as a bar graph.\\
+the PUF response was 32 Kilobytes. Figure \ref{img:golay_time} illustrates the encoding and decoding analysis of Golay code with different file sizes as a bar graph.\\
 
 \begin{figure}
 \centering
@@ -206,14 +206,7 @@ the PUF response was 32 Kilobytes. Figure \ref{img:golay_enc_time} and \ref{img:
 
 \begin{figure}
 \centering
-%\fbox{ \includegraphics[width=0.97\textwidth]{images/Cogni.png}}
-\caption{Time requirement measurements for the Golay encoding for varying filesizes}
-\label{img:golay_enc_time}
-\end{figure}
-
-\begin{figure}
-\centering
-%\fbox{ \includegraphics[width=0.97\textwidth]{images/Cogni.png}}
-\caption{Time requirement measurements for the Golay decoding for varying filesizes}
-\label{img:golay_dec_time}
+\fbox{ \includegraphics[width=0.97\textwidth]{images/golay.pdf}}
+\caption{Time requirement measurements for the Golay encoding and decoding for varying filesizes}
+\label{img:golay_time}
 \end{figure}
