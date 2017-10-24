@@ -50,7 +50,7 @@ The interpretation for the core metrics that were implemented already in the too
 
 For completeness table \ref{tab:metrics} summarizes the result interpretation of the metrics with respect to the utilized use case. The table also contains metrics from the original toolkit and are not explained in detail to avoid redundancy. To know more about the metrics in the previous version of the toolkit refer to \cite{71}.\\
 
-\begin{table}[!ht]
+\begin{table}[]
 \centering
 \begin{tabular}{@{}lccccc@{}}
 \toprule
@@ -192,21 +192,18 @@ Without pre-evaluation such exceptional behavior might not be discovered which c
 
 The BCH code is highly configurable that means the parameters m, n, t can be constructed in various possible ways. For time requirement analysis the preprocessing time for the generation of a BCH mode was taken into account. Depending on the selected parameters, specifically $m$, the preprocessing can create some timing overhead. Since this process is inevitable for both encoder and decoder, the timing overhead is considered with respect to the selection of the parameters, especially since
 the adaptation of the fuzzy extractor is intended for hardware machine with limited resources. For testing, all possible m (in the range [4,14]), the corresponding maximum n ( $2^{n-1} - 1 < n <= 2^{n} - 1$) and the highest possible error correction capability t were chosen. The time requirement analysis was performed on an Intel i3 quad core CPU with 2.0 GHz and 3 GB RAM. The results of the time measurements for the BCH mode pre-processing are visualized in Figure \ref{img:bch_time}.
-
-The Golay code is a static (23, 12, 7) code where the user is not required to input any parameters. The pre-processing time of the Golay code remains constant and is not a timing overhead, so it can be ignored. The time required for encoding and decoding steps depends on the size of the file that is to be encoded/decoded. For the analysis, we used a PUF response from (TI) Stellaris LM4F120XL LaunchPad Evaluation Kits and the size was varied with the help of offsets, the original size of
-the PUF response was 32 Kilobytes. Figure \ref{img:golay_time} illustrates the encoding and decoding analysis of Golay code with different file sizes as a bar graph.\\
-
-\begin{figure}
+\begin{figure}[h]
 \centering
-%\fbox{ \includegraphics[width=0.97\textwidth]{images/Cogni.png}}
+\fbox{ \includegraphics[width=0.97\textwidth]{images/bch_preprocess.pdf}}
 \caption{Time requirement measurements for the BCH mode pre-processing in relation to parameter m.}
 \label{img:bch_time}
 \end{figure}
 
-
-\begin{figure}
+\begin{figure}[h]
 \centering
 \fbox{ \includegraphics[width=0.97\textwidth]{images/golay.pdf}}
 \caption{Time requirement measurements for the Golay encoding and decoding for varying filesizes}
 \label{img:golay_time}
 \end{figure}
+The Golay code is a static (23, 12, 7) code where the user is not required to input any parameters. The pre-processing time of the Golay code remains constant and is not a timing overhead, so it can be ignored. The time required for encoding and decoding steps depends on the size of the file that is to be encoded/decoded. For the analysis, we used a PUF response from (TI) Stellaris LM4F120XL LaunchPad Evaluation Kits and the size was varied with the help of offsets, the original size of
+the PUF response was 32 Kilobytes. Figure \ref{img:golay_time} illustrates the encoding and decoding analysis of Golay code with different file sizes as a bar graph.\\
