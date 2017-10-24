@@ -30,6 +30,8 @@ folders the CogniCrypts selects Inter-Hamming Distance. Such a question dialog b
 \label{img:cogni_ui}
 \end{figure}
 
+During the testing of the CongiCrypt interface, a critical bug was discovered and resolved. If the absolute path of the file name exceeded a certain number of characters then the Toolkit crashed with a segmentation fault. The root cause was the generation of white space by calling the C++ API ``string'' that takes \emph{length} as one of the argument. But when the absolute path is very big the length becomes negative and Toolkit throws a runtime error.\\
+
 To further enhance the developer experience and improve the UI a survey was taken and the suggestions of the Java developers were integrated into the CogniCrypt. For details of the survey please refer to the research paper \cite{crypto_icse}.
 
 \section{Interpretation of the results for the extended metrics}
