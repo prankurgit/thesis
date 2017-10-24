@@ -65,6 +65,13 @@ The notion of the console user interface was inspired from Nielsen and Molich's 
 The design of the menu and the (sub-) menus is consistent and recurses itself to make the user interface more intuitive and friendly. Each menu option is written in clear and easy to understand instructions and the menu items are precisely structured to help the user navigate the toolkit with ease. The organization of the menu follows a hierarchical design and a ``back'' function is provided for the user to go to the parent menu. A conceptual depiction of the User Interface is shown in Figure
 \ref{img:gui_design}. The Graphical User Interface (GUI) is subdivided into four parts, the color markers are related to the illustration in \ref{img:gui_design}.
 
+\begin{figure}
+\centering
+\fbox{ \includegraphics[width=0.9\textwidth]{images/toolkit_gui4.png}}
+\caption{Conceptual design of the PUF Toolkit user interface.}
+\label{img:gui_design}
+\end{figure}
+
 \begin{itemize}
 	\item The first part, marked in yellow, is the \emph{header}. It gives the user general information, like the title of the current (sub-) menu or brief instructions.
 	\item The second part of the gui shows the options and functions that the user can choose from the (sub-) menu, the number in front must be input by the user in the last part of the GUI. The conceptual illustration of the part is marked in red and is called as \emph{Menu}.
@@ -72,12 +79,6 @@ The design of the menu and the (sub-) menus is consistent and recurses itself to
 	\item The fourth part of the GUI is for \emph{feedback} and inputs and is marked in green. It presents the user with the actual processing status, or if an error occurred and the type of the error. Also, it contains a user interactive input cursor, a number must be typed in by the user in order to select the options/functions from the second part, Menu of the GUI.
 \end{itemize}
 
-\begin{figure}
-\centering
-\fbox{ \includegraphics[width=0.9\textwidth]{images/toolkit_gui4.png}}
-\caption{Conceptual design of the PUF Toolkit user interface.}
-\label{img:gui_design}
-\end{figure}
 
 The design of the GUI is kept simple without the use of extended graphic components to keep the toolkit compatible with other operating systems like Linux. The UI shows only relevant information depending on the current state of the program and portrays a simple but aesthetic clean design. Error correction and incorrect user input is efficiently handled, all possible inputs are exhausted and depending on the false input, meaningful errors information is displayed to the user, that can be used to
 recover from the erroneous state. Also for all mandatory inputs, a brief guide/help text with examples is shown, the current settings are saved and kept in each (sub-) menu (wherever applicable) to avoid unnecessary redundant input.\\
@@ -217,15 +218,6 @@ int hammingwt(char *data, int size)
 \end{minipage}
 \end{center}
 
-\subsection{Intra-Hamming Distance}
-\label{intra_hd_section}
-This section explains the Intra-Hamming Distance feature which is a comparison of the PUF responses from the same device. As discussed in section \ref{intra_inter_section} we already observed that the PUF responses from the same device are not identical due various factors like voltage fluctuation,  temperature variation, and other aging effects, which gives rise to Intra distance within the responses. ``Intra'' means on the inside, so we evaluate the PUF instance from within by assessing the Hamming Distance within
-these responses. Since the hardware from which the SRAM PUFs are obtained are kept in a single directory, we need only to give the ``input path'' for processing Intra Hamming Distance, the output file option is mandatory to process Intra HD because the results must be stored for all the responses in a file to be viewed later. Along with the Hamming Distance between PUF responses the fractional distance is also saved for better assessment of the PUF instance.\\
-
-A crucial attribute in the ``Switch output-style'' which can be used to change the save format of the output file, there are two possibilities for Intra HD: \emph{compact} and \emph{minimal}. The compact mode takes each file in the directory and recursively compares with all the other files, then the second file is chosen and compared with the all the other except the first one and so on. The fig. \ref{img:4_intra_WP} illustrates this comparison.  The output style ``\emph{compact}'' is the default format style and should be used
-as an output format for a regular text file. Due to the symmetrical behavior of the comparison ( A to B = B to A), we need not exhaust all 1-to-1 possible combinations. So in compact mode first entry from the directory is compared to all the other till the last entry, then the second entry is compared to the third entry till last file, then the third with fourth entry and so on till we are at the last file which need not be compared to any of the above entries since we have already exhausted the
-symmetric comparisons.\\
-
 \begin{figure}
 \centering
 \fbox{ \includegraphics[width=0.9\textwidth]{images/intra_compact.pdf}}
@@ -240,15 +232,41 @@ symmetric comparisons.\\
 \label{img:4_intra_WP}
 \end{figure}
 
+\subsection{Intra-Hamming Distance}
+\label{intra_hd_section}
+This section explains the Intra-Hamming Distance feature which is a comparison of the PUF responses from the same device. As discussed in section \ref{intra_inter_section} we already observed that the PUF responses from the same device are not identical due various factors like voltage fluctuation,  temperature variation, and other aging effects, which gives rise to Intra distance within the responses. ``Intra'' means on the inside, so we evaluate the PUF instance from within by assessing the Hamming Distance within
+these responses. Since the hardware from which the SRAM PUFs are obtained are kept in a single directory, we need only to give the ``input path'' for processing Intra Hamming Distance, the output file option is mandatory to process Intra HD because the results must be stored for all the responses in a file to be viewed later. Along with the Hamming Distance between PUF responses the fractional distance is also saved for better assessment of the PUF instance.\\
+
+A crucial attribute in the ``Switch output-style'' which can be used to change the save format of the output file, there are two possibilities for Intra HD: \emph{compact} and \emph{minimal}. The compact mode takes each file in the directory and recursively compares with all the other files, then the second file is chosen and compared with the all the other except the first one and so on. The fig. \ref{img:4_intra_WP} illustrates this comparison.  The output style ``\emph{compact}'' is the default format style and should be used
+as an output format for a regular text file. Due to the symmetrical behavior of the comparison ( A to B = B to A), we need not exhaust all 1-to-1 possible combinations. So in compact mode first entry from the directory is compared to all the other till the last entry, then the second entry is compared to the third entry till last file, then the third with fourth entry and so on till we are at the last file which need not be compared to any of the above entries since we have already exhausted the
+symmetric comparisons.\\
+
+
 A sample output file with compact style format is shown in Figure \ref{img:4_intra_compact} that evaluates the PUF instance from a single directory using Intra Hamming Distance metric, it also appends the fractional distance information to the file. It consists of a header with general information that shows the configuration (like offsets, device folder etc.) that was used for evaluation and three tables. In the upper right corner of each table the utilized input file is shown and on the left side of the table
 the files, that are compared to the selected input file, are displayed. The Hamming Distance and Fractional Hamming Distance, separated by a tab length are printed in the center (right) of each table. The
 \emph{minimal} output style strips off all the path and filename info and only saves the Hamming Distance values separated by spaces, this type of file format can be used by another metric of the toolkit called Median and Average calculation (section 4.1 \cite{71}) which accepts only files containing plain numbers separated with space. The \emph{View} option can be used to look at the output/result file.\\
+
+%\begin{figure}
+%\centering
+%\fbox{ \includegraphics[width=0.97\textwidth]{images/inter_compact.pdf}}
+%\caption{A sample output showing the visualization of the inter hamming distance \emph{compact} output style format.}
+%\label{img:inter_output}
+%\end{figure}
+
+\begin{figure}
+\centering
+\fbox{ \includegraphics[width=0.97\textwidth]{images/Inter_itr.png}}
+\caption{Exemplary illustration of the working principle of the \emph{compact} mode, for the inter-Hamming distance.}
+\label{img:inter_compact}
+\end{figure}
 
 \subsection{Inter Hamming Distance}
 \label{inter_hd_section}
 Contrary to the comparisons between PUF responses from the same device, Inter Hamming distance evaluates responses from different PUF instance. The co-relation is again based on the same metric Hamming Distance. In this case, the toolkit can simultaneously compare from 2 to 99 PUF instances. All the PUF responses from a specific instance are arranged in a single directory so that means the toolkit can take input paths between 2 and 99 to evaluate different PUF devices. The output
 style in addition to compact and minimal has a \emph{detailed} as an alternative. The compact and minimal style formats are same as Intra Hamming Distance, but the detailed style differs from the compact style that it does not implicitly ignores the duplicate symmetric comparisons and therefore maps out all the permutations and combinations between files of different folders. It should be noted that Inter Hamming Distance metric does not compare PUF responses in the same directory. So
-in detailed mode, the first directory all the responses are compared to all the PUF responses from the remaining 3 to 99, then all files in the second folder are compared to all the files in all the other folders except its own, and so on. Figure \ref{img:inter_output} shows a sample output with 3 input paths, for compact mode we need to ignore the duplicate comparisons so we take the following approach:
+in detailed mode, the first directory all the responses are compared to all the PUF responses from the remaining 3 to 99, then all files in the second folder are compared to all the files in all the other folders except its own, and so on. The output of the Inter-Hamming Distance in compact mode is similar to that of Intra-Hamming Distance as previously shown in Figure \ref{img:4_intra_compact}. For the compact mode we need to ignore the duplicate comparisons and therefore the following approach is
+taken:
+
 \begin{itemize}
 	\item store all the filenames and their corresponding paths from all but last folder in list1.
 	\item store all the filenames and their corresponding paths from all but the first folder in list2.
@@ -256,20 +274,6 @@ in detailed mode, the first directory all the responses are compared to all the 
 	\item remove the second folder objects from list2.
 	\item iterate over list1 (iteration 5-7) and compare the list1 objects with all files of list2.
 \end{itemize}
-
-\begin{figure}
-\centering
-\fbox{ \includegraphics[width=0.97\textwidth]{images/inter_compact.pdf}}
-\caption{A sample output showing the visualization of the inter hamming distance \emph{compact} output style format.}
-\label{img:inter_output}
-\end{figure}
-
-\begin{figure}
-\centering
-\fbox{ \includegraphics[width=0.97\textwidth]{images/Inter_itr.png}}
-\caption{Exemplary illustration of the working principle of the \emph{compact} mode, for the intra-Hamming distance.}
-\label{img:inter_compact}
-\end{figure}
 
 This process is summarized in Figure \ref{img:inter_compact} for three folder input and is generalized for more inputs. We emphasize on the inner workings of the modes because the exact same techniques are used for Jaccard's index that will be discussed later in this chapter.\\
 
@@ -532,7 +536,7 @@ second part of the enrollment of the fuzzy extractor, the LR code is applied to 
 	\caption{Names and types of each element in the data structure \emph{Pattern} for the \emph{PUF Golay Encoder} and a description regarding their purpose.}
 	\label{tab:Golay_pattern}
 	\end{table}
-
+	\vspace*{1\baselineskip}
 	A helper function \emph{SetInputLen} was implemented to aid the encoder functions in calculating the length of the file based on the offsets. This function is called internally before reading and allocating the memory for key and PUF response. It takes two arguments, first the Item structure with initialized data members as filenames and a second integer argument that point to PUF response or secret key, based on these values it calculates the input length as $input\_length =
 	original\_filesize - (Offset\_end + Offset\_beginning)$. \\
 
@@ -548,19 +552,19 @@ second part of the enrollment of the fuzzy extractor, the LR code is applied to 
 	Due to the static nature of the Golay Code (23, 12, 7) it can only correct up to ``three errors'' per ``twelve bits'' of the message. Consequently, this code is not suitable for encoding and large secret files. Extensive testing showed that when the resultant helper data is greater in size compared to the PUF response, the secret file is not recovered completely and via hit and trial the filesize for complete recovery of the secret key was approximated $2340$ bytes. So the recovery of ssh private keys which are
 	typically greater than 3000 bytes is not possible using Golay and the user must choose the BCH fuzzy extractor instead.
 
-	\subsection{Golay Decoder}
-	The next step after encoding the secret key and obtaining the helper data is to recover the key via Golay decoding. The subtext presents the user interface and explains the procedure to restore the securely stored secret key, then the modules and functions of the decoder are illustrated. The discussion then follows the code improvement done to enhance the menu of the toolkit and finally verification strategy to check the integrated changes is shown.\\
-
-	The user interface as shown in Figure \ref{img:golay_decoder_ui} has five main options where the user must input the helper data filename that was generated in the enrollment phase using option one. The other two mandatory options are to set the PUF response filename that is generated from the same device as used in encoding phase and to specify the output key filename where the secret key will be restored. If all the inputs are correctly set then the ``regeneration'' can be performed via option four. The output and status is displayed
-	under the \emph{Result} section of the UI whereas \emph{Settings} subsection of the interface shows the filenames. If the input is incorrect or if the given filename is not present on the disk then a suitable error with details to recover from a faulty state is shown to the user.\\
-	\begin{figure}
+	\begin{figure}[h]
 	\centering
 	\fbox{ \includegraphics[width=0.9\textwidth]{images/golay_decoder_ui.png}}
 	\caption{Conceptual design of the Golay Deocder user interface.}
 	\label{img:golay_decoder_ui}
 	\end{figure}
+	\subsection{Golay Decoder}
+	The next step after encoding the secret key and obtaining the helper data is to recover the key via Golay decoding. The subtext presents the user interface and explains the procedure to restore the securely stored secret key, then the modules and functions of the decoder are illustrated. The discussion then follows the code improvement done to enhance the menu of the toolkit and finally verification strategy to check the integrated changes is shown.\\
 
-	\begin{figure}
+	The user interface as shown in Figure \ref{img:golay_decoder_ui} has five main options where the user must input the helper data filename that was generated in the enrollment phase using option one. The other two mandatory options are to set the PUF response filename that is generated from the same device as used in encoding phase and to specify the output key filename where the secret key will be restored. If all the inputs are correctly set then the ``regeneration'' can be performed via option four. The output and status is displayed
+	under the \emph{Result} section of the UI whereas \emph{Settings} subsection of the interface shows the filenames. If the input is incorrect or if the given filename is not present on the disk then a suitable error with details to recover from a faulty state is shown to the user.\\
+
+	\begin{figure}[h]
 	\centering
 	\fbox{ \includegraphics[width=0.9\textwidth]{images/golay_decoder_functions.pdf}}
 	\caption{Illustration of the Golay Decoder modules and their inter dependency.}
@@ -571,9 +575,7 @@ second part of the enrollment of the fuzzy extractor, the LR code is applied to 
 	function that performs the decoding of the helper data. The usual routines in the ``View'' module are used to set the helper data, PUF response and output recovered key filenames. There is no need to set the offsets and original key filesize in the decoder menu since during the ``enrollment'' phase these details are appended at the end of helper data as part of the `cfg' settings. The ``Calculation'' module is crucial to the decoding operation and which follows the below-mentioned
 	steps:
 	\begin{enumerate}
-		\item The Golay decode function reads the `cfg' settings using a subroutine \emph{read\_infos} that reads the settings appended at the end of the helper data and initializes the corresponding data members of the Item structure. The details of the data members used in Golay decoding are listed in Table \ref{tab:Golay_pattern}. Then based on the settings the input length of the PUF response is calculated as $input\_length = original\_filesize - (Offset\_end + Offset\_beginning)$. The files
-
-			helper data and PUF response are read and stored in the memory and the control is given to the \emph{recoverOriginalData}.
+		\item The Golay decode function reads the `cfg' settings using a subroutine \emph{read\_infos} that reads the settings appended at the end of the helper data and initializes the corresponding data members of the Item structure. The details of the data members used in Golay decoding are listed in Table \ref{tab:Golay_pattern}. Then based on the settings the input length of the PUF response is calculated as $input\_length = original\_filesize - (Offset\_end + Offset\_beginning)$. The files helper data and PUF response are read and stored in the memory and the control is given to the \emph{recoverOriginalData}.
 		\item The next function \emph{recoverOriginalData} performs the decoding of the helper data. It first applies ``Majority Voting'' on the encoded helper data to reverse the effects of the ``Linear Repetition'' done during enrollment phase. With the help of an API \emph{next\_comb} the decoding table for Golay code (23, 12, 7) is calculated that is used to recover the original key.
 		\item After the restoration of the key is complete it is saved in the output key filename by calling a
 			sub-routine \emph{SaveFile} that takes the recovered key (represented in code as a character array) and output filename as arguments and uses standard C file operations to write to the file.
@@ -752,15 +754,11 @@ This marks the completion of the improvement and development phase of the toolki
 \section{CogniCrypt Integration}
 
 To make the C++ source code functions available to the Java runtime they must be interfaced using the Java Native Interface Technology. This section looks at the details of the Java Native interface, most of which is inspired from \cite{jni}, then the code implementation for the JNI is explained. Next, the wrapping procedure of the toolkit as a shared library and packaged as a Java Archive (JAR) to be externally linked by the Java source code is clarified. The next subsections describe the Congicrypt and its clafer model
-along with the XSL coding techniques to generate the Java biolerplate code to assists the Java developers.
+along with the XSL coding techniques to generate the Java biolerplate code to assists the Java developers.\\
 
 \subsection{Java Native Interface}
 Java Native Interface standard and programming techniques are defined by Oracle\textsuperscript{TM} as a native programming interface which allows Java code that runs inside a Java Virtual Machine (VM) to interoperate with applications and libraries written in other programming languages, such as C, C++, and assembly. The JNI does not impose any restriction on the implementation of the underlying Java Virtual Machine so the native code works irrespective of the Virtual machine.\\
 
-To implement the JNI code a lot of help was taken from the tutorial \cite{jni_tutorial}, for each metric of the toolkit an API was designed in accordance with the syntax of the JNI. The text explains the development process for a single metric Hamming Distance, these steps are applied to all the other metrics too. The toolkit.java source file was written containing the native interfaces to the functions in the PUF toolkit. For eg., Hamming weight functionality of the toolkit was available via a
-public \emph{native} Java function \emph{hammingwt} that takes ``file/folder name'', ``output filename'' and ``mode''(file mode or folder mode) as arguments.  These native APIs are the class member functions of the Java \emph{toolkit} class.\\
-
-The compilation of the toolkit Java source was performed resulting in the toolkit.class file. Next, the header file to be included in the JNI C++ source code was generated using the ``javah'' utility. The resultant header file contains the syntactical prototypes of the C++ interface functions that must be implemented. Such a file with hamming distance metric is shown in listing \ref{lst:jni_header}.
 \begin{lstlisting}[frame=single,language=C++,
 commentstyle=\color{magenta},
 backgroundcolor=\color{white},
@@ -770,7 +768,7 @@ basicstyle = \ttfamily \color{black} \footnotesize,
 caption={Auto generated header file showing the syntax for Java Native Interface function declarations} ,
 label={lst:jni_header},
 captionpos=b,
-numbers=left]
+numbers=left][h]
 /* DO NOT EDIT THIS FILE - it is machine generated */
 #include <jni.h>
 /* Header for class jni_toolkit */
@@ -788,10 +786,16 @@ extern "C" {
 JNIEXPORT void JNICALL Java_jni_toolkit_hammingwt
   (JNIEnv *, jclass, jstring, jstring, jboolean);
 \end{lstlisting}
+\vspace*{1\baselineskip}
+
+To implement the JNI code a lot of help was taken from the tutorial \cite{jni_tutorial}, for each metric of the toolkit an API was designed in accordance with the syntax of the JNI. The text explains the development process for a single metric Hamming Distance, these steps are applied to all the other metrics too. The toolkit.java source file was written containing the native interfaces to the functions in the PUF toolkit. For eg., Hamming weight functionality of the toolkit was available via a
+public \emph{native} Java function \emph{hammingwt} that takes ``file/folder name'', ``output filename'' and ``mode''(file mode or folder mode) as arguments.  These native APIs are the class member functions of the Java \emph{toolkit} class.\\
+
+The compilation of the toolkit Java source was performed resulting in the toolkit.class file. Next, the header file to be included in the JNI C++ source code was generated using the ``javah'' utility. The resultant header file contains the syntactical prototypes of the C++ interface functions that must be implemented. Such a file with hamming distance metric is shown in listing \ref{lst:jni_header}.\\
 
 The \emph{Java\_jni\_toolkit\_hammingwt} interface first parses the arguments that it obtained from the Java source code. It takes the jstring arguments file/folder name and output filename and converts them into standard C character array using the standard JNI conversion function \emph{GetStringUTFChars}. The jboolean argument is implicitly an integer so it does not require any transformation. The code then initializes the ``Item'' data structure with these values and calls the \emph{HammingWeight(Item *, int )} function of the toolkit to compute the hamming distance of the file or the entire folder based on the value of $mode$.\\ 
 
-The \emph{ErrorMessages} routine of the toolkit is used to inform the user about invalid inputs and faulty toolkit states. Since these inputs are passed from the Java source as strings, the Java developers can check at their end for the authenticity of the file/folder names and their path on the machine. Other metrics of the PUF toolkit like ``entropy'', ``median and average'' etc. are implemented similarly in the Java source and C++ source code.\\
+The \emph{ErrorMessages} routine of the toolkit is used to inform the user about invalid inputs and faulty toolkit states. Since these inputs are passed from the Java source as strings, the Java developers can check at their end for the authenticity of the file/folder names and their path on the machine. Other metrics of the PUF toolkit like ``entropy'', ``median and average'' etc. are implemented similarly in the Java source and C++ source code.
 
 \subsubsection{Packaging in Java Archive}
 The C++ JNI source code along with the entire PUF toolkit must be compiled and linked as a shared library since the Java source code calls the native functions from the shared library or shared object. Before packaging the shared library and other Java-related class files in a JAR file the toolkit must be compiled as a shared object file. This is achieved by compiling and linking the PUF toolkit with the
@@ -809,7 +813,7 @@ CogniCrypt was implemented as an Eclipse Plugin to support the Java developers t
 	\item Analyzes the Java code and alerts for insecurely used cryptographic APIs.
 \end{itemize}
 
-CogniCrypt supports various crypto tasks and for the PUF toolkit to be made available on the list, a new task ``Evaluation and Assessment of PUF responses'' was implemented. After selecting the task a few high-level questions like if the developer wants to evaluate PUF response from a single or multiple devices as shown in Figure \ref{img:cogni_ques}, must be answered by the developers.\\
+CogniCrypt supports various crypto tasks and for the PUF toolkit to be made available on the list, a new task ``Evaluation and Assessment of PUF responses'' was implemented. After selecting the task a few high-level questions like if the developer wants to evaluate a single PUF response or multiple PUF responses, as shown in Figure \ref{img:cogni_ques}, must be answered.\\
 
 \begin{figure}[h]
 \centering
