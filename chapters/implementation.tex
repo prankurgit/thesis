@@ -1,16 +1,18 @@
-This chapter explains about the major tasks implemented in the thesis and new contributions made to the PUF Toolkit. The first part of the chapter briefly explains about the current PUF toolkit implementation, without delving much into the details. This is followed by an explanation of the Hamming Distance Menu which was implemented as a new menu item combining the Intra- and Inter-Hamming Distance under one menu. The third part talks about the new modifications that were done to the toolkit in the form of BCH fuzzy extractor encoder and decoder integration, which were previously not a part of the main toolkit and presented as separate executables
-with separate menu items. We then go on to explain the Golay code implementation both the decoder and encoder and explain their integration in the toolkit as a distinct menu item. Then the other modifications like the addition of \emph{'offsets from beginning and end', error codes} and other intricate code development changes are presented together as one section. After this, a new metric called \emph{Jaccard Index} is introduced and its implementation along with \emph{Intra- and
+This chapter explains about the major tasks implemented in the thesis and new contributions made to the PUF Toolkit. The first part of the chapter briefly explains about the current PUF toolkit implementation, without delving much into the details. This is followed by an explanation of the Hamming Distance Menu which was implemented as a new menu item combining the already implemented Intra- and Inter-Hamming Distance under one menu. The third part talks about the new modifications that were
+done to the toolkit in the form of BCH fuzzy extractor encoder and decoder integration, which were previously not a part of the main toolkit and were developed as separate executables
+with separate menu items. We then go on to explain the Golay code implementation both the encoder and decoder and explain their integration in the toolkit as a distinct menu item. Then other modifications like the addition of \emph{'offsets from beginning and end', error codes} and other intricate code development changes are presented together as one section. After this, a new metric called \emph{Jaccard Index} is introduced and its implementation along with \emph{Intra- and
 Inter-Jaccard Index} is explained in detail.\\
 
-The final two sections deal with CogniCrypt details and the Java Native Interface (JNI), they first touch upon the basics of JNI
-wrapper and the functioning of JNI with shared libraries packaged as JAR files that are accessible to Java compiler as an external library. Finally, we describe the clafer model of the CogniCrypt and how it assists users and Java developers, without any previous knowledge about cryptography, to select a strong PUF based secure key evaluation algorithm based on the questions asked by the CogniCrypt. In the end of this last section, we also talk about the XSL model of the CogniCrypt that builds on
-the clafer model to generate a boilerplate Java code to help the Java developer by presenting him/her with a sample use case of the Java code implementation showing a usage of the PUF evaluation algorithms that are robust and flawless.\\
+The final two sections deal with the Java Native Interface (JNI) and CogniCrypt opensource library, they first touch upon the basics of JNI
+wrapper and the functioning of JNI with shared libraries that are packaged as a JAR file and made are accessible to Java compiler as an external library. Finally, we describe the clafer model of the CogniCrypt and how it assists the users and Java developers (without any previous knowledge about cryptography) to select a strong PUF-based secure key evaluation algorithm derived from the answeres to the questions asked by the CogniCrypt. In the end of the last section, we also talk about the XSL
+model of the CogniCrypt that is built on
+the clafer model to generate a boilerplate Java code to help the Java developer by presenting him/her with a sample use case of the Java code implementation showing a secure and flawless usage of PUF evaluation algorithms.\\
 
-For the implementation, the ISO standardize programming language C++ was chosen. This selection was made based on the efficient and general purpose features provided by C++. Apart from the object-oriented and generic programming features, C++ has a high abstraction level and the compilation and code development can be done on diverse systems. The implementations are dissociated from a specific hardware to support a wide range of systems and applications. This makes the toolkit easier
-to extend and conform to a particular hardware for next iterations. The JNI framework support native calls and the wrapper is written in Java, for clafer model we use Javascript and json files along with the .cfr clafer extension modeling language \cite{clafer} and XSL model to generate sample Java boilerplate code is written in XSL.\\
+For the implementation, the ISO standard programming language C++ was chosen. This selection was made based on the efficient and general purpose features provided by C++. Apart from the object-oriented and generic programming features, C++ has a high abstraction level and the compilation and code development can be done on diverse systems. The implementations are dissociated from a specific hardware to support a wide range of systems and applications. This makes the toolkit easier
+to extend and conform to a particular hardware for next iterations. The JNI framework support native calls and the wrapper is written in Java, for clafer model we use Javascript and json files along with the Clafer extension modeling language \cite{clafer}. The code to generate a sample Java boilerplate code is written in XSL.\\
 
 \section{PUF Toolkit}
-The current implementation of the PUF toolkit was done and presented in the thesis \cite{71}. The main aim of the toolkit is to evaluate various PUF response based on well-established metrics and thereby helping researchers and designers to gain useful insights into the properties and behavior of PUF responses. The toolkit implements the following list of metrics:
+The original version of the PUF toolkit was implemented and presented in the thesis \cite{71}. The main aim of the original toolkit was to evaluate various PUF responses based on well-established metrics and thereby helping researchers and designers to gain useful insights into the properties and behavior of PUF responses. The toolkit implemented the following list of metrics:
 
 \begin{itemize}
 	\item (Shannon) Entropy
@@ -21,9 +23,9 @@ The current implementation of the PUF toolkit was done and presented in the thes
 	\item Median and average
 \end{itemize}
 
-These metrics are thoroughly explained in Sebastian's Master thesis \cite{71}, so we take the liberty to not go into the detail of explaining each metric here again. It must also be noted that there are other metrics and definitions that use identical concepts and/or apply the metrics in a different way to generalize the correlation between different PUF instances and their responses. More exhaustive and comprehensive information related to these metrics and definitions for PUFs can be found in \cite{60,64,24,61}.\\
+These metrics are thoroughly explained in Sebastian's Master thesis \cite{71}, so we take the liberty of not explaining the details of each metric here again. It must also be noted that there are other metrics and definitions that use identical concepts and/or apply the metrics in a different way to generalize the correlation between different PUF instances and their responses. More exhaustive and comprehensive information related to these metrics and definitions for PUFs can be found in \cite{60,64,24,61}.\\
 
-Apart from the above-mentioned metrics implementation, the PUF based secure key storage is implemented already, using BCH encoder and Decoder in two separate executables. The structure and the User design used in these two executables is similar to the PUF toolkit and to avoid confusion we shall refer to them as \emph{PUF-BCH encoder} and \emph{PUF-BCH decoder}.\\
+Apart from the above-mentioned metrics, the PUF-based secure key storage fuzzy extractor is already implemented, using BCH encoder and Decoder as two separate executables. The User design used and the data structures used in these two executables are similar to the ones used in PUF toolkit.\\
 
 \subsection{User Design}
 
@@ -58,11 +60,11 @@ The notion of the console user interface was inspired from Nielsen and Molich's 
 \bottomrule
 \end{tabular}
 \end{center}
-\caption{The nine design guidelines according to \cite{67} and the effect on the UI design.}
+\caption{The nine design guidelines according to \cite{67} and their effect on the UI design.}
 \label{tab:guidline_design}
 \end{table}
 
-The design of the menu and the (sub-) menus is consistent and recurses itself to make the user interface more intuitive and friendly. Each menu option is written in clear and easy to understand instructions and the menu items are precisely structured to help the user navigate the toolkit with ease. The organization of the menu follows a hierarchical design and a ``back'' function is provided for the user to go to the parent menu. A conceptual depiction of the User Interface is shown in Figure
+The design of the menu and the sub-menus is consistent and recurses itself to make the user interface more intuitive and friendly. Each menu option is written in clear and easy to understand instructions and the menu items are precisely structured to help the user to navigate the toolkit with ease. The organization of the menu follows a hierarchical design and a ``back'' function is provided for the user to go to the parent menu. A conceptual depiction of the User Interface is shown in Figure
 \ref{img:gui_design}. The Graphical User Interface (GUI) is subdivided into four parts, the color markers are related to the illustration in \ref{img:gui_design}.
 
 \begin{figure}
@@ -72,20 +74,6 @@ The design of the menu and the (sub-) menus is consistent and recurses itself to
 \label{img:gui_design}
 \end{figure}
 
-\begin{itemize}
-	\item The first part, marked in yellow, is the \emph{header}. It gives the user general information, like the title of the current (sub-) menu or brief instructions.
-	\item The second part of the gui shows the options and functions that the user can choose from the (sub-) menu, the number in front must be input by the user in the last part of the GUI. The conceptual illustration of the part is marked in red and is called as \emph{Menu}.
-	\item Below the Menu part there is \emph{settings and results} that are marked in blue. It shows the current configuration and provides the user with essential information that is vital for the actual computation of the main function. It also shows the output after the computation is performed in the result part of this section.
-	\item The fourth part of the GUI is for \emph{feedback} and inputs and is marked in green. It presents the user with the actual processing status, or if an error occurred and the type of the error. Also, it contains a user interactive input cursor, a number must be typed in by the user in order to select the options/functions from the second part, Menu of the GUI.
-\end{itemize}
-
-
-The design of the GUI is kept simple without the use of extended graphic components to keep the toolkit compatible with other operating systems like Linux. The UI shows only relevant information depending on the current state of the program and portrays a simple but aesthetic clean design. Error correction and incorrect user input is efficiently handled, all possible inputs are exhausted and depending on the false input, meaningful errors information is displayed to the user, that can be used to
-recover from the erroneous state. Also for all mandatory inputs, a brief guide/help text with examples is shown, the current settings are saved and kept in each (sub-) menu (wherever applicable) to avoid unnecessary redundant input.\\
-
-Rigorously complying with the standardized design guidelines for the toolkit, resulted in a effective and intuitive console user interface.
-This in turn decisively supports developers and researchers in the PUFs responses evaluation.\cite{71}
-
 \begin{figure}
 \centering
 \fbox{ \includegraphics[width=0.97\textwidth, height=\textwidth, keepaspectratio]{images/PUF_Toolkit.pdf}}
@@ -94,28 +82,41 @@ This in turn decisively supports developers and researchers in the PUFs response
 \label{img:puf_menu}
 \end{figure}
 
+\begin{itemize}
+	\item The first part, marked in yellow, shows the \emph{header} part of the menu. It gives the user general information, like the title of the current menu/sub-menu or brief instructions.
+	\item The second part of the GUI shows the options and functions that the user can choose from the menu/sub-menu; the number in front of the option must be input by the user. The conceptual illustration of the part is marked in red and is called as \emph{Menu}.
+	\item Below the Menu part there is \emph{settings and results} that are marked in blue. It shows the current configuration and provides the user with essential information that is vital for the actual computation of the main function. It also shows the output after the computation is performed in the result part of this section.
+	\item The fourth part of the GUI is for \emph{feedback} and inputs and is marked in green. It presents the user with the actual processing status, or if an error occurred and the type of the error. Additionally, it contains a user interactive input cursor; where a number must be typed in by the user in order to select the options/functions of the toolkit.
+\end{itemize}
+
+
+The design of the GUI is kept simple without the use of extended graphic components to keep the toolkit compatible with other operating systems like Linux. The UI shows only relevant information depending on the current state of the program and portrays a simple but an aesthetically clean design. Error correction and incorrect user input is efficiently handled, all possible inputs are rigorously checked and depending on the false input, meaningful error information is displayed to the user, that can be used to
+recover from the erroneous state. Also for all mandatory inputs, a brief guide/help text with examples is shown, the current settings are saved and kept in each sub-menu (wherever applicable) to avoid unnecessary redundant input by the user.\\
+
+By rigorously complying to the standardized design guidelines for the toolkit, resulted in a effective and intuitive console user interface.
+This in turn decisively supports developers and researchers in the evaluation of PUFs responses.\cite{71}
+
+
 \section{Hamming Distance Menu}
 \label{Hamming_Distance_menu}
 The Hamming distance functionality was added to and integrated as part of this Master thesis. Hamming Distance between two ``bit strings'' of the same length is defined as the number of the bits that differ amongst the two binary bit strings. For eg., if we have two string \emph{A = 1100} and \emph{B = 1010} then the Hamming Distance between them would be ``\emph{two}'', since the bits at second and third position (starting from the left) differ between these two strings. The implementation of
-this functionality is straightforward, using the in-built \emph{bitwise XOR} operation of the ISO C++ standard and then counting the number of ones in the resulting string, which is nothing but calling the Hamming distance function on the resultant string.\\
+this functionality is straightforward; by using the in-built \emph{bitwise XOR} operation of the ISO C++ standard and then counting the number of ones in the result string, which is achieved by calling the PUF Toolkit's Hamming weight function on the resultant string.\\
 
-As depicted in Figure \ref{img:gui_design} above there are other options like \emph{Intra-Hamming Distance} and \emph{Inter-Hamming Distance} in the Hamming Distance Menu, that are organized later as subsections where we explain about the different modes and other options and plausible input values, the user can select from. For now, we direct our attention at the other menu items.\\
+As depicted in Figure \ref{img:gui_design} there are other options like \emph{Intra-Hamming Distance} and \emph{Inter-Hamming Distance} in the Hamming Distance Menu, that are organized later as subsections where we explain about the different modes and other options and plausible input values the user can give.\\
 
-The first menu item is related to the \emph{\textbf{Offsets}} that are mandatory for the user to input and the first query that must be answered after the toolkit is run. Since the PUF toolkit is designed for evaluation of PUF responses that are in binary format and not all the data in PUF response binary file is useful for evaluation, the user can manually select how much he/she desires to skip the data (in bytes) from the beginning and the end of the file using this \emph{Offsets} option.
-For example, the first $400$ bytes of the PUF response of a (TI) Stellaris LM4F120XL Launchpad Evaluation Kit are used during the booting process and are not random, so they are irrelevant in PUF responses evaluation. This kind of device specific behavior requires suitable handling to ensure valid results.\\
+The first menu item is related to the \emph{\textbf{offset functionality}} that is a mandatory option which must be set by the user before proceeding on to the other options of the toolkit. The PUF toolkit is designed for the evaluation of PUF responses that are in binary format where not all the data in PUF response binary file is useful for evaluation. So a functionality is provided to the user through which he/she can manually select how much data(in bytes) he/she desires to skip from the beginning and from the end of the file.
+For example, the first $400$ bytes of the PUF response of a (TI) Stellaris LM4F120XL Launchpad Evaluation Kit are used during the booting process and are not random, so they are irrelevant in evaluating the PUF responses and must be skipped. This kind of device specific behavior requires suitable handling to ensure valid results.\\
 
-Consequently, the \emph{Offset} determines the selection range of the bytes from the PUF response for calculation and also establishing the actual \emph{length} of the response. For eg. if a PUF response is 32784 bytes long and we skip 400 from the beginning and 200 from the end, the actual length becomes $32784-600 = 32184$ bytes and the processing start from the $401^{th}$ byte till $32184^{th}$ byte.\\
+Consequently, the \emph{offset} determines the selection range of the bytes from the PUF response for calculation and also establishing the actual \emph{length} of the response. Eg., if a PUF response is 32784 bytes long and we skip 400 from the beginning and 200 from the end, the actual length becomes $32784-600 = 32184$ bytes and the processing start from the $401^{st}$ byte till $32184^{th}$ byte.\\
 
-The result of the Hamming Distance between two PUF responses can be optionally stored in an output file that is set using the option \emph{two}. This is not mandatory if we are evaluating only two files but in cases of Inter/Intra-Hamming Distance this option becomes mandatory. Another functionality added to the Hamming Distance and other Functions in the toolkit as well is that of the Fractional Distance. \newline
-$\S$\emph{Defintion}: We define \emph{Fractional Hamming Distance} as the Hamming Distance between two PUF
+The result of the Hamming Distance between two PUF responses can be optionally stored in an output file that can be set using the option \emph{two}. This is not mandatory if we are evaluating only two files but in cases of Inter/Intra-Hamming Distance this option becomes mandatory. Another functionality added to the Hamming Distance and other Functions in the toolkit as well is that of the Fractional Distance.\\
+
+\textbf{$\S$Defintion}: We define \emph{Fractional Hamming Distance} as the Hamming Distance between two PUF
 responses divided by their length. For example, if Hamming Distance between two PUF responses each of length 31784 bytes is 10, then their Fractional Hamming Distance would be $ 10 / 31784 = 0.000314624$ (NOTE: the toolkit displays the fractional Hamming distance rounded off to 9 digits after decimal).\\
 
-The Hamming Distance can be calculated using option \emph{three} that will ask for the two PUF responses binary filenames and if the path and filenames are correct, the results will be displayed in the fourth part of the GUI. If the output filename was given before then the result is also stored in that file and can be viewed using the option \emph{seven}.\\
+The Hamming Distance can be calculated using option \emph{three} where the user must input the names and paths of two PUF responses; if the path and filenames are correct, then the result will be displayed in the fourth part of the GUI. If the output filename was set before then the result is also stored in that file and can be viewed using the option \emph{seven}.\\
 
-In order to understand the code flow and working of the Hamming distance function, it is vital to look at the structure \emph{Item} and its data members. This structure is used by other menus in the toolkit to share the current settings and global configurations like Offsets, filenames, paths etc. and thereby reducing the user's effort and memory load. Table \ref{table:item} only highlights the data members and their purpose that are relevant to Hamming Distance Menu. The other data
-members, for the time being, are not shown and will be discussed in relevant sections.\\
-
-\begin{table}[!ht]
+\begin{table}[t]
 	\begin{center}
 		\begin{tabular}{ll}
 			\toprule
@@ -154,11 +155,9 @@ members, for the time being, are not shown and will be discussed in relevant sec
 	\label{table:item}
 \end{table}
 
-The four lines of code form the basic building block for Hamming distance as shown in listing \ref{lst:hammingdt}. First the data is read from the two input PUF files into two arrays of size \emph{dsize} where dsize is equal to the length of the files after applying the Offsets, then as depicted in lines 3-5 of listing \ref{lst:hammingdt} each byte of the data are bitwise XORed and the result is stored in a third array of same length. So the resultant data array contains
-\emph{ones} in the position where bits differ in the two PUF responses. We then just need to count the number of ones in the XORed result.
-This is done by calling the function \emph{hammingwt} abbreviated in the code for Hamming Weight.\\
+In order to understand the code flow and working of the Hamming distance function, it is vital to look at the structure \emph{Item} and its data members. This structure is used by other menus in the toolkit to share the current settings and global configurations like Offsets, filenames, paths etc. and thereby reducing the user's effort and memory load. Table \ref{table:item} only highlights the data members and their purpose that are relevant to Hamming Distance Menu.\\
 
-\begin{center}
+\begin{center}[]
 \begin{minipage}{0.7\textwidth}
 \begin{lstlisting}[frame=single,language=C++,
 commentstyle=\color{green},
@@ -182,9 +181,9 @@ numbers=left]
 \end{minipage}
 \end{center}
 
-Hamming Weight is one of the essential function of the toolkit and it is also referred to by other functions it's important that we list the code here. Listing \ref{lst:hammingwt} shows the Hamming Weight function as implemented in the toolkit, it takes the data array as a character pointer and its size as arguments. The for loop in lines 5-14 takes each byte of the data and then bitwise ANDs with each bit position (total 8 bit-positions) to count the total occurrences of ones in the byte. This process is
-iterated for the entire length ``size'' of the array, each time incrementing the counter ``wt'' whenever a one is encountered and finally, the Hamming weight is returned to the caller function.\\
-
+The four lines of code form the basic building block for Hamming distance as shown in listing \ref{lst:hammingdt}. First the data is read from the two input PUF files into two arrays of size \emph{dsize} where dsize is equal to the length of the files after applying the Offsets, then as depicted in lines 3-5 of listing \ref{lst:hammingdt} each byte of the data are bitwise XORed and the result is stored in a third array of same length. So the resultant data array contains
+\emph{ones} in the position where bits differ in the two PUF responses. We then just need to count the number of ones in the XORed result.
+This is done by calling the function \emph{hammingwt} abbreviated in the code for Hamming Weight.\\
 
 \begin{center}
 \begin{minipage}{0.7\textwidth}
@@ -218,6 +217,9 @@ int hammingwt(char *data, int size)
 \end{minipage}
 \end{center}
 
+Hamming Weight is one of the essential function of the toolkit and it is also referred to by other functions it's important that we list the code here. Listing \ref{lst:hammingwt} shows the Hamming Weight function as implemented in the toolkit, it takes the data array as a character pointer and its size as arguments. The for loop in lines 5-14 takes each byte of the data and then bitwise ANDs with each bit position (total 8 bit-positions) to count the total occurrences of ones in the byte. This process is
+iterated for the entire length ``size'' of the array, each time incrementing the counter ``wt'' whenever a one is encountered and finally, the Hamming weight is returned to the caller function.\\
+
 \begin{figure}
 \centering
 \fbox{ \includegraphics[width=0.9\textwidth]{images/intra_compact.pdf}}
@@ -225,19 +227,19 @@ int hammingwt(char *data, int size)
 \label{img:4_intra_compact}
 \end{figure}
 
-\begin{figure}
+\subsection{Intra-Hamming Distance}
+\label{intra_hd_section}
+This section explains the Intra-Hamming Distance feature which is a comparison of the PUF responses from the same device. As discussed in section \ref{intra_inter_section} we already observed that the PUF responses from the same device are not identical due various factors like voltage fluctuation,  temperature variation, and other aging effects, which gives rise to intra distance within the responses. ``Intra'' means on the inside, so we evaluate the PUF instance from within by assessing the Hamming Distance within
+these responses. Since the hardware from which the SRAM PUFs are obtained are kept in a single directory, we need only to give the ``input path'' for processing Intra-Hamming Distance, the output file option is mandatory to process Intra-Hamming Distance because the results must be stored for all the responses in a file to be viewed later. Along with the Hamming Distance between PUF responses the fractional distance is also saved for better assessment of the PUF instance.\\
+
+\begin{figure}[]
 \centering
 \fbox{ \includegraphics[width=0.4\textwidth]{images/Intra.png}}
 \caption{Exemplary illustration of the working principle of the \emph{compact} mode, for the Intra-Hamming Distance.}
 \label{img:4_intra_WP}
 \end{figure}
 
-\subsection{Intra-Hamming Distance}
-\label{intra_hd_section}
-This section explains the Intra-Hamming Distance feature which is a comparison of the PUF responses from the same device. As discussed in section \ref{intra_inter_section} we already observed that the PUF responses from the same device are not identical due various factors like voltage fluctuation,  temperature variation, and other aging effects, which gives rise to intra distance within the responses. ``Intra'' means on the inside, so we evaluate the PUF instance from within by assessing the Hamming Distance within
-these responses. Since the hardware from which the SRAM PUFs are obtained are kept in a single directory, we need only to give the ``input path'' for processing Intra-Hamming Distance, the output file option is mandatory to process Intra-Hamming Distance because the results must be stored for all the responses in a file to be viewed later. Along with the Hamming Distance between PUF responses the fractional distance is also saved for better assessment of the PUF instance.\\
-
-A crucial attribute in the ``Switch output-style'' which can be used to change the save format of the output file, there are two possibilities for Intra-Hamming Distance: \emph{compact} and \emph{minimal}. The compact mode takes each file in the directory and recursively compares with all the other files, then the second file is chosen and compared with the all the other except the first one and so on. The fig. \ref{img:4_intra_WP} illustrates this comparison.  The output style ``\emph{compact}'' is the default format style and should be used
+A crucial attribute in the ``Switch output-style'' which can be used to change the save format of the output file, there are two possibilities for Intra-Hamming Distance: \emph{compact} and \emph{minimal}. The compact mode takes each file in the directory and recursively compares with all the other files, then the second file is chosen and compared with the all the other except the first one and so on. Figure \ref{img:4_intra_WP} illustrates this comparison.  The output style ``\emph{compact}'' is the default format style and should be used
 as an output format for a regular text file. Due to the symmetrical behavior of the comparison ( A to B = B to A), we need not exhaust all 1-to-1 possible combinations. So in compact mode first entry from the directory is compared to all the other till the last entry, then the second entry is compared to the third entry till last file, then the third with fourth entry and so on till we are at the last file which need not be compared to any of the above entries since we have already exhausted the
 symmetric comparisons.\\
 
@@ -282,7 +284,7 @@ more files.\\
 
 
 \section{Fuzzy extractor}
-As discussed in section \ref{fuzzy_section} the PUF based secure key storage uses Fuzzy Extractor technique that is divided into three phases \emph{(i)Pre-evaluation}, \emph{(ii) Enrollment} and \emph{(iii) Reconstruction}. The second and third phase follow a separate implementation of the respectively dedicated functionalities, according to \cite{10}. The enrollment phase is presented with the help of an Entity Relation Diagram. Similar to BCH encoder
+As discussed in section \ref{fuzzy_section} the PUF-based secure key storage uses Fuzzy Extractor technique that is divided into three phases \emph{(i)Pre-evaluation}, \emph{(ii) Enrollment} and \emph{(iii) Reconstruction}. The second and third phase follow a separate implementation of the respectively dedicated functionalities, according to \cite{10}. The enrollment phase is presented with the help of an Entity Relation Diagram. Similar to BCH encoder
 section we examine the changes required during merging with the toolkit in the subsection ``Integration Changes'' and finally talk about the verification steps taken to assert the correctness of the merged decoder functionality in the toolkit.\\UF BCH encoder which will be discussed first followed by the Reconstruction phase, that is
 realized by the PUF BCH Decoder implementation. We will not go into the details of the actual implementation of the encoder and decoder since they are already well documented in \cite{71}, but rather explain the changes made to integrate these functionalities in the PUF toolkit.\\
 
@@ -404,7 +406,7 @@ second part of the enrollment of the fuzzy extractor, the LR code is applied to 
 	We now go on to discuss the second phase of the fuzzy extractor i.e.``regeneration'' that uses PUF BCH Decoder as an essential element to recover the secret key that was encoded in the first phase with the help of the generated helper data and a PUF response from the same device as used in the enrollment phase. Again we do not indulge in the exact implementation details since they are presented in great detail in \cite{71}. This section looks at the user interface of the BCH decoder where the possible inputs and their meaning is discussed, then a summary of the main modules involved in the BCH decoder
 	is presented with the help of an Entity Relation Diagram. Similar to BCH encoder section we examine the changes required during merging with the toolkit in the subsection ``Integration Changes'' and finally talk about the verification steps taken to assert the correctness of the merged decoder functionality in the toolkit.\\
 
-	The decoder implementation is also the extension of the Morelos-Zaragoza's code \cite{69} but before applying the decoding functionality, the LR encoded helper data received from the first phase is processed in the majority vote module of the fuzzy extractor as shown in Figure \ref{img:4_MV_codewords}. This counteracts the linear repetition introduced in the LR coding module of the ``enrollment phase''. The fig. \ref{img:4_MV_codewords} shows this operation on the helper data received from fig. \ref{img:4_LR_HD}, notice that the PUF
+	The decoder implementation is also the extension of the Morelos-Zaragoza's code \cite{69} but before applying the decoding functionality, the LR encoded helper data received from the first phase is processed in the majority vote module of the fuzzy extractor as shown in Figure \ref{img:4_MV_codewords}. This counteracts the linear repetition introduced in the LR coding module of the ``enrollment phase''. Figure \ref{img:4_MV_codewords} shows this operation on the helper data received from Figure \ref{img:4_LR_HD}, notice that the PUF
 	response has some bits changed due to the various environmental factors (like temperature change and voltage fluctuation) that introduce intra distance between the PUF responses from the same device. After the Majority Vote operation the BCH decoder recovers the configuration settings \emph{cfg} that are appended to the end of the helper data to satisfy correct boundary conditions as seen in the BCH encoding phase. Usually, the BCH(n,k,d) can correct up to $t$ bit flip errors though along with Majority
 	Voting and BCH decoding the fuzzy extractor can restore the original input secret key.\\
 
@@ -513,7 +515,7 @@ second part of the enrollment of the fuzzy extractor, the LR code is applied to 
 	\multicolumn{1}{l}{\textbf{Name}} & \multicolumn{1}{c}{\textbf{Type}} & \multicolumn{1}{c}{\textbf{Description}}\\
 	\midrule
 	\hline
-	\emph{errorCode} & int & \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Defines the utilized error correction code (0 = Golay, 1 = BCH)\end{tabular}} \\
+	\emph{errorCode} & int & \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Defines the utilized error-correction code (0 = Golay, 1 = BCH)\end{tabular}} \\
 
 	\emph{Golay\_BCH\_length} & int & \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Defines the \emph{length} of one code word, for Golay and BCH \end{tabular}}\\
 
