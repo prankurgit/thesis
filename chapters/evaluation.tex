@@ -18,7 +18,7 @@ The user interface should be intuitive and easy-to-use which ensures user-satisf
 		the program from running into undesired state and crashes.
 \end{itemize}
 
-\subsection{CogniCrypt User interface}
+\subsection{CogniCrypt User Interface}
 The CongniCrypt user interface consists of dialog boxes that ask simple questions to help the Java developers call the functions of the toolkit.
 The above-mentioned design guidelines were considered for the development of the UI of CogniCrypt. They not only help to implement a secure Java code for the invocation of the toolkit functions but also assists the developers in getting familiar with the pattern of the toolkit and structure of the PUF responses. For eg. One major question asked by the CogniCrypt to the developer is if he/she wants to evaluate from a single PUF instance or multiple PUF instances (folders), for multiple
 folders the CogniCrypts selects Inter-Hamming Distance. Such a question dialog box is represented in Figure \ref{img:cogni_ui} which shows the simple and intuitive design of the User Interface.\\
@@ -26,7 +26,7 @@ folders the CogniCrypts selects Inter-Hamming Distance. Such a question dialog b
 \begin{figure}
 \centering
 \fbox{ \includegraphics[width=0.97\textwidth]{images/Cogni.png}}
-\caption{User interface of the CogniCrypt, represented as a dialog box that asks simple questions for the evaluation of the PUF metrics.}
+\caption{User Interface of the CogniCrypt, represented as a dialog box that asks simple questions for the evaluation of the PUF metrics.}
 \label{img:cogni_ui}
 \end{figure}
 
@@ -64,15 +64,15 @@ To further enhance the developer experience and improve the UI a survey was take
 \end{table}
 
 \section{Interpretation of the results for the extended metrics}
-The interpretation for the core metrics that were implemented already in the toolkit is explained in detail in \cite{71}. This section presents the interpretation of the extended metrics and also touches upon the hamming weight interpretation since it is a base metric upon which other PUF evaluation metrics are built.
+The interpretation for the core metrics that were implemented already in the toolkit is explained in detail in \cite{71}. This section presents the interpretation of the extended metrics and also touches upon the Hamming weight interpretation since it is a base metric upon which other PUF evaluation metrics are built.
 \begin{itemize}
-	\item \textbf{Hamming Weight:} This metric was introduced in section \ref{Hamming_Distance_menu} and is used to ensure that a PUF response is not biased towards 0 or 1. For the result to be unbiased, the PUF response evaluation for the Fractional hamming weight metric between two files should be as close to 50\% as possible. Slight deviations are acceptable.
+	\item \textbf{Hamming Weight:} This metric was introduced in section \ref{Hamming_Distance_menu} and is used to ensure that a PUF response is not biased towards 0 or 1. For the result to be unbiased, the PUF response evaluation for the Fractional Hamming weight metric between two files should be as close to 50\% as possible. Slight deviations are acceptable.
 	\item \textbf{Jaccard Index:} This metric is also sometimes referred to as Jaccard similarity coefficient. As its alternate name suggests the Jaccard index measures similarity between two files so the Jaccard Index should be as close to $1$ or the $Jaccard Index * 100$ should be as close to 100\% as possible for two files to be similar.
 	\item \textbf{Intra-Jaccard Index:} The general use case for evaluation of the Intra-Jaccard Index is when evaluating PUF responses from a single PUF instance with the same particular challenge. Ideally, the PUF responses from the same PUF instance and same challenge must be identical, but errors are introduced due to external factors like operating temperature change, voltage fluctuation etc. The PUF responses from the same PUF instance are stored in a particular directory and evaluation
 		for intra-Jaccard Index is done for this entire folder. The result for each comparison should be close to $1$ which establishes similarity between files. The fractional Jaccard Index which is $Jaccard Index / filesize$ should be close to zero, considering the PUF response sizes are much greater than one byte. Note, slight deviations are tolerable. Another use case for this metric is to gain insight in the uniqueness of the PUF responses from a single PUF instance when
 		it is stimulated with different PUF challenges. In such a case the resultant PUF responses should be different from each other depending on the PUF challenge. Note this evaluation only holds ground if the PUF instance offers a challenge space that is greater than one. In this case the Jaccard Similarity Index should be around $0.5$ (or 50\%) which establishes exclusiveness amongst PUF responses.
 	\item \textbf{Inter-Jaccard Index:} Contrary to the Intra-Jaccard Index where evaluation of the PUF responses from a single device is done, Inter-Jaccard Index evaluates PUF responses from multiple devices. As stated above each PUF instance stores the responses in a specific directory, so multiple directories represent multiple PUF instances containing PUF responses which ideally must be similar within the same directory but must be unique and exclusive amongst other directories.
-		Therefore the inter Jaccard Index for the same PUF challenge to different PUF responses from
+		Therefore the inter-Jaccard Index for the same PUF challenge to different PUF responses from
 		separate PUF instances should be as close to $0.5$ (or 50\%) as possible to ascertain
 		uniqueness. Slight deviations from this ideal number are always acceptable.
 \end{itemize}
@@ -80,7 +80,7 @@ The interpretation for the core metrics that were implemented already in the too
 For completeness table \ref{tab:metrics} summarizes the result interpretation of the metrics with respect to the utilized use case. The table also contains metrics from the original toolkit and are not explained in detail to avoid redundancy. To know more about the metrics in the previous version of the toolkit refer to \cite{71}.\\
 
 \textbf{Time requirements:} To test the new metrics of the toolkit an analysis of the time taken by the calculation APIs for the PUF response evaluation of multiple instances was performed. The time taken by the user to input the settings was skipped, the measurement of the time was done using the standard ``clock()'' API of the GNU C library which is used to determine the process time. For testing, the SRAM PUF responses from Texas Instrument (TI) Stellaris LM4F120XL LaunchPad Evaluation Kits with a
-size of 32 Kilobytes and an offset of 400 bytes from the beginning was used. The analysis was performed on an Intel i3 quad core CPU with 2.00 GHz and 3 GB RAM. The results of the time requirements for Intra Jaccard Index and Inter Jaccard Index are visualized in Figures \ref{img:time_intra} and \ref{img:time_inter} respectively. Figures \ref{img:cpu_intra} and \ref{img:cpu_inter} show the average percentage of CPU usage for Intra and Inter-Jaccard Index with the same parameters. The time taken analysis for the Jaccard Index is not represented since it is constant around $0.7$ milliseconds.
+size of 32 Kilobytes and an offset of 400 bytes from the beginning was used. The analysis was performed on an Intel i3 quad core CPU with 2.00 GHz and 3 GB RAM. The results of the time requirements for Intra-Jaccard Index and Inter-Jaccard Index are visualized in Figures \ref{img:time_intra} and \ref{img:time_inter} respectively. Figures \ref{img:cpu_intra} and \ref{img:cpu_inter} show the average percentage of CPU usage for Intra and Inter-Jaccard Index with the same parameters. The time taken analysis for the Jaccard Index is not represented since it is constant around $0.7$ milliseconds.
 \vspace*{1.5\baselineskip}
 
 \begin{figure}[h]
@@ -94,14 +94,14 @@ size of 32 Kilobytes and an offset of 400 bytes from the beginning was used. The
 \begin{figure}[t!]
 \centering
 \fbox{ \includegraphics[width=0.875\textwidth,keepaspectratio]{images/inter_time.pdf}}
-\caption{Time requirement measurements of the \emph{Inter-Jaccard Index} with PUF response of size 32 kilobytes.}
+\caption{Time requirement measurements of the \emph{Inter-Jaccard Index} with each PUF response of size 32 kilobytes.}
 \label{img:time_inter}
 \end{figure}
 
 \begin{figure}[h!]
 \centering
 \fbox{ \includegraphics[width=0.875\textwidth,keepaspectratio]{images/intra_cpu.pdf}}
-\caption{Visualization of CPU usage by the \emph{Intra-Jaccard Index} for folders containing multiple PUF response of size 32 kilobytes.}
+\caption{Visualization of CPU usage by the \emph{Intra-Jaccard Index} for folders containing multiple PUF responses of size 32 kilobytes.}
 \label{img:cpu_intra}
 \end{figure}
 
@@ -111,14 +111,14 @@ size of 32 Kilobytes and an offset of 400 bytes from the beginning was used. The
 \begin{figure}[t!]
 \centering
 \fbox{ \includegraphics[width=0.875\textwidth,keepaspectratio]{images/inter_cpu.pdf}}
-\caption{Visualization of the CPU usage by the \emph{Inter-Jaccard Index} between mutiple folders containing multiple PUF response of size 32 kilobytes.}
+\caption{Visualization of the CPU usage by the \emph{Inter-Jaccard Index} between mutiple folders containing multiple PUF responses of size 32 kilobytes.}
 \label{img:cpu_inter}
 \end{figure}
 
 \subsection{Evaluation of the Fuzzy extractor}
 
 To evaluate the fuzzy extractor we compare both the coding techniques, Golay Code and BCH code used in the fuzzy implementation. Both of which are assisted with linear repetition algorithm and majority voting procedure. The error correction capability $t$ of Golay code is limited to a maximum of three-bit errors for a message length of \emph{12 bits}. Both the codes are linear codes so they take the same parameters (n, k, d), where $n$ is the length (in bits) of the encoded codeword, $k$ is the
-length (message length) of the input secret/message that is fed to the encoder and $d$ is the minimal hamming distance from which the error correcting capability is derived using the formula $t = \lfloor(d-1)/2\rfloor$. The Golay code uses a lookup table to encode the \emph{12 bits} of message to \emph{23 bits} of codeword, in case there are more than three bits of errors introduced while processing PUF instance for response (due to external noise and environmental factors) then the decoding lookup
+length (message length) of the input secret/message that is fed to the encoder and $d$ is the minimal Hamming distance from which the error correcting capability is derived using the formula $t = \lfloor(d-1)/2\rfloor$. The Golay code uses a lookup table to encode the \emph{12 bits} of message to \emph{23 bits} of codeword, in case there are more than three bits of errors introduced while processing PUF instance for response (due to external noise and environmental factors) then the decoding lookup
 table for Golay code is not capable to correct errors which leads to an undesired state. To avoid this behavior, the user is presented with an error message that it is out of Golay code's scope to correct so many errors and to use BCH coding instead.
 
 The BCH coding implementation, on the contrary, corrects as many bit errors as possible in each codeword. If errors exceed the correction capability $t$ of the BCH code then only $t$ errors are corrected and remaining errors are ignored. This avoids the undesired behavior unlike the Golay code and the information about the detected but not corrected errors is displayed to the user which enhances the robustness of the fuzzy extractor. In addition, the parameters of the BCH code are

@@ -26,7 +26,7 @@ This section introduces commonly used terms used for describing PUFs and their c
 As discussed in the definition, PUF produces output on being queried with an input. Since the input may have more than one possible output so PUFs are not functions in a mathematical sense rather they are considered function in engineering sense i.e a procedure performed by or acting upon a specific (physical) system. \cite{thbook}. The input to PUF is called \emph{Challenge} and output is termed as \emph{Response}, together they are known as \emph{Challenge-Response Pair} or \emph{CRP} and
 the relation imposed between challenges and responses by a particular PUF is called as its \emph{CRP behavior}. PUF is applied in two phases, the first phase is \emph{enrollment}, where a certain number of CRPs are collected from a PUF and stored in a \emph{CRP database}. In the second phase called \emph{verification}, a challenge from CRP database is applied to the PUF and the produced response is compared with the corresponding response from the database (section 2.1 \cite{thbook}).
 
-\subsubsection{Intra-and Inter-Distance metrics}
+\subsubsection{Intra- and Inter-Distance metrics}
 \label{intra_inter_section}
 The concept of inter-versus intra-(class) distance is inherited from the theory of classification and identification:
 \begin{itemize}
@@ -148,7 +148,7 @@ Proposed by Gassend et al. \cite{21} it is another type of delay-based intrinsic
 An AND gate is added to turn off/on the oscillation, which is fed to a frequency counter that counts the number of oscillating cycles in a fixed time interval. The same setup for ring oscillator on another device with the same implementation has different counter value because of the silicon process variations which forms the basis of the PUF response.\\
 
 There are some other side effects associated with ring oscillator PUFs, one of them is significant influence from the environmental conditions like temperature changes and voltage fluctuations. The frequency changes introduced by these factors outweigh the deviations caused by the process variations, so to counteract these changes we need a post-processing technique known as \emph{compensated measuring}. The main idea is to calculate the ratio of the frequency of two ring oscillators
-on the same device since they both are affected by identical environmental factors, hence the ratio would be more uniform. According to observations average intra-distance distance between evaluations is approximately 10\% and the average inter-distance is approximately 50\% (section 2.4.2 \cite{17})
+on the same device since they both are affected by identical environmental factors, hence the ratio would be more uniform. According to observations average intra-distance between evaluations is approximately 10\% and the average inter-distance is approximately 50\% (section 2.4.2 \cite{17})
 
 \subsubsection{Optical PUFs}
 
@@ -258,7 +258,7 @@ We define matrix B as follows:\\\\
 
 The generator matrix for the binary Golay code is defined as $ \begin{bmatrix} I_{12} & | & \hat{B}\end{bmatrix} $ where $I_{12}$ is a 12x12 identity matrix i.e a matrix whose principal diagonal elements are ones and all other elements are zero. This generator matrix will be denoted as $G_{23}$ in the remaining text.\\
 
-\emph{Decoding}: We summarize the steps for decoding the Golay code, here we use parity check matrix for ``extended Golay code'' denoted by $H = G^t_{24}$ where $G_{24}$ is generator matrix for extended Golay code \cite{golay}, the error pattern is assigned variable $u = v + w$, where $w$ is the word received and $v$ is nearest to $w$. In this context we denote $wt(x)$ as the weight of vector $x$, (or hamming weight or the number of ``ones'' in $x$). Once we have found the value of $u$ we assume the
+\emph{Decoding}: We summarize the steps for decoding the Golay code, here we use parity check matrix for ``extended Golay code'' denoted by $H = G^t_{24}$ where $G_{24}$ is generator matrix for extended Golay code \cite{golay}, the error pattern is assigned variable $u = v + w$, where $w$ is the word received and $v$ is nearest to $w$. In this context we denote $wt(x)$ as the weight of vector $x$, (or Hamming weight or the number of ``ones'' in $x$). Once we have found the value of $u$ we assume the
 corrected received word is $v = w + u$ and we denote the received word $w$ as $w = [w_1, w_2, \cdots , w_{12}, w_{13}, w_{14}, \cdots , w_{23}]$. The algorithm is taken from \cite{golay} is described below:
 \begin{enumerate}
 	\item If weight of $w$ is even then construct\\
@@ -267,7 +267,7 @@ corrected received word is $v = w + u$ and we denote the received word $w$ as $w
 		\tab $\hat{w} = [ w_1, w_2, \cdots , w_{12}, w_{13}, w_{14}, \cdots , w_{23}, 1]$\\
 	\item Compute the syndrome using extended Golay code generator matrix:\\
 		\tab \tab \tab \tab $s = mod(wG^t, 2)$
-	\item If the hamming weight of syndrome is less than or equal to \emph{three}, then the error pattern is:\\
+	\item If the Hamming weight of syndrome is less than or equal to \emph{three}, then the error pattern is:\\
 		\tab \tab \tab $u = [s,\  0\  0\  0\  0\  0\  0\  0\  0\  0\  0\  0\  0]$\\
 		else, if the weight of $s$ is greater than \emph{three}, but for some i = 1, 2, \ldots, 12, the weight of $s + A_i$ is less than or equal to \emph{two}, then the error pattern is $u = [ s + A_i, e_i]$, where $e_i$ is the $i^{th}$ row of the 12x12 identity matrix and A is the matrix from which $G_{24}$ is generated as $[I_{12}\:|\:A]$ (refer to \cite{golay} for details about A and $G_{24}$)
 	\item Compute the second  syndrome $s_2 = s A$
@@ -330,7 +330,7 @@ Output & 10\\
 
 \subsection{Fuzzy extractor}
 \label{fuzzy_section}
-We have already established that external factors like noise, voltage fluctuation, aging etc. instill errors in the PUF responses with some of the bits flipped between two responses from the same device, giving rise to intra distance between them. \emph{Fuzzy Extraction} is a well-known technique which aims to rectify these errors with the help of the error correcting codes. In this thesis, we have used binary BCH codes, binary linear repetition code, binary majority vote and binary Golay
+We have already established that external factors like noise, voltage fluctuation, aging etc. instill errors in the PUF responses with some of the bits flipped between two responses from the same device, giving rise to intra-distance between them. \emph{Fuzzy Extraction} is a well-known technique which aims to rectify these errors with the help of the error correcting codes. In this thesis, we have used binary BCH codes, binary linear repetition code, binary majority vote and binary Golay
 codes to realize the PUF based secure key storage.\\
 
 \begin{figure}[htp]

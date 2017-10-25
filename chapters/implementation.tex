@@ -1,6 +1,6 @@
-This chapter explains about the major tasks implemented in the thesis and new contributions made to the PUF Toolkit. The first part of the chapter briefly explains about the current PUF toolkit implementation, without delving much into the details. This is followed by an explanation of the Hamming Distance Menu which was implemented as a new menu item combining the Intra and Inter-Hamming Distance under one menu. The third part talks about the new modifications that were done to the toolkit in the form of BCH fuzzy extractor encoder and decoder integration, which were previously not a part of the main toolkit and presented as separate executables
-with separate menu items. We then go on to explain the Golay code implementation both the decoder and encoder and explain their integration in the toolkit as a distinct menu item. Then the other modifications like the addition of \emph{'offsets from beginning and end', error codes} and other intricate code development changes are presented together as one section. After this, a new metric called \emph{Jaccard Index} is introduced and its implementation along with \emph{Intra and Inter
-Jaccard Index} is explained in detail.\\
+This chapter explains about the major tasks implemented in the thesis and new contributions made to the PUF Toolkit. The first part of the chapter briefly explains about the current PUF toolkit implementation, without delving much into the details. This is followed by an explanation of the Hamming Distance Menu which was implemented as a new menu item combining the Intra- and Inter-Hamming Distance under one menu. The third part talks about the new modifications that were done to the toolkit in the form of BCH fuzzy extractor encoder and decoder integration, which were previously not a part of the main toolkit and presented as separate executables
+with separate menu items. We then go on to explain the Golay code implementation both the decoder and encoder and explain their integration in the toolkit as a distinct menu item. Then the other modifications like the addition of \emph{'offsets from beginning and end', error codes} and other intricate code development changes are presented together as one section. After this, a new metric called \emph{Jaccard Index} is introduced and its implementation along with \emph{Intra- and
+Inter-Jaccard Index} is explained in detail.\\
 
 The final two sections deal with CogniCrypt details and the Java Native Interface (JNI), they first touch upon the basics of JNI
 wrapper and the functioning of JNI with shared libraries packaged as JAR files that are accessible to Java compiler as an external library. Finally, we describe the clafer model of the CogniCrypt and how it assists users and Java developers, without any previous knowledge about cryptography, to select a strong PUF based secure key evaluation algorithm based on the questions asked by the CogniCrypt. In the end of this last section, we also talk about the XSL model of the CogniCrypt that builds on
@@ -96,23 +96,23 @@ This in turn decisively supports developers and researchers in the PUFs response
 
 \section{Hamming Distance Menu}
 \label{Hamming_Distance_menu}
-The hamming distance functionality was added to and integrated as part of this Master thesis. Hamming Distance between two ``bit strings'' of the same length is defined as the number of the bits that differ amongst the two binary bit strings. For eg., if we have two string \emph{A = 1100} and \emph{B = 1010} then the Hamming Distance between them would be ``\emph{two}'', since the bits at second and third position (starting from the left) differ between these two strings. The implementation of
-this functionality is straightforward, using the in-built \emph{bitwise XOR} operation of the ISO C++ standard and then counting the number of ones in the resulting string, which is nothing but calling the hamming distance function on the resultant string.\\
+The Hamming distance functionality was added to and integrated as part of this Master thesis. Hamming Distance between two ``bit strings'' of the same length is defined as the number of the bits that differ amongst the two binary bit strings. For eg., if we have two string \emph{A = 1100} and \emph{B = 1010} then the Hamming Distance between them would be ``\emph{two}'', since the bits at second and third position (starting from the left) differ between these two strings. The implementation of
+this functionality is straightforward, using the in-built \emph{bitwise XOR} operation of the ISO C++ standard and then counting the number of ones in the resulting string, which is nothing but calling the Hamming distance function on the resultant string.\\
 
-As depicted in Figure \ref{img:gui_design} above there are other options like \emph{Intra Hamming Distance} and \emph{Inter Hamming Distance} in the Hamming Distance Menu, that are organized later as subsections where we explain about the different modes and other options and plausible input values, the user can select from. For now, we direct our attention at the other menu items.\\
+As depicted in Figure \ref{img:gui_design} above there are other options like \emph{Intra-Hamming Distance} and \emph{Inter-Hamming Distance} in the Hamming Distance Menu, that are organized later as subsections where we explain about the different modes and other options and plausible input values, the user can select from. For now, we direct our attention at the other menu items.\\
 
 The first menu item is related to the \emph{\textbf{Offsets}} that are mandatory for the user to input and the first query that must be answered after the toolkit is run. Since the PUF toolkit is designed for evaluation of PUF responses that are in binary format and not all the data in PUF response binary file is useful for evaluation, the user can manually select how much he/she desires to skip the data (in bytes) from the beginning and the end of the file using this \emph{Offsets} option.
 For example, the first $400$ bytes of the PUF response of a (TI) Stellaris LM4F120XL Launchpad Evaluation Kit are used during the booting process and are not random, so they are irrelevant in PUF responses evaluation. This kind of device specific behavior requires suitable handling to ensure valid results.\\
 
 Consequently, the \emph{Offset} determines the selection range of the bytes from the PUF response for calculation and also establishing the actual \emph{length} of the response. For eg. if a PUF response is 32784 bytes long and we skip 400 from the beginning and 200 from the end, the actual length becomes $32784-600 = 32184$ bytes and the processing start from the $401^{th}$ byte till $32184^{th}$ byte.\\
 
-The result of the Hamming Distance between two PUF responses can be optionally stored in an output file that is set using the option \emph{two}. This is not mandatory if we are evaluating only two files but in cases of Inter/Intra Hamming Distance this option becomes mandatory. Another functionality added to the Hamming Distance and other Functions in the toolkit as well is that of the Fractional Distance. \newline
+The result of the Hamming Distance between two PUF responses can be optionally stored in an output file that is set using the option \emph{two}. This is not mandatory if we are evaluating only two files but in cases of Inter/Intra-Hamming Distance this option becomes mandatory. Another functionality added to the Hamming Distance and other Functions in the toolkit as well is that of the Fractional Distance. \newline
 $\S$\emph{Defintion}: We define \emph{Fractional Hamming Distance} as the Hamming Distance between two PUF
-responses divided by their length. For example, if Hamming Distance between two PUF responses each of length 31784 bytes is 10, then their Fractional Hamming Distance would be $ 10 / 31784 = 0.000314624$ (NOTE: the toolkit displays the fractional hamming distance rounded off to 9 digits after decimal).\\
+responses divided by their length. For example, if Hamming Distance between two PUF responses each of length 31784 bytes is 10, then their Fractional Hamming Distance would be $ 10 / 31784 = 0.000314624$ (NOTE: the toolkit displays the fractional Hamming distance rounded off to 9 digits after decimal).\\
 
 The Hamming Distance can be calculated using option \emph{three} that will ask for the two PUF responses binary filenames and if the path and filenames are correct, the results will be displayed in the fourth part of the GUI. If the output filename was given before then the result is also stored in that file and can be viewed using the option \emph{seven}.\\
 
-In order to understand the code flow and working of the hamming distance function, it is vital to look at the structure \emph{Item} and its data members. This structure is used by other menus in the toolkit to share the current settings and global configurations like Offsets, filenames, paths etc. and thereby reducing the user's effort and memory load. Table \ref{table:item} only highlights the data members and their purpose that are relevant to Hamming Distance Menu. The other data
+In order to understand the code flow and working of the Hamming distance function, it is vital to look at the structure \emph{Item} and its data members. This structure is used by other menus in the toolkit to share the current settings and global configurations like Offsets, filenames, paths etc. and thereby reducing the user's effort and memory load. Table \ref{table:item} only highlights the data members and their purpose that are relevant to Hamming Distance Menu. The other data
 members, for the time being, are not shown and will be discussed in relevant sections.\\
 
 \begin{table}[!ht]
@@ -154,7 +154,7 @@ members, for the time being, are not shown and will be discussed in relevant sec
 	\label{table:item}
 \end{table}
 
-The four lines of code form the basic building block for hamming distance as shown in listing \ref{lst:hammingdt}. First the data is read from the two input PUF files into two arrays of size \emph{dsize} where dsize is equal to the length of the files after applying the Offsets, then as depicted in lines 3-5 of listing \ref{lst:hammingdt} each byte of the data are bitwise XORed and the result is stored in a third array of same length. So the resultant data array contains
+The four lines of code form the basic building block for Hamming distance as shown in listing \ref{lst:hammingdt}. First the data is read from the two input PUF files into two arrays of size \emph{dsize} where dsize is equal to the length of the files after applying the Offsets, then as depicted in lines 3-5 of listing \ref{lst:hammingdt} each byte of the data are bitwise XORed and the result is stored in a third array of same length. So the resultant data array contains
 \emph{ones} in the position where bits differ in the two PUF responses. We then just need to count the number of ones in the XORed result.
 This is done by calling the function \emph{hammingwt} abbreviated in the code for Hamming Weight.\\
 
@@ -166,7 +166,7 @@ backgroundcolor=\color{gray},
 keywordstyle=\color{blue},
 stringstyle=\color{orange},
 basicstyle = \ttfamily \color{black} \footnotesize,
-caption={Hamming Distance calculation using hamming weight and bitwise XOR operator} ,
+caption={Hamming Distance calculation using Hamming weight and bitwise XOR operator} ,
 label={lst:hammingdt},
 captionpos=b,
 numbers=left]
@@ -183,7 +183,7 @@ numbers=left]
 \end{center}
 
 Hamming Weight is one of the essential function of the toolkit and it is also referred to by other functions it's important that we list the code here. Listing \ref{lst:hammingwt} shows the Hamming Weight function as implemented in the toolkit, it takes the data array as a character pointer and its size as arguments. The for loop in lines 5-14 takes each byte of the data and then bitwise ANDs with each bit position (total 8 bit-positions) to count the total occurrences of ones in the byte. This process is
-iterated for the entire length ``size'' of the array, each time incrementing the counter ``wt'' whenever a one is encountered and finally, the hamming weight is returned to the caller function.\\
+iterated for the entire length ``size'' of the array, each time incrementing the counter ``wt'' whenever a one is encountered and finally, the Hamming weight is returned to the caller function.\\
 
 
 \begin{center}
@@ -221,49 +221,49 @@ int hammingwt(char *data, int size)
 \begin{figure}
 \centering
 \fbox{ \includegraphics[width=0.9\textwidth]{images/intra_compact.pdf}}
-\caption{Visualization of the \emph{compact} output style format for Intra Hamming Distance.}
+\caption{Visualization of the \emph{compact} output style format for Intra-Hamming Distance.}
 \label{img:4_intra_compact}
 \end{figure}
 
 \begin{figure}
 \centering
 \fbox{ \includegraphics[width=0.4\textwidth]{images/Intra.png}}
-\caption{Exemplary illustration of the working principle of the \emph{compact} mode, for the intra-Hamming distance.}
+\caption{Exemplary illustration of the working principle of the \emph{compact} mode, for the Intra-Hamming Distance.}
 \label{img:4_intra_WP}
 \end{figure}
 
 \subsection{Intra-Hamming Distance}
 \label{intra_hd_section}
-This section explains the Intra-Hamming Distance feature which is a comparison of the PUF responses from the same device. As discussed in section \ref{intra_inter_section} we already observed that the PUF responses from the same device are not identical due various factors like voltage fluctuation,  temperature variation, and other aging effects, which gives rise to Intra distance within the responses. ``Intra'' means on the inside, so we evaluate the PUF instance from within by assessing the Hamming Distance within
-these responses. Since the hardware from which the SRAM PUFs are obtained are kept in a single directory, we need only to give the ``input path'' for processing Intra Hamming Distance, the output file option is mandatory to process Intra HD because the results must be stored for all the responses in a file to be viewed later. Along with the Hamming Distance between PUF responses the fractional distance is also saved for better assessment of the PUF instance.\\
+This section explains the Intra-Hamming Distance feature which is a comparison of the PUF responses from the same device. As discussed in section \ref{intra_inter_section} we already observed that the PUF responses from the same device are not identical due various factors like voltage fluctuation,  temperature variation, and other aging effects, which gives rise to intra distance within the responses. ``Intra'' means on the inside, so we evaluate the PUF instance from within by assessing the Hamming Distance within
+these responses. Since the hardware from which the SRAM PUFs are obtained are kept in a single directory, we need only to give the ``input path'' for processing Intra-Hamming Distance, the output file option is mandatory to process Intra-Hamming Distance because the results must be stored for all the responses in a file to be viewed later. Along with the Hamming Distance between PUF responses the fractional distance is also saved for better assessment of the PUF instance.\\
 
-A crucial attribute in the ``Switch output-style'' which can be used to change the save format of the output file, there are two possibilities for Intra HD: \emph{compact} and \emph{minimal}. The compact mode takes each file in the directory and recursively compares with all the other files, then the second file is chosen and compared with the all the other except the first one and so on. The fig. \ref{img:4_intra_WP} illustrates this comparison.  The output style ``\emph{compact}'' is the default format style and should be used
+A crucial attribute in the ``Switch output-style'' which can be used to change the save format of the output file, there are two possibilities for Intra-Hamming Distance: \emph{compact} and \emph{minimal}. The compact mode takes each file in the directory and recursively compares with all the other files, then the second file is chosen and compared with the all the other except the first one and so on. The fig. \ref{img:4_intra_WP} illustrates this comparison.  The output style ``\emph{compact}'' is the default format style and should be used
 as an output format for a regular text file. Due to the symmetrical behavior of the comparison ( A to B = B to A), we need not exhaust all 1-to-1 possible combinations. So in compact mode first entry from the directory is compared to all the other till the last entry, then the second entry is compared to the third entry till last file, then the third with fourth entry and so on till we are at the last file which need not be compared to any of the above entries since we have already exhausted the
 symmetric comparisons.\\
 
 
-A sample output file with compact style format is shown in Figure \ref{img:4_intra_compact} that evaluates the PUF instance from a single directory using Intra Hamming Distance metric, it also appends the fractional distance information to the file. It consists of a header with general information that shows the configuration (like offsets, device folder etc.) that was used for evaluation and three tables. In the upper right corner of each table the utilized input file is shown and on the left side of the table
+A sample output file with compact style format is shown in Figure \ref{img:4_intra_compact} that evaluates the PUF instance from a single directory using Intra-Hamming Distance metric, it also appends the fractional distance information to the file. It consists of a header with general information that shows the configuration (like offsets, device folder etc.) that was used for evaluation and three tables. In the upper right corner of each table the utilized input file is shown and on the left side of the table
 the files, that are compared to the selected input file, are displayed. The Hamming Distance and Fractional Hamming Distance, separated by a tab length are printed in the center (right) of each table. The
 \emph{minimal} output style strips off all the path and filename info and only saves the Hamming Distance values separated by spaces, this type of file format can be used by another metric of the toolkit called Median and Average calculation (section 4.1 \cite{71}) which accepts only files containing plain numbers separated with space. The \emph{View} option can be used to look at the output/result file.\\
 
 %\begin{figure}
 %\centering
 %\fbox{ \includegraphics[width=0.97\textwidth]{images/inter_compact.pdf}}
-%\caption{A sample output showing the visualization of the inter hamming distance \emph{compact} output style format.}
+%\caption{A sample output showing the visualization of the inter-Hamming distance \emph{compact} output style format.}
 %\label{img:inter_output}
 %\end{figure}
 
 \begin{figure}
 \centering
 \fbox{ \includegraphics[width=0.97\textwidth]{images/Inter_itr.png}}
-\caption{Exemplary illustration of the working principle of the \emph{compact} mode, for the inter-Hamming distance.}
+\caption{Exemplary illustration of the working principle of the \emph{compact} mode, for the Inter-Hamming Distance.}
 \label{img:inter_compact}
 \end{figure}
 
 \subsection{Inter-Hamming Distance}
 \label{inter_hd_section}
-Contrary to the comparisons between PUF responses from the same device, Inter Hamming distance evaluates responses from different PUF instance. The co-relation is again based on the same metric Hamming Distance. In this case, the toolkit can simultaneously compare from 2 to 99 PUF instances. All the PUF responses from a specific instance are arranged in a single directory so that means the toolkit can take input paths between 2 and 99 to evaluate different PUF devices. The output
-style in addition to compact and minimal has a \emph{detailed} as an alternative. The compact and minimal style formats are same as Intra Hamming Distance, but the detailed style differs from the compact style that it does not implicitly ignores the duplicate symmetric comparisons and therefore maps out all the permutations and combinations between files of different folders. It should be noted that Inter Hamming Distance metric does not compare PUF responses in the same directory. So
+Contrary to the comparisons between PUF responses from the same device, Inter-Hamming distance evaluates responses from different PUF instance. The co-relation is again based on the same metric Hamming Distance. In this case, the toolkit can simultaneously compare from 2 to 99 PUF instances. All the PUF responses from a specific instance are arranged in a single directory so that means the toolkit can take input paths between 2 and 99 to evaluate different PUF devices. The output
+style in addition to compact and minimal has a \emph{detailed} as an alternative. The compact and minimal style formats are same as Intra-Hamming Distance, but the detailed style differs from the compact style that it does not implicitly ignores the duplicate symmetric comparisons and therefore maps out all the permutations and combinations between files of different folders. It should be noted that Inter-Hamming Distance metric does not compare PUF responses in the same directory. So
 in detailed mode, the first directory all the responses are compared to all the PUF responses from the remaining 3 to 99, then all files in the second folder are compared to all the files in all the other folders except its own, and so on. The output of the Inter-Hamming Distance in compact mode is similar to that of Intra-Hamming Distance as previously shown in Figure \ref{img:4_intra_compact}. For the compact mode we need to ignore the duplicate comparisons and therefore the following approach is
 taken:
 
@@ -277,7 +277,7 @@ taken:
 
 This process is summarized in Figure \ref{img:inter_compact} for three folder input and is generalized for more inputs. We emphasize on the inner workings of the modes because the exact same techniques are used for Jaccard's index that will be discussed later in this chapter.\\
 
-\emph{Menu Modifications:} In contrast to the original toolkit where Intra and Inter Hamming Distance were separated in their own sub-menus, the new changes merge both of them under Hamming Distance Menu. Seeing as it is relevant to combine them if they use the same underlying metric, on the other hand, the Hamming Weight menu item was untouched since it takes only one PUF response file as an input and gives out its hamming weight and there is no evaluation between two or
+\emph{Menu Modifications:} In contrast to the original toolkit where Intra- and Inter-Hamming Distance were separated in their own sub-menus, the new changes merge both of them under Hamming Distance Menu. Seeing as it is relevant to combine them if they use the same underlying metric, on the other hand, the Hamming Weight menu item was untouched since it takes only one PUF response file as an input and gives out its Hamming weight and there is no evaluation between two or
 more files.\\
 
 
@@ -337,7 +337,7 @@ second part of the enrollment of the fuzzy extractor, the LR code is applied to 
 	\caption{Console user interface of the \emph{PUF BCH Encoder}.}
 	\label{img:4_BCH_ENC_menu}
 	\end{figure}
-	The User interface for the BCH Encoder sub-menu is shown in Figure \ref{img:4_BCH_ENC_menu}. The first option is to set the BCH mode in which the user is required to input the code length $n$ i.e. derived from $m$ such that $(2^{m-1} - 1) < length <= (2^m - 1)$, after that it is also mandatory to enter the desired correction capability $t$ of the BCH (n,k,d) code that in turn will determine the parameter $d$ of the code from the formula $t = \lfloor(d-1)/2\rfloor$.
+	The User Interface for the BCH Encoder sub-menu is shown in Figure \ref{img:4_BCH_ENC_menu}. The first option is to set the BCH mode in which the user is required to input the code length $n$ i.e. derived from $m$ such that $(2^{m-1} - 1) < length <= (2^m - 1)$, after that it is also mandatory to enter the desired correction capability $t$ of the BCH (n,k,d) code that in turn will determine the parameter $d$ of the code from the formula $t = \lfloor(d-1)/2\rfloor$.
 	These values must be consistent with the equations \ref{4:BCH_len} and \ref{4:BCH_LR_len} or else the decoding of the secret key will not be successful. The second option chooses the LR factor as 7 or 15, the third is the familiar offsets selection for the PUF response that will also determine the actual length of the PUF response used to generate the helper data. After this the user must also input the key he/she wants to securely store and the name of the PUF
 	response file, finally the output filename for helper data must be provided to be saved on permanent storage and to be used in the later reconstruction phase of the fuzzy extraction. These discussed inputs are all mandatory in the BCH menu and only then we can use option seven to process and generate the helper data or else the toolkit throws appropriate error messages to the user about missing parameters.\\
 
@@ -421,7 +421,7 @@ second part of the enrollment of the fuzzy extractor, the LR code is applied to 
 	\begin{figure}
 	\centering
 	\fbox{ \includegraphics[width=0.9\textwidth]{images/bch_decoder_functions.pdf}}
-	\caption{Dependencies of the BCH Encoder Modules}
+	\caption{Dependencies of the BCH Decoder Modules}
 	\label{img:bchdec_fns}
 	\end{figure}
 
@@ -592,7 +592,7 @@ second part of the enrollment of the fuzzy extractor, the LR code is applied to 
 	\hline
 	1 & ERROR! Invalid input - Only digits are allowed! No digit at \emph{pos + 1}.\\
 
-	2 & ERROR! Invalid input - Input to long. \\
+	2 & ERROR! Invalid input - Input too long. \\
 
 	3 & ERROR! Invalid input - Try again...  \\
 
@@ -661,8 +661,8 @@ second part of the enrollment of the fuzzy extractor, the LR code is applied to 
 
 	\section{Jaccard Index}
 	\label{jaccardi_index_section}
-	This section explains the Jaccard Index implementation that was developed as a new feature for the toolkit. Then the two sub-menu options Intra Jaccard and Inter Jaccard Index are presented as subsections.
-	The modules and code structure was inspired from the Hamming Distance Menu since both of the metrics (Hamming Distance and Jaccard Index) are closely related to each other and operate on either files or folders. We first discuss the definition of Jaccard Index and its relation to the hamming weight. We then look at the user interface for the Jaccard Index Menu which contains two more sub-menu options \emph{Inter} and \emph{Intra Jaccard index} and then go on to explain the modules of the
+	This section explains the Jaccard Index implementation that was developed as a new feature for the toolkit. Then the two sub-menu options Intra-Jaccard and Inter-Jaccard Index are presented as subsections.
+	The modules and code structure was inspired from the Hamming Distance Menu since both of the metrics (Hamming Distance and Jaccard Index) are closely related to each other and operate on either files or folders. We first discuss the definition of Jaccard Index and its relation to the Hamming weight. We then look at the user interface for the Jaccard Index Menu which contains two more sub-menu options \emph{Intra}- and \emph{Inter-Jaccard index} and then go on to explain the modules of the
 	Jaccard index. In the end, the section presents the verification steps after the development of this new feature was complete.\\
 
 	\begin{itemize}
@@ -671,7 +671,7 @@ second part of the enrollment of the fuzzy extractor, the LR code is applied to 
 		J(A,B) = \frac {|A \cap B|} {|A\cup B|} = \frac{|A \cap B|} {|A| + |B| - |A \cap B|}
 		\label{jaccard_eq}
 		\end{equation}
-		where |A| is the hamming weight of A, |B| is the hamming weight of B and $|A \cap B|$ is the number of times both A and B have one in the same bit position.
+		where |A| is the Hamming weight of A, |B| is the Hamming weight of B and $|A \cap B|$ is the number of times both A and B have one in the same bit position.
 	\end{itemize}
 
 	For eg. if we have two bytes A = 1100 1111 and B = 1111 0000 then |A| = 6, |B| = 4 and $|A \cap B|$ = 2 (since only first two common positions have ones in both the bytes). Substituting these values in the above equation we get $J(A,B) = (2) / ( 6 + 4 - 2) = 0.25$.\\
@@ -683,7 +683,7 @@ second part of the enrollment of the fuzzy extractor, the LR code is applied to 
 	\label{img:jaccard_ui}
 	\end{figure}
 	The user interface for the Jaccard Index menu is similar to the Hamming Distance Menu as shown in Figure \ref{img:jaccard_ui}. Using the first option user can set the offsets from beginning and end of the file and as a result, those bytes will be skipped during Jaccard calculation. The second option lets the user set the output filename which is mandatory since the results will be stored in this file. The third option performs the computation of the Jaccard index between the two given
-	files. It first asks for the two filenames to be prompted by the user and then the result along with the \emph{Fractional Index} is stored in the output file. Option five and six calls the Intra and Inter Jaccard Index routines respectively and are discussed in following subsections. The six and the last option can be used to view the output file without exiting the toolkit.\\
+	files. It first asks for the two filenames to be prompted by the user and then the result along with the \emph{Fractional Index} is stored in the output file. Option five and six calls the Intra- and Inter-Jaccard Index routines respectively and are discussed in following subsections. The six and the last option can be used to view the output file without exiting the toolkit.\\
 
 	The modules of the Jaccard's index are similar to those of the Hamming Distance and therefore this section takes the liberty of not showing it here again.
 	Rather than looking at each and every module, we look at the main routines and algorithm to calculate the Jaccard Index.
@@ -715,28 +715,28 @@ second part of the enrollment of the fuzzy extractor, the LR code is applied to 
 \end{itemize}
 
 \subsection{Intra-Jaccard Index}
-Instead of computing Jaccard index between two files, the entire folder containing PUF responses from a single device can be evaluated by selecting the Intra Jaccard Index sub-menu item. The filename where the results will be written is essential before processing the Intra Jaccard Index. The menu item asks for an input directory with a relative or absolute path on the machine and if the input path is correct and an output file is set then the result is generated and stored in the
+Instead of computing Jaccard index between two files, the entire folder containing PUF responses from a single device can be evaluated by selecting the Intra-Jaccard Index sub-menu item. The filename where the results will be written is essential before processing the Intra-Jaccard Index. The menu item asks for an input directory with a relative or absolute path on the machine and if the input path is correct and an output file is set then the result is generated and stored in the
 output file.\\
 
-Contrary to the intra hamming distance the ``Switch output-style'' (refer section \ref{intra_hd_section}) option was not made available to the user to simplify the functionality. The default output-style was set as \emph{Compact} which is explained in detail in the Intra Hamming Distance section \ref{intra_hd_section} and illustrated in Figure \ref{img:4_intra_WP}. A sample result output file is presented in Figure \ref{img:intra_jaccardi_compact} which shows the compact mode comparison between the files in the
+Contrary to the intra-Hamming distance the ``Switch output-style'' (refer section \ref{intra_hd_section}) option was not made available to the user to simplify the functionality. The default output-style was set as \emph{Compact} which is explained in detail in the Intra-Hamming Distance section \ref{intra_hd_section} and illustrated in Figure \ref{img:4_intra_WP}. A sample result output file is presented in Figure \ref{img:intra_jaccardi_compact} which shows the compact mode comparison between the files in the
 directory where the Jaccard Index in conjunction with fractional Jaccard Index is written for each comparison.\\
 
 \begin{figure}[h]
 \centering
 \fbox{ \includegraphics[width=0.9\textwidth]{images/intra_jaccardi.pdf}}
-\caption{A sample output result showing the \emph{compact} output style format for Intra Jaccard Index }
+\caption{A sample output result showing the \emph{compact} output style format for Intra-Jaccard Index }
 \label{img:intra_jaccardi_compact}
 \end{figure}
 
-To realize the Intra Jaccard Index the function \emph{Jaccard\_Intra} was implemented that takes the directory as input and first checks if the path is valid and there are more than one files present in the folder. Then all filenames with their absolute paths are stored in a standard C++ vector data structure. The \emph{Jaccard\_Intra} then iterates through this vector and computes the Jaccard Index for each comparison by calling the \emph{Jaccard\_Index} procedure that was explained in  section
+To realize the Intra-Jaccard Index the function \emph{Jaccard\_Intra} was implemented that takes the directory as input and first checks if the path is valid and there are more than one files present in the folder. Then all filenames with their absolute paths are stored in a standard C++ vector data structure. The \emph{Jaccard\_Intra} then iterates through this vector and computes the Jaccard Index for each comparison by calling the \emph{Jaccard\_Index} procedure that was explained in  section
 \ref{jaccardi_index_section}
 above. Finally, the result is written in each iteration of the loop and appended to the output file.\\
 
 \subsection{Inter-Jaccard Index}
-Unlike its Intra counterpart, the Inter Jaccard Index can be used to evaluate the PUF responses across different devices. It compares the PUF responses in a directory (analogous to a device since all PUF responses from a single device are stored in the same folder) to PUF responses in other directories. The comparison mode or the output-style by default is designed in the code to be ``compact'' since it simplifies the metric and also avoids any duplicate comparisons. The details of
-the compact mode file comparison for Inter Jaccard index are the same as for Inter Hamming Distance which is explained in detail in section \ref{inter_hd_section} and the  compact comparison operation between three folders is shown in Figure \ref{img:inter_compact}.\\
+Unlike its Intra counterpart, the Inter-Jaccard Index can be used to evaluate the PUF responses across different devices. It compares the PUF responses in a directory (analogous to a device since all PUF responses from a single device are stored in the same folder) to PUF responses in other directories. The comparison mode or the output-style by default is designed in the code to be ``compact'' since it simplifies the metric and also avoids any duplicate comparisons. The details of
+the compact mode file comparison for Inter-Jaccard index are the same as for Inter-Hamming Distance which is explained in detail in section \ref{inter_hd_section} and the  compact comparison operation between three folders is shown in Figure \ref{img:inter_compact}.\\
 
-The code implementation for Inter Jaccard Index is achieved by the routine \emph{Jaccard\_Inter} which takes the data structure Item as an argument. The user needs to input the number of paths or folders he/she wants to evaluate, this number is bounded between \emph{two} and \emph{ninety-nine} i.e $2 <= n < 99$, then the folder names with their absolute or relative path are required by the toolkit. All these paths are verified by the code as valid and present in the memory, the
+The code implementation for Inter-Jaccard Index is achieved by the routine \emph{Jaccard\_Inter} which takes the data structure Item as an argument. The user needs to input the number of paths or folders he/she wants to evaluate, this number is bounded between \emph{two} and \emph{ninety-nine} i.e $2 <= n < 99$, then the folder names with their absolute or relative path are required by the toolkit. All these paths are verified by the code as valid and present in the memory, the
 routine \emph{Jaccard\_Inter} verifies if each given folder has at least one file. These folder names and paths are then stored in a standard C++ vector which is navigated in compact comparison fashion to compute the Jaccard Index. The nested for loop iterations are abstracted in this text to avoid complexity. In each iteration of the nested loop the comparison between PUF responses of different devices is achieved by redundant calls to the \emph{Jaccard\_Index} function explained in section
 \ref{jaccardi_index_section} and result is written to the output file as specified by the user.\\
 
@@ -746,7 +746,7 @@ The merging of a new feature to the toolkit required careful testing to ensure c
 	\item All the menu item were checked and reviewed for their expected functionality.
 	\item Testing was done for faulty and incorrect inputs to the Jaccard Index menu options to ensure relevant error messages are displayed to the user. For eg., incorrect paths or filenames of the directories will be prompted to the user suggesting to enter the paths/filenames again.
 	\item The Jaccard output file was reviewed to check for proper header information and tables.
-	\item For Intra and Inter Jaccard index, the mandatory options like setting of the offsets and the output file was checked before computing the index. In case these settings are not configured then relevant error information was displayed to the user.
+	\item For Intra- and Inter-Jaccard index, the mandatory options like setting of the offsets and the output file was checked before computing the index. In case these settings are not configured then relevant error information was displayed to the user.
 \end{itemize}
 
 This marks the completion of the improvement and development phase of the toolkit. Next part of the report discusses the integration of the toolkit to the CogniCrypt opensource library by interfacing the C++ APIs to the Java runtime via Java Native Interface.
@@ -765,7 +765,7 @@ backgroundcolor=\color{white},
 keywordstyle=\color{blue},
 stringstyle=\color{orange},
 basicstyle = \ttfamily \color{black} \footnotesize,
-caption={Auto generated header file showing the syntax for Java Native Interface function declarations} ,
+caption={Auto generated header file showing the syntax for Java Native Interface function declaration} ,
 label={lst:jni_header},
 captionpos=b,
 numbers=left][h]
@@ -791,9 +791,9 @@ JNIEXPORT void JNICALL Java_jni_toolkit_hammingwt
 To implement the JNI code a lot of help was taken from the tutorial \cite{jni_tutorial}, for each metric of the toolkit an API was designed in accordance with the syntax of the JNI. The text explains the development process for a single metric Hamming Distance, these steps are applied to all the other metrics too. The toolkit.java source file was written containing the native interfaces to the functions in the PUF toolkit. For eg., Hamming weight functionality of the toolkit was available via a
 public \emph{native} Java function \emph{hammingwt} that takes ``file/folder name'', ``output filename'' and ``mode''(file mode or folder mode) as arguments.  These native APIs are the class member functions of the Java \emph{toolkit} class.\\
 
-The compilation of the toolkit Java source was performed resulting in the toolkit.class file. Next, the header file to be included in the JNI C++ source code was generated using the ``javah'' utility. The resultant header file contains the syntactical prototypes of the C++ interface functions that must be implemented. Such a file with hamming distance metric is shown in listing \ref{lst:jni_header}.\\
+The compilation of the toolkit Java source was performed resulting in the toolkit.class file. Next, the header file to be included in the JNI C++ source code was generated using the ``javah'' utility. The resultant header file contains the syntactical prototypes of the C++ interface functions that must be implemented. Such a file with Hamming distance metric is shown in listing \ref{lst:jni_header}.\\
 
-The \emph{Java\_jni\_toolkit\_hammingwt} interface first parses the arguments that it obtained from the Java source code. It takes the jstring arguments file/folder name and output filename and converts them into standard C character array using the standard JNI conversion function \emph{GetStringUTFChars}. The jboolean argument is implicitly an integer so it does not require any transformation. The code then initializes the ``Item'' data structure with these values and calls the \emph{HammingWeight(Item *, int )} function of the toolkit to compute the hamming distance of the file or the entire folder based on the value of $mode$.\\ 
+The \emph{Java\_jni\_toolkit\_hammingwt} interface first parses the arguments that it obtained from the Java source code. It takes the jstring arguments file/folder name and output filename and converts them into standard C character array using the standard JNI conversion function \emph{GetStringUTFChars}. The jboolean argument is implicitly an integer so it does not require any transformation. The code then initializes the ``Item'' data structure with these values and calls the \emph{HammingWeight(Item *, int )} function of the toolkit to compute the Hamming distance of the file or the entire folder based on the value of $mode$.\\ 
 
 The \emph{ErrorMessages} routine of the toolkit is used to inform the user about invalid inputs and faulty toolkit states. Since these inputs are passed from the Java source as strings, the Java developers can check at their end for the authenticity of the file/folder names and their path on the machine. Other metrics of the PUF toolkit like ``entropy'', ``median and average'' etc. are implemented similarly in the Java source and C++ source code.
 
@@ -818,11 +818,11 @@ CogniCrypt supports various crypto tasks and for the PUF toolkit to be made avai
 \begin{figure}[h]
 \centering
 \fbox{ \includegraphics[width=0.9\textwidth]{images/Cogni1.png}}
-\caption{An example of High level questions asked by the CogniCrypt for the Evaluating PUF responses}
+\caption{An example of high-level questions asked by the CogniCrypt for the Evaluating PUF responses}
 \label{img:cogni_ques}
 \end{figure}
 
-Once all the questions are acknowledged, based on their answers the CogniCrypt presents a list of the algorithms that are eligible for selection for e.g if the developer answered evaluation of PUF response from ``multiple devices'' then Inter Hamming Distance is only shown in the drop-down since it is the only metric in the toolkit that takes more than one directory as input. In this case, the CogniCrypt generates a Java boilerplate code that shows the proper usage of the Inter Hamming Distance
+Once all the questions are acknowledged, based on their answers the CogniCrypt presents a list of the algorithms that are eligible for selection for e.g if the developer answered evaluation of PUF response from ``multiple devices'' then Inter-Hamming Distance is only shown in the drop-down since it is the only metric in the toolkit that takes more than one directory as input. In this case, the CogniCrypt generates a Java boilerplate code that shows the proper usage of the Inter-Hamming Distance
 function of the toolkit with directories (bounded between 2 and 99) as parameters to the API.\\
 
 To achieve the above-mentioned functionality the CogniCrypt employs a Clafer based model which is a lightweight modeling language that facilitates a mix of class and feature modeling \cite{clafer,cogni}. It supports constraint solvers that can generate instances of a model and satisfy its constraints \cite{cogni}. The answers to the high-level questions determine the constraints on the model which is composed of different elements known as clafer. For the PUF toolkit each evaluation metric was
@@ -833,7 +833,7 @@ backgroundcolor=\color{white},
 keywordstyle=\color{blue},
 stringstyle=\color{orange},
 basicstyle = \ttfamily \color{black} \footnotesize,
-caption={Code snippet of a sample metric Hamming Distance in the PUF clafer model} ,
+caption={Code snippet of a sample metric ``Hamming Distance'' in the PUF clafer model} ,
 label={lst:pufcfr},
 captionpos=b,
 numbers=left]
@@ -848,7 +848,7 @@ Hamming_Distance : Metric
 	[devices = Single]
 \end{lstlisting}
 
-The hamming distance extends the abstract Metric class that has two enums ``filemode and devices'', and a string element as data members. These elements are initialized in the \emph{Hamming\_distance} class, lines 11-12 make ensures the hamming distance can only be evaluated for a file or an entire folder, such conditions are applied to other metrics too, for eg., Inter Hamming distance must always evaluate for multiple devices.\\ 
+The Hamming distance extends the abstract Metric class that has two enums ``filemode and devices'', and a string element as data members. These elements are initialized in the \emph{Hamming\_distance} class, lines 11-12 make ensures the Hamming distance can only be evaluated for a file or an entire folder, such conditions are applied to other metrics too, for eg., Inter-Hamming distance must always evaluate for multiple devices.\\ 
 
 After the clafer model is finalized and implemented, auto-generation of the Java code, that shows the developers the correct usage of the PUF toolkit functions, is achieved by the XSL stylesheet. For the PUF Toolkit the already implemented stylesheet in the CogniCrypt was enhanced to support the new functionality. Based on the answers by the developer to the high-level questions the algorithm type or the metric is set in the clafer model which can be used by the <xsl: if> statements
 to match and generate appropriate usage sample code. %For eg. listing \ref{ } shows the XSL stylesheet code to match the Hamming Distance metric and consequently produce java code that shows its proper usage.
