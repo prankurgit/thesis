@@ -24,20 +24,20 @@ This section introduces commonly used terms used for describing PUFs and their c
 
 \subsubsection{Challenge and Responses}
 As discussed in the definition, PUF produces output on being queried with an input. Since the input may have more than one possible output so PUFs are not functions in a mathematical sense rather they are considered function in engineering sense i.e. a procedure performed by or acting upon a specific (physical) system. \cite{thbook}. The input to PUF is called \emph{Challenge} and output is termed as \emph{Response}, together they are known as \emph{Challenge-Response Pair} or \emph{CRP} and
-the relation imposed between challenges and responses by a particular PUF is called as its \emph{CRP behavior}. PUF is applied in two phases, the first phase is \emph{enrollment}, where a certain number of CRPs are collected from a PUF and stored in a \emph{CRP database}. In the second phase called \emph{verification}, a challenge from CRP database is applied to the PUF and the produced response is compared with the corresponding response from the database (section 2.1 \cite{thbook}).
+the relation imposed between challenges and responses by a particular PUF is called as its \emph{CRP behavior}. PUF is applied in two phases, the first phase is \emph{enrollment}, where a certain number of CRPs are collected from a PUF and stored in a \emph{CRP database}. In the second phase called \emph{verification}, a challenge from CRP database is applied to the PUF and the produced response is compared with the corresponding response from the database (section of 2.1 \cite{thbook}).
 
 \subsubsection{Intra- and Inter-Distance metrics}
 \label{intra_inter_section}
 The concept of inter-versus intra-(class) distance is inherited from the theory of classification and identification:
 \begin{itemize}
 	\item for a specific challenge, inter-distance between two PUFs instances is the distance between two responses produced by applying the same challenge to both PUFs.
-	\item for a specific challenge, the intra-distance between two evaluations of the single PUF is the distance between two responses produced by applying the same challenge twice to the same PUF. (section 2.2 \cite{thbook})
+	\item for a specific challenge, the intra-distance between two evaluations of the single PUF is the distance between two responses produced by applying the same challenge twice to the same PUF. (section of 2.2 \cite{thbook})
 \end{itemize}
 
 In our case, we deal with challenges and responses that are output in bit strings (after decoding and quantization of analog physical stimuli and measured effect), so Hamming Distance is a good metric to measure the difference in the responses i.e. degree by which the responses from the same challenge differ. To amplify the Hamming distance it is often expressed as a fraction of the length of the considered strings, in that case it is known as \emph{fractional Hamming distance}
 
 \subsection{Reliability Issues}
-As pointed out earlier in the introduction, PUF is sensitive to external factors and therefore the output of PUF is not consistent. These factors can be inevitable random noise or measurement uncertainties which give rise to the intra-distance between PUF responses (section 2.3 \cite{thbook}). Apart from these undesirable effects PUFs are susceptible to other sources of noise e.g. varying temperature or supply voltage on PUFs integrated circuit, these factors contribute to a \emph{systematic} effect on
+As pointed out earlier in the introduction, PUF is sensitive to external factors and therefore the output of PUF is not consistent. These factors can be inevitable random noise or measurement uncertainties which give rise to the intra-distance between PUF responses (section 2.3 of \cite{thbook}). Apart from these undesirable effects PUFs are susceptible to other sources of noise e.g. varying temperature or supply voltage on PUFs integrated circuit, these factors contribute to a \emph{systematic} effect on
 response measurement. Another cause for unreliable responses is the \emph{aging effect}, which causes gradual degradation of the device resulting in varying PUF responses. Consequently, PUF responses need post-processing techniques to be applicable in practical security scenarios. One such case is extracting a reliable key from PUF that requires a scheme called Fuzzy Extractor (covered in more detailed in later section \ref{fuzzy_section}).
 
 \subsection{Classifications}

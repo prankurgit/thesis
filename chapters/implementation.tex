@@ -217,19 +217,19 @@ int hammingwt(char *data, int size)
 
 Hamming Weight is one of the essential functions of the toolkit and it is also referred to by other functions, so it's important that we list its code here. Listing \ref{lst:hammingwt} shows the Hamming Weight function as implemented in the toolkit, it takes the data array as a character pointer and its size as arguments. The for loop in lines 5-14 takes each byte of the data and then bitwise ANDs this byte with each bit position (total 8 bit-positions) to count the total occurrences of
 ``ones'' in the byte. This process is
-iterated for the entire length ``size'' of the array, each time incrementing the counter ``wt'' whenever a ``one'' is encountered. After the computation is done, the Hamming weight is returned to the caller function.\\
-
-\begin{figure}
-\centering
-\fbox{ \includegraphics[width=0.9\textwidth]{images/intra_compact.pdf}}
-\caption{Visualization of the \emph{compact} output style format for Intra-Hamming Distance.}
-\label{img:4_intra_compact}
-\end{figure}
+iterated for the entire length ``size'' of the array, each time incrementing the counter ``wt'' whenever a ``one'' is encountered. After the computation is done, the Hamming weight is returned to the caller function.
 
 \subsection{Intra-Hamming Distance}
 \label{intra_hd_section}
 This section explains the Intra-Hamming Distance feature which is a comparison of the PUF responses from the same device. As discussed in section \ref{intra_inter_section} we already observed that the PUF responses from the same device are not identical due to various factors like voltage fluctuation,  temperature variation, and other aging effects, which give rise to distance between responses of the same PUF. We refer to this distance as ``intra'' because it concerns responses of the same
 device. Since the responses from a single PUF instance are kept in a single directory, we need only to give the ``input path'' for processing Intra-Hamming Distance; the output file option is mandatory to process Intra-Hamming Distance because the result must be stored for all the responses so that it can be viewed later. Along with the Hamming Distance between PUF responses, the fractional distance is also saved for better assessment of the PUF instance.\\
+
+\begin{figure}[h!]
+\centering
+\fbox{ \includegraphics[width=0.9\textwidth]{images/intra_compact.pdf}}
+\caption{Visualization of the \emph{compact} output style format for Intra-Hamming Distance.}
+\label{img:4_intra_compact}
+\end{figure}
 
 \begin{figure}[]
 \centering
@@ -287,7 +287,7 @@ more files.\\
 As discussed in section \ref{fuzzy_section} the PUF-based secure key storage approach uses Fuzzy Extractor technique that is divided into three phases \emph{(i)Pre-evaluation}, \emph{(ii) Enrollment} and \emph{(iii) Reconstruction}. The second and third phase follow a separate implementation of the respectively dedicated functionalities, according to \cite{10}.  The enrollment phase employs PUF BCH encoder which will be discussed first followed by the Reconstruction phase, that is realized by the PUF BCH Decoder implementation.
 We will not go into the details of the actual implementation of the encoder and decoder since they are already well documented in \cite{71}, but rather explain the changes made to integrate these functionalities in the PUF toolkit.\\
 
-The concept of fuzzy extractor in combination with BCH coding with linear repetition code and majority voting is depicted in Figures \ref{img:4_BCH_concept}, \ref{img:4_LR_HD} and \ref{img:4_MV_codewords}.
+The concept of fuzzy extractor in combination with BCH coding and linear repetition code is depicted in Figures \ref{img:4_BCH_concept} and \ref{img:4_LR_HD}.\\
 
 \begin{figure}[h]
 \centering
@@ -309,11 +309,16 @@ This section first briefly mentions the implementation algorithm used in the BCH
 
 The BCH encoding implementation is taken from \emph{Morelos-Zaragoza's Encoder/Decoder} for binary BCH codes in C \cite{69}. The algorithm uses systematic encoding to encode the message, hence the encoded codewords contain the initial message in it, which is stripped from the codeword to get the helper data. The message is encoded using the BCH(n,k,d) code (refer section \ref{bch_section}) to generate the codewords which are then combined in groups of \emph{length k} and extra 0s are added to
 complete the last set as shown in Figure \ref{img:4_BCH_concept}. In the
-second part of the enrollment of the fuzzy extractor, the LR code is applied to the generated codeword, based on the user input the bits are repeated either 7 or 15 times, Figure \ref{img:4_LR_HD} shows this LR process with factor 7. It was noted that there were some limitations to the original algorithm and the encoding worked only for small values of $m$, after code review and research the error states were removed and/or documented.\\
+second part of the enrollment of the fuzzy extractor, the LR code is applied to the generated codeword, based on the user input the bits are repeated either 7 or 15 times, Figure \ref{img:4_LR_HD} shows this LR process with factor 7. It was noted that there were some limitations to the original algorithm and the encoding worked only for small values of $m$, after code review and research the error states were removed and/or documented.
 
 	%Due to above-mentioned limitations, the correct combination of BCH encoding and linear repetition code requires correct handling of the bounds. The length of the secret key in bits is denoted by $N$, to process the entire file with BCH (n,k,d) code we need \emph{len} iterations of encoding, this is defined in Equation \ref{4:BCH_len}.
+	\begin{figure}[ht!]
+	\centering
+	\fbox{\includegraphics[width=0.9\textwidth]{images/bch_encoder_ui.png}}
+	\caption{Console user interface of the \emph{PUF BCH Encoder}.}
+	\label{img:4_BCH_ENC_menu}
+	\end{figure}
 The relation between the length of the secret key, number of BCH iterations, linear repetition factor and BCH parameters n and k is stated in the following two Equations:
-
 	\begin{itemize}
 		\item For an input data of length \emph{N} (bits) and a BCH ($n$,$k$,$d$) code, a ‘\emph{len}’ number of BCH encoding iterations have to be performed to process the complete input file \cite{71}:
 	\begin{equation}
@@ -328,12 +333,6 @@ The relation between the length of the secret key, number of BCH iterations, lin
 	\end{equation}
 	\end{itemize}
 
-	\begin{figure}[h!]
-	\centering
-	\fbox{\includegraphics[width=0.9\textwidth]{images/bch_encoder_ui.png}}
-	\caption{Console user interface of the \emph{PUF BCH Encoder}.}
-	\label{img:4_BCH_ENC_menu}
-	\end{figure}
 	The User Interface for the BCH Encoder sub-menu is shown in Figure \ref{img:4_BCH_ENC_menu}. The first option is to set the BCH mode in which the user is required to input the code length $n$ i.e. derived from $m$ such that $(2^{m-1} - 1) < n <= (2^m - 1)$, after that it is also mandatory to enter the desired correction capability $t$ of the BCH (n,k,d) code that in turn will determine the parameter $d$ of the code from the formula $t = \lfloor(d-1)/2\rfloor$.
 	These values must be consistent with the equations \ref{4:BCH_len} and \ref{4:BCH_LR_len} or else the decoding of the secret key will not be successful. The second option chooses the LR factor as 7 or 15, the third option sets the offsets for the PUF response that will also determine the actual length of the PUF response that is used to generate the helper data. After this the user must supply the key filename he/she wants to securely store and the name of the PUF
 	response file, finally the output filename for helper data must be provided to be saved on permanent storage and to be used in the later reconstruction phase of the fuzzy extraction. These discussed inputs are all mandatory in the BCH menu and once they are initialized, only then we can use option seven of the BCH encoder menu to process and generate the helper data or else the toolkit throws appropriate error messages to the user about missing parameters.\\
@@ -397,15 +396,18 @@ The relation between the length of the secret key, number of BCH iterations, lin
 		\item Unusual workflows were inspected to assess their impact on Encoder functionality.
 	\end{itemize}
 
+	\subsection{PUF BCH Decoder}
+	We now go on to discuss the second phase of the fuzzy extractor i.e.``regeneration'' that uses PUF BCH Decoder as an essential element to recover the secret key that was encoded in the first phase, with the help of the generated helper data and a PUF response from the same device as used in the enrollment phase. Again we do not indulge in the exact implementation details since they are presented in great detail in \cite{71}.\\
+
+	This section looks at the user interface of the BCH decoder where the possible inputs and their meaning is discussed, then a summary of the main modules involved in the BCH decoder
+	is presented with the help of an Entity Relation Diagram. Similar to BCH encoder section we examine the changes required during merging with the toolkit in the subsection ``Integration Changes'' and finally talk about the verification steps taken to assert the correctness of the merged decoder functionality in the toolkit.\\
+
 \begin{figure}[h!]
 \centering
 \fbox{ \includegraphics[width=0.97\textwidth]{images/MVrecon.png}}
 \caption{Exemplary code word reconstruction with the majority vote and factor 7, based on \cite{10}.}
 \label{img:4_MV_codewords}
 \end{figure}
-	\subsection{PUF BCH Decoder}
-	We now go on to discuss the second phase of the fuzzy extractor i.e.``regeneration'' that uses PUF BCH Decoder as an essential element to recover the secret key that was encoded in the first phase, with the help of the generated helper data and a PUF response from the same device as used in the enrollment phase. Again we do not indulge in the exact implementation details since they are presented in great detail in \cite{71}. This section looks at the user interface of the BCH decoder where the possible inputs and their meaning is discussed, then a summary of the main modules involved in the BCH decoder
-	is presented with the help of an Entity Relation Diagram. Similar to BCH encoder section we examine the changes required during merging with the toolkit in the subsection ``Integration Changes'' and finally talk about the verification steps taken to assert the correctness of the merged decoder functionality in the toolkit.\\
 
 	The decoder implementation is also the extension of the Morelos-Zaragoza's code \cite{69} but before applying the decoding functionality, the LR encoded helper data received from the first phase is processed in the majority vote module of the fuzzy extractor as shown in Figure \ref{img:4_MV_codewords}. This counteracts the linear repetition introduced in the LR coding module of the ``enrollment phase''. Figure \ref{img:4_MV_codewords} shows this operation on the helper data received from Figure \ref{img:4_LR_HD}, notice that the PUF
 	response has some bits changed due to the various environmental factors (like temperature change and voltage fluctuation) that introduce intra-distance between the PUF responses from the same device. After the Majority Vote operation the BCH decoder recovers the configuration settings \emph{cfg} that are appended to the end of the helper data to satisfy correct boundary conditions as seen in the BCH encoding phase. Usually, the BCH(n,k,d) can correct up to $t$ bit flip errors though along with Majority
@@ -464,7 +466,10 @@ The relation between the length of the secret key, number of BCH iterations, lin
 
 	\subsubsection{Integration Changes}
 	To integrate the BCH decoder on top of the already merged BCH encoder in the toolkit, required careful alterations to the code. The \emph{Main\_Menu} routine of the toolkit was modified to insert a BCH decoder menu that can be invoked by the user. The ``Calculation'' module functions were merged without much conflict with the existing functions, the function \emph{generate\_gf}, responsible for Galois Field computation was unchanged. The other two functions
-	\emph{read\_p\_decode and gen\_poly\_decode} that are used for the polynomial generation were renamed because of the overlapping function names with the encoder. The error messages displaying routine of the ``View module'' was redeclared as  \emph{ErrorMessages\_decode} because the error states and the possible inputs for the decoder are different from the BCH encoder. \emph{MajorityVoting} and \emph{ViewFile} were added to the family of BCH functions and correspondingly their declarations written in respective header files. The
+	\emph{read\_p\_decode and gen\_poly\_decode} that are used for the polynomial generation were renamed because of the overlapping function names with the encoder. The error messages displaying routine of the ``View module'' was redeclared as  \emph{ErrorMessages\_decode} because the error states and the possible inputs for the decoder are different from the BCH encoder.
+
+	\vspace*{1\baselineskip}
+	\emph{MajorityVoting} and \emph{ViewFile} were added to the family of BCH functions and correspondingly their declarations written in respective header files. The
 	routine \emph{DefineFilename\_BCH} was specifically modified to take two more arguments i.e. input helper data filename and output recovered key name since these two arguments were not implemented in the encoder. Accordingly, the body of the same routine was changed to display appropriate messages for the input of helper data and output key name that would be restored after decoding. The other challenge was to find and modify all the invoking points to the newly renamed functions, this was
 	resolved by careful code investigation and with the help of insight gained via compiler and linker errors.\\
 
@@ -481,18 +486,18 @@ The relation between the length of the secret key, number of BCH iterations, lin
 	\end{itemize}
 
 	\subsection{Golay Encoder}
-	This section discusses the Golay Encoder that was integrated into the toolkit. We first discuss the user interface then look at the functions and modules of the Golay encoder followed by a basic description of the important routines in the code and then the steps taken to verify the implementation.\\
 
-	\begin{figure}
+	This section discusses the Golay Encoder that was integrated into the toolkit. We first discuss the user interface then look at the functions and modules of the Golay encoder followed by a basic description of the important routines in the code and then the steps taken to verify the implementation.\\
+	\begin{figure}[h!]
 	\centering
-	\fbox{\includegraphics[width=0.9\textwidth]{images/golay_encoder_ui.png}}
+	\fbox{\includegraphics[width=0.9\textwidth,keepaspectratio]{images/golay_encoder_ui.png}}
 	\caption{Console user interface of the \emph{PUF Golay Encoder}.}
 	\label{img:golay_enc_ui}
 	\end{figure}
+
 	The UI is similar to BCH encoder but in this case we do not need to set the dimensions of the code ``n, k and d'' because Golay is a static code with the universal dimensions of (23, 12, 7) as seen in section \ref{golay_related}. The user interface is portrayed in Figure \ref{img:golay_enc_ui}. Using the first option the user can set the Linear repetition factor as '7' or '15', the offsets of the PUF file can be adjusted using option two of the Golay Encoder menu. After this, it is mandatory
 	to input the secret key filename, to be
 	stored securely, and input the PUF filename to generate the helper data using the fuzzy extractor algorithm, using option three and four of the Golay Encoder Menu respectively. The helper data filename is provided by the user by selecting option five. If all the inputs are satisfied and conditions are met then the helper data will be generated by choosing the last option six of the Golay Encoder Menu.\\
-
 
 	\begin{figure}
 	\centering
@@ -509,7 +514,8 @@ The relation between the length of the secret key, number of BCH iterations, lin
 		\item \emph{generateHelperData} generates the encoding table using another internal function \emph{get\_syndrome} (this table is analogous to the generator matrix discussed in section \ref{golay_related} of the Golay Code). Then the secret key is encoded using the Golay Coding technique. The generated Codewords are stored in an array that undergoes the linear repetition process and finally, the LR\_Encoded codewords are XORed with the PUF response to obtain the
 			helper data. The generateHelperData function stores the final output in the helper data filename specified by the user along with the ``cfg'' settings i.e. offsets, LR factor and secret key filesize. This information will be read and used in the decoder module. Table \ref{tab:Golay_pattern} summarizes the data structure ``Pattern'' that presents the cfg settings.
 
-		\item \emph{get\_syndrome} function computes the generator polynomial for the corresponding (23, 12, 7) Golay code. \end{itemize}
+		\item \emph{get\_syndrome} function computes the generator polynomial for the corresponding (23, 12, 7) Golay code. 
+	\end{itemize}
 
 	\begin{table}[!ht]
 	\begin{center}
@@ -541,7 +547,7 @@ The relation between the length of the secret key, number of BCH iterations, lin
 	\caption{Names and types of each element in the data structure \emph{Pattern} for the \emph{PUF Golay Encoder} and a description regarding their purpose.}
 	\label{tab:Golay_pattern}
 	\end{table}
-	\vspace*{1\baselineskip}
+%	\vspace*{1\baselineskip}
 	A helper function \emph{SetInputLen} was implemented to aid the encoder functions in calculating the length of the file based on the offsets. This function is called internally before reading and allocating the memory for key and PUF response. It takes two arguments, first the Item structure with initialized data members as filenames and a second integer argument that points to PUF response or secret key, based on these values it calculates the input length as $input\_length =
 	original\_filesize - (Offset\_end + Offset\_beginning)$. \\
 
@@ -720,7 +726,7 @@ The relation between the length of the secret key, number of BCH iterations, lin
 \end{itemize}
 
 \subsection{Intra-Jaccard Index}
-\begin{figure}[ht!]
+\begin{figure}[h!]
 \centering
 \fbox{ \includegraphics[width=0.9\textwidth]{images/intra_jaccardi.pdf}}
 \caption{A sample output result showing the \emph{compact} output style format for Intra-Jaccard Index }
@@ -764,7 +770,6 @@ along with the XSL coding techniques to generate the Java boilerplate code to as
 
 \subsection{Java Native Interface}
 The Java Native Interface standard and programming techniques are defined by Oracle\textsuperscript{TM} as a native programming interface which allows Java code that runs inside a Java Virtual Machine (JVM) to interoperate with applications and libraries written in other programming languages, such as C, C++, and assembly. The JNI does not impose any restriction on the implementation of the underlying Java Virtual Machine so the native code works irrespective of the Virtual machine.\\
-\newpage
 
 \begin{lstlisting}[frame=single,language=C++,
 commentstyle=\color{magenta},
@@ -833,9 +838,6 @@ CogniCrypt supports various crypto tasks and for the PUF toolkit to be made avai
 Once all the questions are acknowledged, based on their answers the CogniCrypt presents a list of the algorithms that are eligible for selection for example, if the developer answered he wants to evaluate PUF response from ``multiple devices'' then Inter-Hamming Distance is only shown in the drop-down since it is the only metric in the toolkit that takes more than one directory as input. In this case, the CogniCrypt generates a Java boilerplate code that shows the proper usage of the Inter-Hamming Distance
 function of the toolkit with directories (bounded between 2 and 99) as parameters to the API.\\
 
-To achieve the above-mentioned functionality, CogniCrypt employs a Clafer-based model which is a lightweight modeling language that facilitates a mix of class and feature modeling \cite{clafer,cogni}. It supports constraint solvers that can generate instances of a model and satisfy its constraints \cite{cogni}. The answers to the high-level questions determine the constraints on the model which is composed of different elements known as clafers. For the PUF toolkit each evaluation metric was
-implemented as clafer element and named as ``Metric'' in the model, one of the sample Metric is presented in listing \ref{lst:pufcfr}.\\
-
 \begin{lstlisting}[frame=single,language=C++,
 commentstyle=\color{magenta},
 backgroundcolor=\color{white},
@@ -856,6 +858,9 @@ Hamming_Distance : Metric
 	[fileMode = File || fileMode = Folder]
 	[devices = Single]
 \end{lstlisting}
+
+To achieve the above-mentioned functionality, CogniCrypt employs a Clafer-based model which is a lightweight modeling language that facilitates a mix of class and feature modeling \cite{clafer,cogni}. It supports constraint solvers that can generate instances of a model and satisfy its constraints \cite{cogni}. The answers to the high-level questions determine the constraints on the model which is composed of different elements known as clafers. For the PUF toolkit each evaluation metric was
+implemented as clafer element and named as ``Metric'' in the model, one of the sample Metric is presented in listing \ref{lst:pufcfr}.\\
 
 The Hamming distance extends the abstract Metric class that has two enums ``filemode'' and ``devices'', and a string element ``description'' as data members. These elements are initialized in the \emph{Hamming\_distance} class, lines 7-9 ensure the Hamming distance can only be evaluated for a file or an entire folder, such conditions are applied to other metrics too, for example, Inter-Hamming distance must always be evaluated for multiple devices.\\
 
